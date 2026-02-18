@@ -5,6 +5,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { HttpInterceptorService } from './interceptors/http.interceptor';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
 const scrollConfig: InMemoryScrollingOptions = {
   scrollPositionRestoration: 'top',
   anchorScrolling: 'enabled',
@@ -23,5 +25,10 @@ export const appConfig: ApplicationConfig = {
     multi: true,
   },
   provideAnimationsAsync(),
+  providePrimeNG({
+            theme: {
+                preset: Aura
+            }
+        })
   ]
 };
