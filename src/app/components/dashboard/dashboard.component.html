@@ -1,0 +1,406 @@
+<div class="ct_inner_header_bg mt-4 ct_px_30">
+    <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Dashboard</h4>
+</div>
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+                <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
+                    <div>
+                        <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
+                            {{dashboardData?.total_clients}}
+                        </h3>
+                        <p class="mb-0">Total Clients</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M22.4291 13.468C22.3058 14.034 21.9926 14.5408 21.5415 14.9043C21.0904 15.2677 20.5286 15.4659 19.9493 15.4659C19.37 15.4659 18.8082 15.2677 18.3571 14.9043C17.906 14.5408 17.5928 14.034 17.4696 13.468L17.437 13.3189C17.3555 12.9436 17.3563 12.555 17.4392 12.18C17.5222 11.805 17.6854 11.4524 17.9176 11.1464L17.9694 11.0782C18.2012 10.7728 18.5006 10.5252 18.8441 10.3547C19.1876 10.1843 19.5658 10.0956 19.9493 10.0956C20.3328 10.0956 20.711 10.1843 21.0545 10.3547C21.398 10.5252 21.6974 10.7728 21.9293 11.0782L21.9811 11.1464C22.2132 11.4524 22.3764 11.805 22.4594 12.18C22.5423 12.555 22.5431 12.9436 22.4616 13.3189L22.4291 13.468ZM23.7528 21H18.55V20.8575C18.55 19.6031 18.1318 18.4191 17.4048 17.465C19.1494 16.8893 21.0377 16.9222 22.7612 17.5584C23.2711 17.7466 23.7111 18.0865 24.0219 18.5324C24.3326 18.9783 24.4993 19.5087 24.4993 20.0522V20.2531C24.4993 20.3512 24.4801 20.4483 24.4426 20.5389C24.4051 20.6295 24.3501 20.7118 24.2808 20.7812C24.2114 20.8506 24.1291 20.9056 24.0385 20.9431C23.9479 20.9807 23.8508 21 23.7528 21ZM15.68 22.4H4.62C4.32296 22.4 4.03808 22.282 3.82804 22.072C3.618 21.8619 3.5 21.577 3.5 21.28V20.8575C3.5 19.258 4.48945 17.8251 5.985 17.2588C8.66866 16.2425 11.6313 16.2425 14.315 17.2588C15.0455 17.5356 15.6745 18.0281 16.1184 18.6709C16.5623 19.3137 16.8 20.0764 16.8 20.8575V21.28C16.8 21.577 16.682 21.8619 16.472 22.072C16.2619 22.282 15.977 22.4 15.68 22.4ZM8.44935 13.6773C8.95417 13.9393 9.51273 14.0812 10.0814 14.0917C10.6501 14.1023 11.2135 13.9813 11.7277 13.7381C12.2419 13.495 12.693 13.1363 13.0457 12.6901C13.3984 12.2438 13.6432 11.7221 13.761 11.1657L13.8327 10.8276C13.9489 10.2791 13.9474 9.71223 13.8282 9.1644C13.709 8.61656 13.475 8.10025 13.1415 7.64959L13.026 7.49349C12.6933 7.04375 12.2599 6.67829 11.7604 6.42645C11.2609 6.17461 10.7094 6.04343 10.15 6.04343C9.59063 6.04343 9.03906 6.17461 8.53958 6.42645C8.04011 6.67829 7.60666 7.04375 7.27405 7.49349L7.15855 7.64959C6.82504 8.10025 6.59096 8.61656 6.4718 9.1644C6.35264 9.71223 6.35111 10.2791 6.4673 10.8276L6.53905 11.1657C6.65212 11.6995 6.88209 12.2016 7.21239 12.6358C7.5427 13.0701 7.96515 13.4258 8.44935 13.6773Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+                <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
+                    <div>
+                        <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
+                            {{dashboardData?.total_devices}}
+                        </h3>
+                        <p class="mb-0">Total Devices</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7 23.3333C6.69058 23.3333 6.39384 23.2104 6.17504 22.9916C5.95625 22.7728 5.83333 22.4761 5.83333 22.1667C5.83333 21.8572 5.95625 21.5605 6.17504 21.3417C6.39384 21.1229 6.69058 21 7 21H7.71867L8.01033 18.6667H2.33333C1.71449 18.6667 1.121 18.4208 0.683417 17.9832C0.245833 17.5457 0 16.9522 0 16.3333V2.33333C0 1.71449 0.245833 1.121 0.683417 0.683417C1.121 0.245833 1.71449 0 2.33333 0H21C21.6188 0 22.2123 0.245833 22.6499 0.683417C23.0875 1.121 23.3333 1.71449 23.3333 2.33333V16.3333C23.3333 16.9522 23.0875 17.5457 22.6499 17.9832C22.2123 18.4208 21.6188 18.6667 21 18.6667H15.3218L15.6135 21H16.3333C16.6428 21 16.9395 21.1229 17.1583 21.3417C17.3771 21.5605 17.5 21.8572 17.5 22.1667C17.5 22.4761 17.3771 22.7728 17.1583 22.9916C16.9395 23.2104 16.6428 23.3333 16.3333 23.3333H7ZM12.9687 18.6667H10.3635L10.0718 21H13.2603L12.9687 18.6667Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+                <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
+                    <div>
+                        <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
+                            {{dashboardData?.service_requests}}
+                        </h3>
+                        <p class="mb-0">Service Requests</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <svg width="27" height="28" viewBox="0 0 27 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M20.2444 9.8182H20.2552H20.2444ZM20.2552 7.0126V3.507V7.0126ZM27 6.7088C27 10.4132 23.9759 13.4176 20.2444 13.4176C19.8052 13.4176 19.3696 13.3756 18.9376 13.2916C18.6271 13.2314 18.4732 13.202 18.3638 13.2188C18.2558 13.2356 18.1019 13.3196 17.7968 13.4904C16.9229 13.9736 15.917 14.1359 14.9429 13.951C15.3128 13.4778 15.5639 12.9108 15.6759 12.3032C15.7434 11.9322 15.576 11.571 15.3249 11.3064C14.1524 10.0848 13.4926 8.43239 13.4889 6.7088C13.4889 3.0044 16.5129 0 20.2444 0C23.9759 0 27 3.0044 27 6.7088ZM7.42722 28H3.66872C3.23266 28 2.7939 27.9356 2.39294 27.7578C1.08881 27.1768 0.425942 26.4082 0.118135 25.928C0.0345969 25.795 -0.00644656 25.6381 0.000822837 25.4795C0.00809223 25.321 0.0633056 25.1688 0.158636 25.0446C1.67067 22.9614 5.17536 21.7042 7.42722 21.7042M7.43397 28H11.1911C11.6285 28 12.0659 27.9356 12.4669 27.7578C13.7724 27.1768 14.4339 26.4082 14.743 25.928C14.8266 25.795 14.8676 25.6381 14.8604 25.4795C14.8531 25.321 14.7979 25.1688 14.7025 25.0446C13.1905 22.9614 9.68582 21.7042 7.43397 21.7042M11.1844 14.4046C11.1829 15.4349 10.7871 16.4224 10.0838 17.1501C9.38056 17.8778 8.42745 18.2861 7.43397 18.2854C6.94181 18.2861 6.45434 18.1863 5.99937 17.9917C5.54441 17.7971 5.13087 17.5114 4.78236 17.1511C4.43386 16.7907 4.15721 16.3627 3.96821 15.8914C3.77922 15.4202 3.68158 14.915 3.68087 14.4046C3.6814 13.8941 3.77891 13.3887 3.96783 12.9173C4.15674 12.4459 4.43336 12.0177 4.78189 11.6572C5.13041 11.2967 5.54401 11.0109 5.99906 10.8162C6.45411 10.6215 6.9417 10.5217 7.43397 10.5224C8.42768 10.5217 9.381 10.9302 10.0843 11.6582C10.7876 12.3862 11.1833 13.3741 11.1844 14.4046Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+                <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
+                    <div>
+                        <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
+                            {{dashboardData?.total_employees}}
+                        </h3>
+                        <p class="mb-0">Total Employees</p>
+                    </div>
+                    <div class="ct_dash_icon">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M14.0001 12.4289C16.0448 12.4289 17.7023 10.7922 17.7023 8.77333C17.7023 6.75442 16.0448 5.11777 14.0001 5.11777C11.9554 5.11777 10.2979 6.75442 10.2979 8.77333C10.2979 10.7922 11.9554 12.4289 14.0001 12.4289Z"
+                                fill="white" />
+                            <path
+                                d="M8.38432 9.13889H8.75766V8.80444C8.75992 7.83191 9.0343 6.87941 9.54974 6.0547C10.0652 5.22999 10.8011 4.56598 11.6743 4.13778C11.4158 3.54243 11.0009 3.02822 10.4736 2.64976C9.94634 2.27129 9.3264 2.04271 8.67965 1.98828C8.03289 1.93385 7.38347 2.0556 6.80035 2.34062C6.21724 2.62563 5.72221 3.06326 5.36784 3.60702C5.01346 4.15079 4.81299 4.78038 4.78769 5.42893C4.7624 6.07748 4.91324 6.72077 5.22419 7.29047C5.53514 7.86018 5.99459 8.33503 6.55373 8.66459C7.11288 8.99415 7.75085 9.16612 8.39988 9.16222L8.38432 9.13889ZM19.2577 8.77333V9.10778H19.631C20.2714 9.10135 20.8982 8.9224 21.4454 8.58977C21.9927 8.25714 22.4402 7.78312 22.7407 7.21762C23.0413 6.65212 23.1839 6.01605 23.1534 5.37635C23.123 4.73666 22.9206 4.117 22.5677 3.58261C22.2148 3.04821 21.7243 2.61885 21.1479 2.33971C20.5715 2.06056 19.9306 1.94197 19.2925 1.9964C18.6544 2.05083 18.0427 2.27628 17.522 2.64902C17.0012 3.02176 16.5905 3.52799 16.3332 4.11444C17.2067 4.54097 17.9434 5.2033 18.4602 6.02659C18.977 6.84988 19.2532 7.8013 19.2577 8.77333ZM17.3365 12.7944C18.8828 13.101 20.378 13.6247 21.7777 14.35C21.9749 14.4582 22.1535 14.5974 22.3065 14.7622H26.4443V12.1022C26.4451 12.0002 26.4179 11.8999 26.3659 11.8122C26.3138 11.7244 26.2387 11.6526 26.1488 11.6044C24.1329 10.55 21.8904 10.0028 19.6154 10.01H19.1021C18.8326 11.1057 18.2126 12.0834 17.3365 12.7944ZM5.07877 16.2711C5.07735 15.8794 5.18313 15.4948 5.38467 15.1589C5.5862 14.823 5.87581 14.5486 6.2221 14.3656C7.62175 13.6403 9.11692 13.1166 10.6632 12.81C9.79138 12.105 9.17184 11.1361 8.89766 10.0489H8.38432C6.10935 10.0416 3.86687 10.5889 1.85099 11.6433C1.76106 11.6915 1.68599 11.7633 1.6339 11.8511C1.58181 11.9388 1.55468 12.0391 1.55544 12.1411V17.1111H5.07877V16.2711ZM16.691 20.7589H21.3265V21.8478H16.691V20.7589Z"
+                                fill="white" />
+                            <path
+                                d="M25.519 16.5356H20.1756V15.7578C20.1756 15.5515 20.0937 15.3537 19.9478 15.2078C19.802 15.0619 19.6041 14.98 19.3979 14.98C19.1916 14.98 18.9938 15.0619 18.8479 15.2078C18.702 15.3537 18.6201 15.5515 18.6201 15.7578V16.5356H17.1112V14.3344C16.088 14.1187 15.0457 14.0066 14.0001 14C11.5454 13.9907 9.1258 14.5836 6.95343 15.7267C6.85668 15.7769 6.77569 15.8528 6.71942 15.9462C6.66314 16.0395 6.63376 16.1466 6.63454 16.2556V20.6189H12.1645V25.3556C12.1645 25.5618 12.2465 25.7597 12.3923 25.9055C12.5382 26.0514 12.736 26.1333 12.9423 26.1333H25.519C25.7253 26.1333 25.9231 26.0514 26.069 25.9055C26.2148 25.7597 26.2968 25.5618 26.2968 25.3556V17.3133C26.2968 17.1071 26.2148 16.9092 26.069 16.7634C25.9231 16.6175 25.7253 16.5356 25.519 16.5356ZM24.7412 24.5933H13.7201V18.0911H18.6201V18.7989C18.6201 19.0052 18.702 19.203 18.8479 19.3489C18.9938 19.4947 19.1916 19.5767 19.3979 19.5767C19.6041 19.5767 19.802 19.4947 19.9478 19.3489C20.0937 19.203 20.1756 19.0052 20.1756 18.7989V18.0911H24.7412V24.5933Z"
+                                fill="white" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Nav Tabs -->
+                <ul class="nav nav-tabs dashboard-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                            type="button">
+                            Pending Payments
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                            type="button">
+                            Recent Service Requests
+                        </button>
+                    </li>
+                </ul>
+                <!-- Tab Content -->
+                <div class="ct_wrapper_white_box px-4">
+                    <div class="tab-content p-4 border-0" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel">
+                            <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
+                                <!-- Search -->
+                                <div class="search-box w-100">
+                                    <div class="input-group position-relative">
+                                        <input type="text" class="form-control ct_input ps-5"
+                                            placeholder="Search by ID, Name or others..." />
+
+                                        <i class="fas fa-search ct_show_search"></i>
+                                    </div>
+                                </div>
+                                <!-- Filters -->
+                                <div class="d-flex align-items-center gap-2 filter-box">
+                                    <div class="d-flex">
+                                        <div class="dropdown">
+                                            <button class="btn filter-dropdown dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M7.08026 12.8429H0.779541" stroke="#475569"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path d="M9.89038 3.15039H16.1911" stroke="#475569"
+                                                        stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M5.47629 3.09625C5.47629 1.8006 4.41813 0.75 3.11314 0.75C1.80816 0.75 0.75 1.8006 0.75 3.09625C0.75 4.39191 1.80816 5.44251 3.11314 5.44251C4.41813 5.44251 5.47629 4.39191 5.47629 3.09625Z"
+                                                        stroke="#475569" stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M16.75 12.8037C16.75 11.5081 15.6926 10.4575 14.3876 10.4575C13.0818 10.4575 12.0237 11.5081 12.0237 12.8037C12.0237 14.0994 13.0818 15.15 14.3876 15.15C15.6926 15.15 16.75 14.0994 16.75 12.8037Z"
+                                                        stroke="#475569" stroke-width="1.5" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                                Filters
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" href="#">Active</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#"> Pending</a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        Rejected</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <input type="date" class="form-control ct_input pe-5"
+                                            placeholder="Search by property name..." />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-4 ct_custom_table">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Client ID</th>
+                                            <th>Client Name</th>
+                                            <th>Amount (₹)</th>
+
+                                            <th>Due Date</th>
+                                            <th>Days Pending</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>24,000</td>
+                                            <td>12 Aug 2026</td>
+                                            <td class="">6 Days</td>
+
+                                            <td class="">
+                                                <span class="ct_dark_yellow_text">Pending</span>
+                                            </td>
+                                            <td class="">
+                                                <span class="ct_blue_text text-decoration-underline">Mark As
+                                                    Urgent</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>24,000</td>
+                                            <td>12 Aug 2026</td>
+                                            <td>6 Days</td>
+
+                                            <td class="">
+                                                <span class="ct_red_text">! Overdue</span>
+                                            </td>
+
+                                            <td class="">
+                                                <span class="ct_blue_text text-decoration-underline">Mark As
+                                                    Urgent</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>24,000</td>
+                                            <td>12 Aug 2026</td>
+                                            <td>6 Days</td>
+
+                                            <td class="">
+                                                <span class="ct_red_text">! Overdue</span>
+                                            </td>
+                                            <td class="">
+                                                <span class="ct_blue_text text-decoration-underline">Mark As
+                                                    Urgent</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="profile" role="tabpanel">
+                            <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
+                                <!-- Search -->
+                                <div class="search-box w-100">
+                                    <div class="input-group position-relative">
+                                        <input type="text" class="form-control ct_input ps-5"
+                                            placeholder="Search by ID, Name or others..." />
+
+                                        <i class="fas fa-search ct_show_search"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-4 ct_custom_table">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>S.No</th>
+                                            <th>Client ID</th>
+                                            <th>Client Name</th>
+                                            <th>Device ID</th>
+
+                                            <th>Issue Type</th>
+                                            <th>Status</th>
+                                            <th>Assigned To</th>
+                                            <th>Created On</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>#DID238976</td>
+                                            <td>Hardware</td>
+                                            <td class="">
+                                                <span class="ct_blue_text"> Open</span>
+                                            </td>
+                                            <td class="">--</td>
+                                            <td>12 Aug 2026</td>
+                                            <td>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                                    <img src="img/action-user-icon.png" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>#DID238976</td>
+                                            <td>Software</td>
+                                            <td class="">
+                                                <span class="ct_blue_text"> Open</span>
+                                            </td>
+                                            <td>--</td>
+                                            <td>12 Aug 2026</td>
+                                            <td>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                                    <img src="img/action-user-icon.png" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>#CID238976</td>
+                                            <td>John Doe</td>
+                                            <td>#DID238976</td>
+                                            <td>Software</td>
+                                            <td class="">
+                                                <span class="ct_blue_text"> Open</span>
+                                            </td>
+                                            <td>--</td>
+                                            <td>12 Aug 2026</td>
+
+                                            <td>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#assignModal">
+                                                    <img src="img/action-user-icon.png" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Popup -->
+<div class="modal fade ct-assign-modal" id="assignModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-0">
+                <h5 class="ct-title ct_fs_22 ct_fw_600">
+                    Assign Service Request
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Info Row -->
+                <div class="ct-info-box mb-4">
+                    <div class="row text-center text-md-start">
+                        <div class="col-md-3">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Device ID:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                #DID238976
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Device Name:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                Dell OptiPlex 7090
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
+                            <div class="ct-value ct_dark_grey_text">John Doe</div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                Software
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
+                <div class="ct-description mb-4 ct_fs_13">
+                    Hi, I’m facing an issue in group chats. When I type // to tag
+                    someone, sometimes the user list doesn’t appear or the tag
+                    doesn’t get added correctly. This happens mostly in larger
+                    groups. Please check and let me know if there’s a fix.
+                </div>
+
+                <!-- Assign To -->
+                <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
+                <!-- Search -->
+                <div class="search-box w-100">
+                    <div class="input-group position-relative">
+                        <input type="text" class="form-control ct_input ps-5"
+                            placeholder="Search by ID, Name or others..." />
+
+                        <i class="fas fa-search ct_show_search"></i>
+                    </div>
+                </div>
+
+                <div class="my-3">
+                    <label class="form-label">Service Date</label>
+                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" />
+                </div>
+
+                <!-- Checkbox -->
+
+                <div class="form-check my-4">
+                    <input class="form-check-input" type="checkbox" id="urgentCheck" checked />
+                    <label class="form-check-label ct_fw_500" for="urgentCheck">
+                        Mark this request as Urgent.
+                    </label>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex gap-3">
+                    <button class="ct_black_btn">Assign Service</button>
+                    <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

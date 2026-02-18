@@ -1,0 +1,45 @@
+<div class="auth-wrapper">
+    <div class="container-fluid">
+        <div class="ct_admin_logo ct-auth-logo">
+            <img src="img/logo.svg" alt="" />
+        </div>
+
+        <!-- Login Section -->
+        <div class="ct-login-wrapper">
+            <div class="ct-login-card">
+                <div class="text-center mb-4">
+                    <div class="ct-title ct_fs_30 ct_fw_600 mb-2">
+                        OTP Verification
+                    </div>
+                    <div class="ct-subtitle ct_dark_grey_text">
+                        We have sent a verification code to your email address. Please
+                        enter the code to verify.
+                    </div>
+                </div>
+
+                <form>
+                    <div class="ct-otp-wrapper">
+                        <div class="d-flex justify-content-center gap-4">
+                            <input type="text" maxlength="1" class="ct-otp-input" />
+                            <input type="text" maxlength="1" class="ct-otp-input" />
+                            <input type="text" maxlength="1" class="ct-otp-input" />
+                            <input type="text" maxlength="1" class="ct-otp-input" />
+                        </div>
+
+                        <div class="ct-timer mt-5 mb-2">Remaining Time : 00:59s</div>
+                    </div>
+
+                    <a routerLink="/reset-password" type="submit" class="ct_black_btn w-100">
+                        Confirm
+                    </a>
+
+                    <!-- <p class="ct_fs_14 ct_fw_600 mt-3 text-center">
+                        Didn’t receive?<a href="forgot-password.html" class="ct_blue_text">
+                            Resend
+                        </a>
+                    </p> -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

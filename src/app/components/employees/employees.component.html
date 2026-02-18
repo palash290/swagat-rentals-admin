@@ -1,0 +1,228 @@
+<div class="ct_inner_header_bg mt-4 ct_px_30">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Employees</h4>
+        <div>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#addClientModal"
+                class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                        stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Add Employee
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_wrapper_white_box">
+                    <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5 mb-4">
+                        <!-- Search -->
+                        <div class="search-box w-100">
+                            <div class="input-group position-relative">
+                                <input type="text" class="form-control ct_input ps-5"
+                                    placeholder="Search..." [(ngModel)]="searchText"
+                                    (input)="getAllEmployee()" />
+
+                                <i class="fas fa-search ct_show_search"></i>
+                            </div>
+                        </div>
+
+                        <!-- Filters -->
+                        <div class="d-flex align-items-center gap-2 filter-box">
+
+                            <!-- <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
+                                <select class="form-select ct_input" [(ngModel)]="status" (change)="onStatusChange()">
+                                    <option value="">Status</option>
+                                    <option value="accepted">Accepted</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div> -->
+
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-4 ct_custom_table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Employee ID</th>
+                                    <th>Employee Name</th>
+                                    <th>Email</th>
+                                    <th>Assigned Devices</th>
+                                    <th>Block</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employeeList; let i = index">
+                                    <td>{{ (page - 1) * limit + i + 1 }}</td>
+                                    <td>{{item.e_unique_id}}</td>
+                                    <td>{{item.full_name}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.assigned_devices}}</td>
+                                    <td>
+                                        <div class="form-check form-switch ct_custom_switch">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                id="flexSwitchCheckChecked" [checked]="item.is_disabled === 1"
+                                                (change)="onToggleUser(item)" data-bs-toggle="modal"
+                                                data-bs-target="#blockAssignDeviceModal" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <a [routerLink]="['/home/view-employees']"
+                                                [queryParams]="{employeeId: item.id}" class="ct_lh_0"><i
+                                                    class="fa-regular fa-eye"></i></a>
+                                            <a data-bs-toggle="modal" data-bs-target="#deleteAssignDeviceModal"
+                                                (click)="getId(item.id)">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M8 11C7.73478 11 7.48043 11.1054 7.29289 11.2929C7.10536 11.4804 7 11.7348 7 12C7 12.2652 7.10536 12.5196 7.29289 12.7071C7.48043 12.8946 7.73478 13 8 13H16C16.2652 13 16.5196 12.8946 16.7071 12.7071C16.8946 12.5196 17 12.2652 17 12C17 11.7348 16.8946 11.4804 16.7071 11.2929C16.5196 11.1054 16.2652 11 16 11H8Z"
+                                                        fill="#F51B0B" />
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M23 12C23 18.075 18.075 23 12 23C5.925 23 1 18.075 1 12C1 5.925 5.925 1 12 1C18.075 1 23 5.925 23 12ZM21 12C21 13.1819 20.7672 14.3522 20.3149 15.4442C19.8626 16.5361 19.1997 17.5282 18.364 18.364C17.5282 19.1997 16.5361 19.8626 15.4442 20.3149C14.3522 20.7672 13.1819 21 12 21C10.8181 21 9.64778 20.7672 8.55585 20.3149C7.46392 19.8626 6.47177 19.1997 5.63604 18.364C4.80031 17.5282 4.13738 16.5361 3.68508 15.4442C3.23279 14.3522 3 13.1819 3 12C3 9.61305 3.94821 7.32387 5.63604 5.63604C7.32387 3.94821 9.61305 3 12 3C14.3869 3 16.6761 3.94821 18.364 5.63604C20.0518 7.32387 21 9.61305 21 12Z"
+                                                        fill="#F51B0B" />
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="employeeList?.length == 0" class="text-center">
+                        <p class="ct_fs_15 mt-5">No employee found</p>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                        <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
+                            Prev
+                        </button>
+                        {{pagination?.page}}
+                        <button class="btn btn-sm btn-secondary"
+                            [disabled]="page >= pagination?.total / pagination?.limit" (click)="changePage(page + 1)">
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Client Modal -->
+<div class="modal fade ct_addclient_modal" id="addClientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">Add Employee</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <form [formGroup]="Form">
+                <div class="modal-body p-0">
+
+                    <div class="mb-3">
+                        <label class="mb-1">Client Name</label>
+                        <input type="text" class="form-control ct_input" placeholder="Enter client name"
+                            formControlName="full_name" />
+                        <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
+                            class="err_msg">
+                            <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter
+                                client name.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="mb-1">Client Email</label>
+                        <input type="email" class="form-control ct_input" placeholder="Enter client email"
+                            formControlName="email" />
+                        <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
+                            <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
+                                Client Email is required.
+                            </div>
+                            <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
+                                class="ct_fs_14 mt-1">
+                                Invalid email format.</div>
+                        </div>
+                    </div>
+
+                    <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
+                        data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button (click)="onSubmit()" class="ct_black_btn w-100">Add</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Delete Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="deleteAssignDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Delete Employee</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to delete this employee?
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalDelete type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="deleteTeam()" type="submit" class="ct_blue_text ct_fw_600 btn-transparent">Yes ,
+                        Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- vlock Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">{{ modalTitle }}</h5>
+                <p class="ct_dark_grey_text">
+                    {{ modalMessage }}
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalBlock type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmToggle()" type="submit"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+</div>

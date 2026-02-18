@@ -1,0 +1,204 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb-35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/client-list" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Client Details ({{clientData?.u_unique_id}})
+            </h4>
+
+            <!-- accept reject btn -->
+            <div class="d-flex gap-4 flex-wrap d-none">
+                <div>
+                    <a href="#" class="reject_btn"><i class="fa-solid fa-xmark me-2"></i>Reject</a>
+                </div>
+                <div>
+                    <a href="#" class="accept_btn"><i class="fa-solid fa-check me-2"></i>Accept</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status approved -->
+        <!-- <div class="ct_client_approved_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+            <div class="ct_green_text ct_fs_18 ct_fw_600">
+                <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.5551 2.88598C15.0418 2.39988 15.6931 2.11385 16.3803 2.08432C17.0676 2.0548 17.741 2.28392 18.2676 2.72648L18.4436 2.88735L21.0561 5.49848H24.7494C25.4429 5.4986 26.1108 5.76079 26.6192 6.2325C27.1277 6.70422 27.4391 7.35063 27.4911 8.04223L27.4994 8.24848V11.9417L30.1119 14.5542C30.5983 15.041 30.8846 15.6926 30.9141 16.3801C30.9437 17.0677 30.7143 17.7414 30.2714 18.2681L30.1105 18.4427L27.498 21.0552V24.7485C27.4982 25.4423 27.2362 26.1105 26.7644 26.6192C26.2927 27.128 25.6461 27.4396 24.9542 27.4916L24.7494 27.4985H21.0575L18.445 30.111C17.9582 30.5975 17.3067 30.8837 16.6191 30.9133C15.9315 30.9428 15.2578 30.7134 14.7311 30.2705L14.5565 30.111L11.944 27.4985H8.24935C7.55556 27.4987 6.88732 27.2367 6.3786 26.7649C5.86987 26.2932 5.55826 25.6466 5.50622 24.9547L5.49935 24.7485V21.0552L2.88685 18.4427C2.40037 17.9559 2.1141 17.3044 2.08457 16.6168C2.05504 15.9292 2.28439 15.2556 2.72735 14.7289L2.88685 14.5542L5.49935 11.9417V8.24848C5.49948 7.55492 5.76166 6.88703 6.23338 6.37859C6.70509 5.87016 7.3515 5.55874 8.0431 5.50673L8.24935 5.49848H11.9426L14.5551 2.88598Z"
+                        fill="#22C55E" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M20.733 12.3517L14.8975 18.1872L12.4665 15.7562C12.2085 15.4984 11.8587 15.3536 11.4939 15.3537C11.1292 15.3538 10.7794 15.4989 10.5216 15.7569C10.2638 16.0149 10.119 16.3647 10.1191 16.7295C10.1193 17.0942 10.2643 17.444 10.5223 17.7018L13.8278 21.0073C13.9683 21.1478 14.135 21.2593 14.3186 21.3354C14.5021 21.4114 14.6989 21.4506 14.8975 21.4506C15.0962 21.4506 15.293 21.4114 15.4765 21.3354C15.6601 21.2593 15.8268 21.1478 15.9673 21.0073L22.6773 14.2959C22.9278 14.0366 23.0664 13.6893 23.0632 13.3288C23.0601 12.9682 22.9155 12.6234 22.6605 12.3684C22.4056 12.1135 22.0607 11.9689 21.7002 11.9658C21.3397 11.9626 20.9924 12.1012 20.733 12.3517Z"
+                        fill="#22C55E" />
+                </svg>
+
+                Approved
+            </div>
+            <div>
+                <p class="mb-0 ct_fs_14 ct_dark_grey_text">Approved on</p>
+                <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p>
+            </div>
+        </div> -->
+
+        <!-- Status rejected -->
+        <!-- <div class="d-none">
+            <div class="ct_client_rejected_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+                <div class="ct_red_text ct_fs_18 ct_fw_600">
+                    <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <rect width="33" height="33" rx="16.5" fill="#F51B0B" fill-opacity="0.2" />
+                        <path
+                            d="M16.5002 14.7808L19.8879 11.3931L19.974 11.4792L20.048 11.5901C20.4076 12.1296 20.8704 12.5926 21.4099 12.9524L21.5217 13.0269L21.6074 13.113L18.2201 16.5002L21.6074 19.8879L21.5213 19.9736L21.4104 20.048C20.8708 20.4076 20.4078 20.8704 20.048 21.4099L19.9736 21.5217L19.8879 21.6074L16.5002 18.2201L13.113 21.6074L13.0269 21.5213L12.9524 21.4104C12.5928 20.8708 12.13 20.4078 11.5905 20.048L11.4787 19.9736L11.3931 19.8879L14.7808 16.5002L11.3931 13.113L11.4792 13.0269L11.5905 12.9524C12.1299 12.5928 12.5928 12.1299 12.9524 11.5905L13.0269 11.4787L13.113 11.3931L16.5002 14.7808Z"
+                            stroke="#F51B0B" stroke-width="1.2381" />
+                    </svg>
+
+                    Rejected
+                </div>
+                <div>
+                    <p class="mb-0 ct_fs_14 ct_dark_grey_text">Rejected on</p>
+                    <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Status pending -->
+        <!-- <div class="d-none">
+            <div class="ct_client_pending_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+                <div class="ct_dark_yellow_text ct_fs_18 ct_fw_600">
+                    <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <mask id="mask0_41_527" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                            width="33" height="33">
+                            <path d="M0 0H33V33H0V0Z" fill="white" />
+                        </mask>
+                        <g mask="url(#mask0_41_527)">
+                            <mask id="mask1_41_527" style="mask-type: luminance" maskUnits="userSpaceOnUse" x="0" y="0"
+                                width="33" height="33">
+                                <path d="M0 0H33V33H0V0Z" fill="white" />
+                            </mask>
+                            <g mask="url(#mask1_41_527)">
+                                <path
+                                    d="M16.5 3.60938C9.39211 3.60938 3.60938 9.39211 3.60938 16.5C3.60938 23.6079 9.39211 29.3906 16.5 29.3906C23.6079 29.3906 29.3906 23.6079 29.3906 16.5C29.3906 9.39211 23.6079 3.60938 16.5 3.60938ZM16.5 8.89452C16.9628 8.89452 17.3577 9.05814 17.6849 9.38535C18.0122 9.71258 18.1758 10.1076 18.1758 10.5703C18.1758 11.0331 18.0122 11.428 17.6849 11.7553C17.3577 12.0825 16.9628 12.2461 16.5 12.2461C16.0372 12.2461 15.6423 12.0825 15.315 11.7553C14.9878 11.428 14.8242 11.0331 14.8242 10.5703C14.8242 10.1076 14.9878 9.71258 15.315 9.38535C15.6423 9.05814 16.0372 8.89452 16.5 8.89452ZM19.5938 23.4609H13.9219C13.6371 23.4609 13.394 23.3602 13.1927 23.1589C12.9913 22.9576 12.8906 22.7144 12.8906 22.4296C12.8906 22.145 12.9913 21.9018 13.1927 21.7005C13.394 21.4992 13.6371 21.3984 13.9219 21.3984H15.7266V15.7266H14.6953C14.4105 15.7266 14.1675 15.6259 13.9661 15.4245C13.7647 15.2231 13.6641 14.9801 13.6641 14.6953C13.6641 14.4105 13.7647 14.1675 13.9661 13.9661C14.1675 13.7647 14.4105 13.6641 14.6953 13.6641H16.7578C17.0426 13.6641 17.2856 13.7647 17.487 13.9661C17.6884 14.1675 17.7891 14.4105 17.7891 14.6953V21.3984H19.5938C19.8785 21.3984 20.1216 21.4992 20.3229 21.7005C20.5244 21.9018 20.625 22.145 20.625 22.4296C20.625 22.7144 20.5244 22.9576 20.3229 23.1589C20.1216 23.3602 19.8785 23.4609 19.5938 23.4609Z"
+                                    fill="#F59E0B" />
+                            </g>
+                        </g>
+                    </svg>
+
+                    Pending
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Profile Card -->
+        <div class="ct_mb-35 ct_client_detail_card pe-3">
+            <div class="d-md-flex gap-4 align-items-center">
+                <div class="">
+                    <img [src]="clientData?.profile_image ? clientData?.profile_image : 'img/no_pro.png'"
+                        class="ct_avatar_315_256" alt="profile" />
+                </div>
+
+                <div class="w-100 mt-md-0 mt-3">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <div>
+                            <div class="ct_fs_22 ct_fw_600">{{clientData?.full_name}}</div>
+                            <div class="ct-email ct_dark_grey_text">
+                                {{clientData?.email}}
+                            </div>
+                        </div>
+                        <div class="">
+                            <p class="mb-0 ct_fs_12 ct_dark_grey_text">
+                                Account Created On
+                            </p>
+                            <p class="mb-0 ct_fs_12 ct_dark_grey_text">
+                                {{clientData?.created_at | date:'dd-MMM-yyyy'}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-5 ct_mt_40 flex-wrap">
+                        <div class="">
+                            <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                Date of Birth
+                            </div>
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.dob || '-'}}</div>
+                        </div>
+                        <div class="">
+                            <div class="ct-info-label ct_dark_grey_text ct_fw_500">Country</div>
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.country || '-'}}</div>
+                        </div>
+                        <div class="">
+                            <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                Phone Number
+                            </div>
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.country_code || '-'}}
+                                {{clientData?.phone_number || '-'}}</div>
+                        </div>
+                        <div class="">
+                            <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                No. of Devices
+                            </div>
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.device_count || '-'}}</div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a [routerLink]="['/home/client-devices']" [queryParams]="{clientId: clientData.id}"
+                            class="ct-link text-decoration-underline ct_fs_14 ct_fw_600">View Devices</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Identity Verification -->
+        <div class="ct-card ct_mb-35">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Identity Verification</h6>
+            <div class="ct-doc">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ct-doc-icon">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6.55135 23.3327C6.0139 23.3327 5.56552 23.153 5.20618 22.7937C4.84685 22.4343 4.66679 21.9856 4.66602 21.4473V6.55135C4.66602 6.0139 4.84607 5.56552 5.20618 5.20618C5.56629 4.84685 6.01468 4.66679 6.55135 4.66602H21.4485C21.9852 4.66602 22.4336 4.84607 22.7937 5.20618C23.1538 5.56629 23.3335 6.01468 23.3327 6.55135V21.4485C23.3327 21.9852 23.153 22.4336 22.7937 22.7937C22.4343 23.1538 21.9856 23.3335 21.4473 23.3327H6.55135ZM6.55135 22.166H21.4485C21.6274 22.166 21.7919 22.0913 21.942 21.942C22.0921 21.7927 22.1668 21.6278 22.166 21.4473V6.55135C22.166 6.37168 22.0913 6.20679 21.942 6.05668C21.7927 5.90657 21.6278 5.8319 21.4473 5.83268H6.55135C6.37168 5.83268 6.20679 5.90735 6.05668 6.05668C5.90657 6.20602 5.8319 6.3709 5.83268 6.55135V21.4485C5.83268 21.6274 5.90735 21.7919 6.05668 21.942C6.20602 22.0921 6.37052 22.1668 6.55018 22.166M8.74935 19.2493H19.429L16.1308 14.851L13.08 18.7103L11.0383 16.2428L8.74935 19.2493Z"
+                                fill="#2563EB" />
+                        </svg>
+                    </div>
+                    Passport
+                </div>
+                <i class="fa-regular fa-eye ct_show_eye" data-bs-toggle="modal" data-bs-target="#selfieModal"></i>
+            </div>
+        </div>
+
+        <!-- Selfie -->
+        <div class="ct-card">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">
+                Identity Verification Selfie
+            </h6>
+            <div class="ct-doc">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="ct-doc-icon">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6.55135 23.3327C6.0139 23.3327 5.56552 23.153 5.20618 22.7937C4.84685 22.4343 4.66679 21.9856 4.66602 21.4473V6.55135C4.66602 6.0139 4.84607 5.56552 5.20618 5.20618C5.56629 4.84685 6.01468 4.66679 6.55135 4.66602H21.4485C21.9852 4.66602 22.4336 4.84607 22.7937 5.20618C23.1538 5.56629 23.3335 6.01468 23.3327 6.55135V21.4485C23.3327 21.9852 23.153 22.4336 22.7937 22.7937C22.4343 23.1538 21.9856 23.3335 21.4473 23.3327H6.55135ZM6.55135 22.166H21.4485C21.6274 22.166 21.7919 22.0913 21.942 21.942C22.0921 21.7927 22.1668 21.6278 22.166 21.4473V6.55135C22.166 6.37168 22.0913 6.20679 21.942 6.05668C21.7927 5.90657 21.6278 5.8319 21.4473 5.83268H6.55135C6.37168 5.83268 6.20679 5.90735 6.05668 6.05668C5.90657 6.20602 5.8319 6.3709 5.83268 6.55135V21.4485C5.83268 21.6274 5.90735 21.7919 6.05668 21.942C6.20602 22.0921 6.37052 22.1668 6.55018 22.166M8.74935 19.2493H19.429L16.1308 14.851L13.08 18.7103L11.0383 16.2428L8.74935 19.2493Z"
+                                fill="#2563EB" />
+                        </svg>
+                    </div>
+                    Photo
+                </div>
+                <i class="fa-regular fa-eye ct_show_eye" data-bs-toggle="modal" data-bs-target="#selfieModal"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- selefie preview modal -->
+<div class="modal fade" id="selfieModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content ct-preview-modal">
+            <div class="modal-header border-0">
+                <h6 class="mb-0 fw-semibold">Identity Verification</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center pt-0">
+                <img src="img/empty_doc.png" alt="Selfie" class="img-fluid rounded-3" />
+            </div>
+        </div>
+    </div>
+</div>

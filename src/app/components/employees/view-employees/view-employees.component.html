@@ -1,0 +1,237 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb-35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/employees" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Employee Details ({{employeeData?.e_unique_id}})
+            </h4>
+        </div>
+        <!-- Profile Card -->
+        <div class="ct_mb-35 ct_client_detail_card pe-3">
+            <div class="d-md-flex gap-4 align-items-center">
+                <div class="">
+                    <img src="img/client-detail-img.jpg" class="ct_avatar_315_256" alt="profile" />
+                </div>
+
+                <div class="w-100 mt-md-0 mt-3">
+                    <div class="d-flex justify-content-between flex-wrap">
+                        <div>
+                            <div class="ct_fs_22 ct_fw_600">{{employeeData?.full_name}}</div>
+                            <div class="ct-email">{{employeeData?.email}}</div>
+                        </div>
+                        <div class="">
+                            <p class="mb-0 ct_fs_12">Account Created On</p>
+                            <p class="mb-0 ct_fs_12">{{employeeData.created_at | date:'dd-MMM-yyyy'}}</p>
+                        </div>
+                    </div>
+                    <div class=" d-flex justify-content-between align-items-center ct_mt_40 flex-wrap">
+                        <div class="d-flex gap-5  flex-wrap">
+                            <div class="">
+                                <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                    Phone Number
+                                </div>
+                                <div class="ct-info-value ct_fs_18 ct_fw_500">{{employeeData?.country_code || '-'}}
+                                    {{employeeData?.phone_number || '-'}}</div>
+                            </div>
+                            <div class="">
+                                <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                    Assigned Devices
+                                </div>
+                                <div class="ct-info-value ct_fs_18 ct_fw_500">04</div>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- <span class="ct_rejected_badge">Remove</span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Assigned Devices</h4>
+            <div>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#assignDeviceModal"
+                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    Assign Devices
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive mt-4 ct_custom_table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Device ID</th>
+                        <th>Device Name</th>
+                        <th>Client ID</th>
+                        <th>Client Name</th>
+                        <th>Date of Installation</th>
+                        <th> Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>#DID238976</td>
+                        <td>Desktop PC</td>
+                        <td>#CID238976</td>
+                        <td>John Doe</td>
+                        <td>12 Aug 2026</td>
+                        <td class="">
+                            <span class="ct_accepted_badge">Active</span>
+                            <!-- <span class="ct_pending_badge">Pending</span> -->
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+                                <a data-bs-toggle="modal" data-bs-target="#editAssignDeviceModal"><img
+                                        src="img/edit.png"></a>
+                                <a data-bs-toggle="modal" data-bs-target="#deleteAssignDeviceModal"><img
+                                        src="img/cancel.png"></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- Add Client Modal -->
+<div class="modal fade ct_addclient_modal" id="assignDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">Assign Device Installation </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Client </label>
+                    <div class="search-box w-100">
+                        <div class="input-group position-relative">
+                            <input type="text" class="form-control ct_input ps-5" placeholder="Search client" />
+
+                            <i class="fas fa-search ct_show_search"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Device</label>
+                    <div class="search-box w-100">
+                        <div class="input-group position-relative">
+                            <input type="text" class="form-control ct_input ps-5"
+                                placeholder="Search available devices " />
+
+                            <i class="fas fa-search ct_show_search"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="mb-1"> Installation Date</label>
+                    <input type="date" class="form-control ct_input" placeholder="Enter employee name" />
+                </div>
+
+                <button class="ct_black_btn w-100">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Assign Modal -->
+<div class="modal fade ct_addclient_modal" id="editAssignDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600"> Edit Device Installation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Client </label>
+                    <div class="search-box w-100">
+                        <div class="input-group position-relative">
+                            <input type="text" class="form-control ct_input ps-5" placeholder="Search client" />
+
+                            <i class="fas fa-search ct_show_search"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Device</label>
+                    <div class="search-box w-100">
+                        <div class="input-group position-relative">
+                            <input type="text" class="form-control ct_input ps-5"
+                                placeholder="Search available device" />
+
+                            <i class="fas fa-search ct_show_search"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="mb-1"> Installation Date</label>
+                    <input type="date" class="form-control ct_input" placeholder="Enter employee name" />
+                </div>
+
+                <button class="ct_black_btn w-100">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="deleteAssignDeviceModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Cancel Installation Assignment</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to cancel this installation assignment?
+                </p>
+
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button class="ct_dark_grey_text btn-transparent  ">Cancel</button>
+                    <button type="submit" class="ct_blue_text ct_fw_600 btn-transparent">Yes , Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- selefie preview modal -->
+<div class="modal fade" id="selfieModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content ct-preview-modal">
+            <div class="modal-header border-0">
+                <h6 class="mb-0 fw-semibold">Selfie Preview</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center pt-0">
+                <img src="https://i.pravatar.cc/500" alt="Selfie" class="img-fluid rounded-3" />
+            </div>
+        </div>
+    </div>
+</div>

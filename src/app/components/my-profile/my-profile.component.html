@@ -1,0 +1,83 @@
+<div class="ct_inner_header_bg mt-4 ct_px_30">
+    <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Edit Profile</h4>
+</div>
+<div class="ct_px_30 mt-4 pb-4">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="ct_white_bg ct_py_50_px_40 ct_border_radius_10">
+                <form [formGroup]="profileForm" class="mt-5 ct_border_radius_12 ct_border_clr_EAEBEF ct_py_28_px_20">
+                    <div class="d-flex gap-4">
+                        <div class="ct_profile_img">
+                            <img [src]="profileImg ? profileImg : 'img/no_pro.png'" alt="">
+                            <label for="ct_profile_update">
+                                <input type="file" class="d-none" id="ct_profile_update"
+                                    (change)="onFileSelected($event)" accept="image/*">
+                                <div class="ct_upload_icon">
+                                    <img src="img/upload_icon.png" alt="">
+                                </div>
+                            </label>
+                        </div>
+                        <div>
+                            <h4 class="ct_fs_20 ct_fw_500 mb-0  mt-4">{{first_name}}</h4>
+                            <p class="ct_fs_14">{{userEmail}}</p>
+                        </div>
+                    </div>
+                    <div class="mt-5 row">
+                        <div class="col-lg-6">
+                            <div class="form-group mb-4">
+                                <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Full
+                                    Name</label>
+                                <input type="text" class="form-control ct_input ct_fs_14" placeholder="Enter Full Name"
+                                    value="Jenny Jhonson" formControlName="first_name">
+                                <div *ngIf="profileForm.controls['first_name'].invalid && profileForm.controls['first_name'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="profileForm.controls['first_name'].errors?.['required']">Please enter
+                                        your full name.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group mb-4">
+                                <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Last
+                                    Name</label>
+                                <input type="text" class="form-control ct_input ct_fs_14" placeholder="Enter Last Name"
+                                    value="Jenny Jhonson" formControlName="last_name">
+                                <div *ngIf="profileForm.controls['last_name'].invalid && profileForm.controls['last_name'].touched"
+                                    class="err_msg">
+                                    <div *ngIf="profileForm.controls['last_name'].errors?.['required']">Please enter
+                                        your last name.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group mb-4">
+                                <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Email Id
+                                    <span class="text-grey">(non-editable)</span></label>
+                                <input type="email" class="form-control ct_input ct_fs_14"
+                                    placeholder="Enter Email Address" value="jennyjhonsongmail.com"
+                                    formControlName="email">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 d-flex gap-3">
+                        <button (click)="onSubmit()" class="ct_black_btn">Save Changes</button>
+                        <!-- <button class="ct_bule_transparent_btn px-4">
+                            Cancel
+                        </button> -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+      <div class="loader">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+      </div>
+</div>

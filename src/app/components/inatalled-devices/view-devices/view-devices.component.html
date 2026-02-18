@@ -1,0 +1,211 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb-35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a (click)="backClicked()" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Device Details ({{deviceData?.device_uid}})
+            </h4>
+        </div>
+
+        <!-- Identity Verification -->
+        <div class="ct-card ct_mb-35">
+            <div class="d-flex justify-content-between flex-wrap gap-4">
+                <div>
+                    <h6 class="ct_fs_22 ct_fw_600 mb-1">{{deviceData?.device_name}}</h6>
+                    <p class="ct_fs_14 mb-3 ct_dark_grey_text">
+                        Device ID: {{deviceData?.device_uid}}
+                    </p>
+                    <div class="d-flex gap-4 flex-wrap">
+                        <div>
+                            <p class="mb-0 ct_fs_14 ct_dark_grey_text">Client Name</p>
+                            <p class="mb-0 ct_fw_500">{{deviceData?.client_name}}</p>
+                        </div>
+                        <div class="border-right"></div>
+                        <div>
+                            <p class="mb-0 ct_fs_14 ct_dark_grey_text">Client ID</p>
+                            <p class="mb-0 ct_fw_500">{{deviceData?.client_unique_id}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-end">
+                    <div class="mb-3">
+                        @if(deviceData?.status == 'active'){
+                        <span class="ct_accepted_badge">Active</span>
+                        }
+                    </div>
+                    <p class="mb-3 ct_fs_14">
+                        Installation Employee: {{deviceData?.employee_name || '-'}}
+                    </p>
+                    <div class="ct_blue_text ct_fs_14 ct_fw_600">
+                        @if(deviceData?.is_warranty_active == '1'){
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_52_1711)">
+                                <path d="M7.00001 0C7.12579 0 7.25157 0.0273438 7.36642 0.0792969L12.5152 2.26406C13.1168 2.51836 
+                                    13.5652 3.11172 13.5625 3.82812C13.5488 6.54063 12.4332 11.5035 7.72189 13.7594C7.26525 
+                                    13.9781 6.73478 13.9781 6.27814 13.7594C1.56681 11.5035 0.451184 6.54063 0.437512 3.82812C0.434778 
+                                    3.11172 0.883216 2.51836 1.48478 2.26406L6.63634 0.0792969C6.74845 0.0273438 6.87423 0 7.00001 0ZM7.00001 
+                                    1.82656V12.1625C10.7734 10.3359 11.7879 6.2918 11.8125 3.86641L7.00001 1.82656Z"
+                                    fill="#2563EB" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_52_1711">
+                                    <path d="M0 0H14V14H0V0Z" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+                        <span *ngIf="deviceData?.is_warranty_active === 1">
+                            Under Warranty
+                        </span>
+
+                        <!-- <span *ngIf="deviceData?.is_warranty_active === 0">
+                            Warranty Expired
+                        </span> -->
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ct-card ct_mb-35">
+            <div class="d-flex justify-content-between flex-wrap gap-4">
+                <div>
+                    <h6 class="ct_fs_18 ct_fw_600 mb-0 ct_dark_grey_text">
+                        Processor
+                    </h6>
+                </div>
+                <div>
+                    <p class="ct_fw_600 mb-0"> {{ parsedDevice?.processor }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- ram & storage -->
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">RAM & Storage</h6>
+        <div class="ct-card ct_mb-35">
+            <div class="row gy-4">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">RAM</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.ram?.total_gb || 'N/A' }} GB
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">SSD:</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.rom?.ssd_gb || 'N/A' }} GB
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">RAM Serial No</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.ram?.serial_no || 'N/A' }}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">SSD Serial No</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.rom?.ssd_serial_no || 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">RAM Brand</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.ram?.brand || 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Motherboard & MAC -->
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">Motherboard & MAC</h6>
+        <div class="ct-card ct_mb-35">
+            <div class="row gy-4">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Motherboard</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.mac }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">MAC Address:</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.ip }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">RAM Serial No</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">CN0W7H3P7272R1B1A00</h6>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <!--  Warranty Details -->
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">Warranty Details</h6>
+        <div class="ct-card ct_mb-35">
+            <div class="row gy-4">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Warranty Start Date</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600"> {{ deviceData?.warranty_start_date ? (deviceData?.warranty_start_date
+                                | date:'dd MMM yyyy') : 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Warranty End Date</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ deviceData?.warranty_end_date ? (deviceData?.warranty_end_date |
+                                date:'dd MMM yyyy') : 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
