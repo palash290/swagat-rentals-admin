@@ -99,13 +99,13 @@
 <!-- <p-table #dt [value]="deviceList" [lazy]="true" (onLazyLoad)="loadDevices($event)" [paginator]="true" [rows]="limit"
     [totalRecords]="totalRecords" [loading]="loading" [rowsPerPageOptions]="[10,25,50]" dataKey="id"
     responsiveLayout="scroll" class="p-datatable-gridlines"> -->
-<p-table #dt [value]="deviceList" [lazy]="true" (onLazyLoad)="loadDevices($event)" [paginator]="true" [rows]="limit"
+<!-- <p-table #dt [value]="deviceList" [lazy]="true" (onLazyLoad)="loadDevices($event)" [paginator]="true" [rows]="limit"
     [totalRecords]="totalRecords" [loading]="loading" [rowsPerPageOptions]="[10,25,50]" [filterDelay]="0"
     [lazyLoadOnInit]="true"
-    [globalFilterFields]="['device_uid','device_type','client_name','client_unique_id','status']">
+    [globalFilterFields]="['device_uid','device_type','client_name','client_unique_id','status']"> -->
 
 
-    <ng-template pTemplate="caption">
+    <!-- <ng-template pTemplate="caption">
         <div class="flex justify-content-between align-items-center">
             <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
@@ -164,10 +164,10 @@
         </tr>
     </ng-template>
 
-</p-table>
+</p-table> -->
 
 
-<!-- <div class="card">
+<div class="card">
     <p-table #dt1 [value]="customers()" dataKey="id" [rows]="10" [rowsPerPageOptions]="[10, 25, 50]"
         [loading]="loading()" [paginator]="true"
         [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']" showGridlines>
@@ -317,4 +317,4 @@
             </tr>
         </ng-template>
     </p-table>
-</div> -->
+</div>

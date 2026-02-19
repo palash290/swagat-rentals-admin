@@ -24,9 +24,8 @@
                         <!-- Search -->
                         <div class="search-box w-100 mb-2">
                             <div class="input-group position-relative">
-                                <input type="text" class="form-control ct_input ps-5"
-                                    placeholder="Search..." [(ngModel)]="search"
-                                    (input)="onSearchChange()" />
+                                <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                                    [(ngModel)]="search" (input)="onSearchChange()" />
 
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
@@ -121,28 +120,51 @@
                 <div class="modal-body p-0">
                     <div class="mb-3">
                         <label class="mb-1">Client Name</label>
+
                         <input type="text" class="form-control ct_input" placeholder="Enter client name"
-                            formControlName="full_name" />
-                        <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter
-                                client name.</div>
+                            formControlName="full_name"
+                            (input)="Form['full_name'].setValue(f['full_name'].value.trimStart(), { emitEvent: false })" />
+
+                        <div *ngIf="f['full_name'].invalid && f['full_name'].touched" class="err_msg">
+
+                            <div *ngIf="f['full_name'].errors?.['required']">
+                                Please enter client name.
+                            </div>
+
+                            <div *ngIf="f['full_name'].errors?.['minlength']">
+                                Name must be at least 3 characters.
+                            </div>
+
+                            <div *ngIf="f['full_name'].errors?.['maxlength']">
+                                Name cannot exceed 50 characters.
+                            </div>
+
                         </div>
                     </div>
 
                     <div class="mb-4">
                         <label class="mb-1">Client Email</label>
+
                         <input type="email" class="form-control ct_input" placeholder="Enter client email"
                             formControlName="email" />
-                        <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
-                            <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
+
+                        <div *ngIf="f['email'].invalid && f['email'].touched" class="err_msg">
+
+                            <div *ngIf="f['email'].errors?.['required']">
                                 Client Email is required.
                             </div>
-                            <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
-                                class="ct_fs_14 mt-1">
-                                Invalid email format.</div>
+
+                            <div *ngIf="f['email'].errors?.['email'] && !f['email'].errors?.['required']">
+                                Invalid email format.
+                            </div>
+
+                            <div *ngIf="f['email'].errors?.['maxlength']">
+                                Email cannot exceed 100 characters.
+                            </div>
+
                         </div>
                     </div>
+
 
                     <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
                         data-bs-dismiss="modal">
@@ -158,10 +180,10 @@
 </div>
 
 <div class="loader-overlay" *ngIf="loading">
-      <div class="loader">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-      </div>
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
 </div>

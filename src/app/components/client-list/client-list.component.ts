@@ -42,7 +42,7 @@ export class ClientListComponent {
   initForm() {
     this.Form = new FormGroup({
       full_name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email])
     });
   }
 
@@ -56,7 +56,12 @@ export class ClientListComponent {
       limit: this.limit.toString()
     });
 
-    this.apiService.get(`admin/clients?${params.toString()}`).subscribe({
+    const url = this.clientId
+      ? `admin/clients/${this.clientId}`
+      : 'admin/clients';
+
+
+    this.apiService.get(url).subscribe({
       next: (resp: any) => {
         this.dashboardData = resp.data.items;
         this.pagination = resp.data.pagination;
