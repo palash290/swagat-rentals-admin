@@ -5,7 +5,7 @@
                 <a (click)="backClicked()" class="ct_text_black">
                     <i class="fa-solid fa-arrow-left me-2"></i>
                 </a>
-                Device Details ({{deviceData?.device_uid}})
+                Device Details ({{deviceData?.system_uid}})
             </h4>
         </div>
 
@@ -15,7 +15,7 @@
                 <div>
                     <h6 class="ct_fs_22 ct_fw_600 mb-1">{{deviceData?.device_name}}</h6>
                     <p class="ct_fs_14 mb-3 ct_dark_grey_text">
-                        Device ID: {{deviceData?.device_uid}}
+                        Device ID: {{deviceData?.system_uid}}
                     </p>
                     <div class="d-flex gap-4 flex-wrap">
                         <div>
@@ -36,7 +36,7 @@
                         }
                     </div>
                     <p class="mb-3 ct_fs_14">
-                        Installation Employee: {{deviceData?.employee_name || '-'}}
+                        Installation Employee: {{deviceData?.employee_name || 'N/A'}}
                     </p>
                     <div class="ct_blue_text ct_fs_14 ct_fw_600">
                         @if(deviceData?.is_warranty_active == '1'){
@@ -77,7 +77,7 @@
                     </h6>
                 </div>
                 <div>
-                    <p class="ct_fw_600 mb-0"> {{ parsedDevice?.processor }}</p>
+                    <p class="ct_fw_600 mb-0"> {{ parsedDevice?.processor || 'N/A' }}</p>
                 </div>
             </div>
         </div>
@@ -153,7 +153,10 @@
                             <p class="ct_dark_grey_text mb-0">Motherboard</p>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="ct_fw_600">{{ parsedDevice?.mac }}</h6>
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.motherboard?.brand || 'N/A' }}
+                                {{ parsedDevice?.motherboard?.model || '' }}
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -163,7 +166,9 @@
                             <p class="ct_dark_grey_text mb-0">MAC Address:</p>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="ct_fw_600">{{ parsedDevice?.ip }}</h6>
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.mac || 'N/A' }}
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -179,6 +184,60 @@
                 </div> -->
             </div>
         </div>
+
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">CPU Details</h6>
+        <div class="ct-card ct_mb-35">
+            <div class="row gy-4">
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Processor</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.processor || 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Cores</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.cpu_cores || 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Threads</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.cpu_threads || 'N/A' }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Speed</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.cpu_speed ? (parsedDevice.cpu_speed + ' GHz') : 'N/A' }}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!--  Warranty Details -->
         <h6 class="ct_fs_18 ct_fw_600 mb-3">Warranty Details</h6>
         <div class="ct-card ct_mb-35">
@@ -207,5 +266,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>

@@ -25,7 +25,7 @@ export class ViewDevicesComponent {
   }
 
   getDeviceDetails() {
-    this.service.get(`devices/${this.deviceId}`).subscribe({
+    this.service.get(`systems/${this.deviceId}`).subscribe({
       next: (resp: any) => {
         this.deviceData = resp.data;
         this.parseInventory(resp.data.inventory);
@@ -37,19 +37,69 @@ export class ViewDevicesComponent {
   }
 
   parseInventory(inventory: any[]) {
-    const find = (type: string) => inventory.find(x => x.type === type)?.details;
+
+    const find = (type: string) =>
+      inventory.find(x => x.type === type)?.details || null;
+
+    const cpu = find('cpu');
+    const motherboard = find('motherboard');
+    const ram = find('ram');
+    const ssd = find('ssd');
+    const hdd = find('hdd');
+    const gpu = find('gpu');
+    const monitor = find('monitor');
 
     this.parsedDevice = {
-      os: find('os_info'),
-      cpu: find('cpu'),
-      processor: find('processor')?.value,
-      ram: find('ram'),
-      rom: find('rom'),
-      network: find('network')?.json || [],
-      mac: find('mac_address')?.value,
-      ip: find('ip_address')?.value,
-      uuid: find('device_uuid')?.value,
-      device_name: find('device_name')?.value
+      // SYSTEM INFO
+      device_name: this.deviceData?.device_name,
+      device_type: this.deviceData?.device_type,
+      uuid: this.deviceData?.system_uuid,
+      ip: this.deviceData?.ip_address,
+      mac: this.deviceData?.mac_address,
+
+      // CPU
+      processor: cpu ? `${cpu.brand} ${cpu.model}` : 'N/A',
+      cpu_cores: cpu?.cores,
+      cpu_threads: cpu?.threads,
+      cpu_speed: cpu?.speedGHz,
+
+      // RAM
+      ram: {
+        total_gb: ram?.sizeGB,
+        brand: ram?.brand,
+        serial_no: ram?.serial_number,
+        speed: ram?.clockSpeed
+      },
+
+      // STORAGE
+      rom: {
+        ssd_gb: ssd?.sizeGB,
+        ssd_brand: ssd?.brand,
+        ssd_serial_no: ssd?.serial_number,
+        hdd_gb: hdd?.sizeGB
+      },
+
+      // MOTHERBOARD
+      motherboard: {
+        brand: motherboard?.brand,
+        model: motherboard?.model,
+        serial: motherboard?.serial_number,
+        bios: motherboard?.bios_version
+      },
+
+      // GPU
+      gpu: {
+        brand: gpu?.brand,
+        model: gpu?.model,
+        vram: gpu?.vramMB
+      },
+
+      // MONITOR
+      monitor: {
+        resolution: monitor?.resolution,
+        size: monitor?.approx_size_inches,
+        serial: monitor?.serial_number
+      }
     };
   }
 

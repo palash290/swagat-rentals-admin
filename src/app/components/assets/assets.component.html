@@ -1,0 +1,90 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb-25">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                Assets Categories
+            </h4>
+        </div>
+
+        <div class="ct_wrapper_white_box">
+            <!-- Search -->
+            <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
+                <!-- Search -->
+                <!-- <div class="search-box  ">
+                    <div class="input-group position-relative">
+                        <input type="text" class="form-control ct_input ps-5"
+                            placeholder="Search..." [(ngModel)]="searchText"
+                            (input)="getAllTasks()" />
+
+                        <i class="fas fa-search ct_show_search"></i>
+                    </div>
+                </div> -->
+
+                <!-- Filters -->
+                <div class="d-flex align-items-center gap-2 filter-box">
+                    <div class="d-flex">
+                        <!-- <div class="ct_w_100_767">
+                            <select class="form-control ct_input" [(ngModel)]="selectedClientId"
+                                (change)="getAllTasks()">
+                                <option value="" disabled>Select Client</option>
+                                <option value="">All</option>
+                                <option *ngFor="let agent of clientList" [value]="agent.id">
+                                    {{ agent.full_name }}
+                                </option>
+                            </select>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive mt-4 ct_custom_table">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                     
+                            <th>Device Status</th>
+                            <!-- <th>Installed On</th> -->
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of deviceList; let i = index">
+                            <td>{{ (page - 1) * limit + i + 1 }}</td>
+                            <td>{{item.name}}</td>
+                            
+                            <td class="">
+                                @if(item.is_active == "1"){
+                                <span class="ct_accepted_badge">Active</span>
+                                }
+                                @if(item.is_active == "0"){
+                                <span class="ct_rejected_badge">Inactive</span>
+                                }
+                            </td>
+                            <!-- <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td> -->
+                            <!-- <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <a [routerLink]="['/home/view-assets']" [queryParams]="{deviceId: item.id}"><i
+                                            class="fa-regular fa-eye"></i></a>
+                                </div>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="deviceList?.length == 0" class="text-center">
+                <p class="ct_fs_15 mt-5">No device found</p>
+            </div>
+            <!-- <div class="d-flex justify-content-end mt-3 gap-2">
+                <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
+                    Prev
+                </button>
+                {{pagination.page}}
+                <button class="btn btn-sm btn-secondary" [disabled]="page >= pagination?.total / pagination?.limit"
+                    (click)="changePage(page + 1)">
+                    Next
+                </button>
+            </div> -->
+        </div>
+    </div>
+</div>

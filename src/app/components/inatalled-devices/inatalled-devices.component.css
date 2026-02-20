@@ -1,0 +1,8 @@
+.ct_hover_underline:hover {
+    text-decoration: underline;
+    color: var(--blue);
+}
+
+.ct_hover_underline {
+    color: #000;
+}

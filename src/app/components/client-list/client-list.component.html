@@ -24,22 +24,19 @@
                         <!-- Search -->
                         <div class="search-box w-100 mb-2">
                             <div class="input-group position-relative">
-                                <input type="text" class="form-control ct_input ps-5"
-                                    placeholder="Search..." [(ngModel)]="search"
-                                    (input)="onSearchChange()" />
-
+                                <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                                    [(ngModel)]="search" (input)="onSearchChange()" />
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
                         </div>
 
                         <!-- Filters -->
-
                         <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
                             <select class="form-select ct_input" [(ngModel)]="kycStatus" (change)="onStatusChange()">
                                 <!-- <option disabled selected>KYC Status</option> -->
                                 <option value="" disabled>KYC Status</option>
                                 <option value="">All</option>
-                                <option value="accepted">Accepted</option>
+                                <option value="approved">Approved</option>
                                 <option value="pending">Pending</option>
                                 <option value="rejected">Rejected</option>
                             </select>
@@ -69,8 +66,8 @@
                                     <td>{{ item.full_name }}</td>
                                     <td>{{ item.email }}</td>
                                     <td>
-                                        <span *ngIf="item.kyc_status === 'accepted'"
-                                            class="ct_accepted_badge">Accepted</span>
+                                        <span *ngIf="item.kyc_status === 'approved'"
+                                            class="ct_accepted_badge">Approved</span>
                                         <span *ngIf="item.kyc_status === 'pending'"
                                             class="ct_pending_badge">Pending</span>
                                         <span *ngIf="item.kyc_status === 'rejected'"
@@ -158,10 +155,10 @@
 </div>
 
 <div class="loader-overlay" *ngIf="loading">
-      <div class="loader">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-      </div>
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
 </div>

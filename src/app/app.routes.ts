@@ -21,7 +21,7 @@ export const routes: Routes = [
       {
             path: 'home',
             loadComponent: () => import('./components/main/main.component').then(m => m.MainComponent),
-            canActivate:[authGuard],
+            canActivate: [authGuard],
             children: [
                   {
                         path: 'dashboard',
@@ -51,6 +51,15 @@ export const routes: Routes = [
                   },
 
                   {
+                        path: 'assets',
+                        loadComponent: () => import('./components/assets/assets.component').then(m => m.AssetsComponent)
+                  },
+                  {
+                        path: 'view-assets',
+                        loadComponent: () => import('./components/assets/view-assets/view-assets.component').then(m => m.ViewAssetsComponent)
+                  },
+
+                  {
                         path: 'employees',
                         loadComponent: () => import('./components/employees/employees.component').then(m => m.EmployeesComponent)
                   },
@@ -58,7 +67,7 @@ export const routes: Routes = [
                         path: 'view-employees',
                         loadComponent: () => import('./components/employees/view-employees/view-employees.component').then(m => m.ViewEmployeesComponent)
                   },
-                   {
+                  {
                         path: 'my-profile',
                         loadComponent: () => import('./components/my-profile/my-profile.component').then(m => m.MyProfileComponent)
                   },

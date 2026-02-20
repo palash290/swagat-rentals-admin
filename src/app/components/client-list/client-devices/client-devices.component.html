@@ -48,9 +48,9 @@
                     <tbody>
                         <tr *ngFor="let item of clientData; let i = index">
                             <td>1</td>
-                            <td>{{item.device_uid}}</td>
+                            <td>{{item.system_uid}}</td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.ip_address}}</td>
+                            <td>{{item.ip_address || '-'}}</td>
                             <td>{{item.employee_name || '-'}}</td>
                             <td class="">
                                 @if(item.status == "active"){

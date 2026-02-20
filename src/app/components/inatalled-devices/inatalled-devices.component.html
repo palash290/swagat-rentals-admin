@@ -12,9 +12,8 @@
                 <!-- Search -->
                 <div class="search-box  ">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search..." [(ngModel)]="searchText"
-                            (input)="getAllTasks()" />
+                        <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                            [(ngModel)]="searchText" (input)="getAllTasks()" />
 
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
@@ -23,7 +22,7 @@
                 <!-- Filters -->
                 <div class="d-flex align-items-center gap-2 filter-box">
                     <div class="d-flex">
-                        <div class="ct_w_100_767">
+                        <!-- <div class="ct_w_100_767">
                             <select class="form-control ct_input" [(ngModel)]="selectedClientId"
                                 (change)="getAllTasks()">
                                 <option value="" disabled>Select Client</option>
@@ -32,7 +31,7 @@
                                     {{ agent.full_name }}
                                 </option>
                             </select>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -41,22 +40,49 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Device ID</th>
-                            <th>Device Type</th>
+
+                            <th>
+                                <div class="d-flex flex-column">
+                                    <span>System ID</span>
+                                    <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.system_uid"
+                                        (change)="applyFilter()">
+                                        <option value="">All</option>
+                                        <option *ngFor="let id of systemUidList" [value]="id">
+                                            {{ id }}
+                                        </option>
+                                    </select> -->
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="d-flex flex-column">
+                                    <span>Device Type</span>
+                                    <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.deviceType"
+                                        (change)="applyFilter()">
+                                        <option value="">All</option>
+                                        <option *ngFor="let type of deviceTypeList" [value]="type">
+                                            {{ type }}
+                                        </option>
+                                    </select> -->
+                                </div>
+                            </th>
+
                             <th>Client ID</th>
                             <th>Client Name</th>
-                            <th>Device Status</th>
                             <th>Installed On</th>
+                            <th>Device Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
-                            <td>{{item.device_uid}}</td>
+                            <td>{{item.system_uid}}</td>
                             <td>{{item.device_type}}</td>
                             <td>{{item.client_unique_id}}</td>
-                            <td>{{item.client_name}}</td>
+                            <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
+                                [queryParams]="{clientId: item.client_id}"><a  class="ct_hover_underline">{{item.client_name}}</a></td>
+                            <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td>
                             <td class="">
                                 @if(item.status == "active"){
                                 <span class="ct_accepted_badge">Active</span>
@@ -71,7 +97,6 @@
                                 <span class="ct_rejected_badge">Inactive</span>
                                 }
                             </td>
-                            <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
                                     <a [routerLink]="['/home/view-devices']" [queryParams]="{deviceId: item.id}"><i

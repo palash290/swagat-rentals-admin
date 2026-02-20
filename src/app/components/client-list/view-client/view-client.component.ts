@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 
 @Component({
   selector: 'app-view-client',
@@ -14,7 +14,7 @@ export class ViewClientComponent {
   clientId: any;
   clientData: any;
 
-  constructor(private route: ActivatedRoute, private service: CommonService) { }
+  constructor(private route: ActivatedRoute, private service: CommonService, private location: Location) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -32,6 +32,10 @@ export class ViewClientComponent {
         console.log(error.message);
       }
     });
+  }
+
+  backClicked() {
+    this.location.back();
   }
 
 
