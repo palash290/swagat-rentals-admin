@@ -3,7 +3,6 @@
             <div class="ct_admin_logo ct-auth-logo">
                   <img src="img/logo.svg" alt="" />
             </div>
-
             <!-- Login Section -->
             <div class="ct-login-wrapper">
                   <div class="ct-login-card">
@@ -14,13 +13,11 @@
                                     devices, billing and services.
                               </div>
                         </div>
-
                         <form [formGroup]="Form">
                               <div class="mb-3">
                                     <label class="form-label small">Email</label>
                                     <input type="email" class="form-control ct_input" placeholder="Enter your email"
                                           formControlName="email" />
-
                                     <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched"
                                           class="err_msg">
                                           <div *ngIf="Form.controls['email'].errors?.['required']"
@@ -31,9 +28,7 @@
                                                 class="ct_fs_14 mt-1">
                                                 Invalid email format.</div>
                                     </div>
-
                               </div>
-
                               <div class="form-group mb-3">
                                     <label for="" class="mb-2 ct_text_black ct_fw_400">
                                           Password</label>
@@ -55,12 +50,10 @@
                                           </div>
                                     </div>
                               </div>
-
                               <div class="text-end mb-3">
                                     <a routerLink="/forgot-password" class="ct-forgot ct_blue_text ct_fw_600">Forgot
                                           Password?</a>
                               </div>
-
                               <a (click)="login()" type="submit" class="ct_black_btn w-100">
                                     Sign In
                               </a>

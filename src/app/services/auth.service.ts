@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 export class AuthService {
       constructor(private router: Router) { }
 
-      setValues(token: string, roleUUID: string,userInfo: any) {
+      setValues(token: string, roleUUID: string, userInfo: any) {
             localStorage.setItem('swagatToken', token)
             localStorage.setItem('role_uuid', roleUUID);
             localStorage.setItem('userInfo', JSON.stringify(userInfo));

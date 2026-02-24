@@ -10,11 +10,13 @@ import { LoaderService } from './services/loader.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
   title = 'swagat-rentals';
   showLoader = false;
   private subscription!: Subscription;
-  constructor(private router: Router, private loaderService: LoaderService) {
-  }
+
+  constructor(private router: Router, private loaderService: LoaderService) {}
+
   ngOnInit() {
     this.subscription = this.loaderService.showLoader$.subscribe(value => {
       this.showLoader = value;
@@ -32,4 +34,6 @@ export class AppComponent {
       }
     });
   }
+
+  
 }

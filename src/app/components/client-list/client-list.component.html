@@ -14,7 +14,6 @@
         </div>
     </div>
 </div>
-
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
         <div class="row">
@@ -29,7 +28,6 @@
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
                         </div>
-
                         <!-- Filters -->
                         <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
                             <select class="form-select ct_input" [(ngModel)]="kycStatus" (change)="onStatusChange()">
@@ -112,7 +110,6 @@
                 <h5 class="modal-title ct_fs_18 ct_fw_600">Add Client</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
             <!-- Body -->
             <form [formGroup]="Form">
                 <div class="modal-body p-0">
@@ -126,7 +123,6 @@
                                 client name.</div>
                         </div>
                     </div>
-
                     <div class="mb-4">
                         <label class="mb-1">Client Email</label>
                         <input type="email" class="form-control ct_input" placeholder="Enter client email"
@@ -140,16 +136,13 @@
                                 Invalid email format.</div>
                         </div>
                     </div>
-
                     <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
                         data-bs-dismiss="modal">
                         Cancel
                     </button>
-
                     <button (click)="onSubmit()" type="submit" class="ct_black_btn w-100">Add</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

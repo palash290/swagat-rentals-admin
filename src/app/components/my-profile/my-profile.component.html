@@ -25,18 +25,17 @@
                     <div class="mt-5 row">
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
-                                <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Full
+                                <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Fist
                                     Name</label>
-                                <input type="text" class="form-control ct_input ct_fs_14" placeholder="Enter Full Name"
-                                    value="Jenny Jhonson" formControlName="first_name">
+                                <input type="text" class="form-control ct_input ct_fs_14" placeholder="Enter First Name"
+                                    formControlName="first_name">
                                 <div *ngIf="profileForm.controls['first_name'].invalid && profileForm.controls['first_name'].touched"
                                     class="err_msg">
                                     <div *ngIf="profileForm.controls['first_name'].errors?.['required']">Please enter
-                                        your full name.</div>
+                                        your first name.</div>
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Last
@@ -50,7 +49,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-lg-6">
                             <div class="form-group mb-4">
                                 <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Email Id
@@ -74,10 +72,10 @@
 </div>
 
 <div class="loader-overlay" *ngIf="loading">
-      <div class="loader">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-      </div>
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
 </div>

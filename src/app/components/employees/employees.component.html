@@ -14,7 +14,6 @@
         </div>
     </div>
 </div>
-
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
         <div class="row">
@@ -27,14 +26,11 @@
                                 <input type="text" class="form-control ct_input ps-5"
                                     placeholder="Search..." [(ngModel)]="searchText"
                                     (input)="getAllEmployee()" />
-
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
                         </div>
-
                         <!-- Filters -->
                         <div class="d-flex align-items-center gap-2 filter-box">
-
                             <!-- <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
                                 <select class="form-select ct_input" [(ngModel)]="status" (change)="onStatusChange()">
                                     <option value="">Status</option>
@@ -43,7 +39,6 @@
                                     <option value="rejected">Rejected</option>
                                 </select>
                             </div> -->
-
                         </div>
                     </div>
                     <div class="table-responsive mt-4 ct_custom_table">
@@ -125,11 +120,9 @@
                 <h5 class="modal-title ct_fs_18 ct_fw_600">Add Employee</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
             <!-- Body -->
             <form [formGroup]="Form">
                 <div class="modal-body p-0">
-
                     <div class="mb-3">
                         <label class="mb-1">Client Name</label>
                         <input type="text" class="form-control ct_input" placeholder="Enter client name"
@@ -140,7 +133,6 @@
                                 client name.</div>
                         </div>
                     </div>
-
                     <div class="mb-4">
                         <label class="mb-1">Client Email</label>
                         <input type="email" class="form-control ct_input" placeholder="Enter client email"
@@ -154,16 +146,13 @@
                                 Invalid email format.</div>
                         </div>
                     </div>
-
                     <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
                         data-bs-dismiss="modal">
                         Cancel
                     </button>
-
                     <button (click)="onSubmit()" class="ct_black_btn w-100">Add</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>
