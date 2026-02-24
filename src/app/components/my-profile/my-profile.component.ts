@@ -35,7 +35,7 @@ export class MyProfileComponent {
   initForm() {
     this.profileForm = new FormGroup({
       first_name: new FormControl('', Validators.required),
-      last_name: new FormControl('', Validators.required),
+      // last_name: new FormControl('', Validators.required),
       email: new FormControl({ value: this.userEmail, disabled: true }),
     });
   }
@@ -45,7 +45,7 @@ export class MyProfileComponent {
       next: (resp: any) => {
         this.userEmail = resp.data.email;
         this.first_name = resp.data.first_name;
-        this.last_name = resp.data.last_name;
+        // this.last_name = resp.data.last_name;
         this.profileImg = resp.data.profile_image;
         this.profileForm.patchValue({
           first_name: this.first_name,
@@ -64,9 +64,9 @@ export class MyProfileComponent {
     this.profileForm.markAllAsTouched();
 
     const first_name = this.profileForm.value.first_name?.trim();
-    const last_name = this.profileForm.value.last_name?.trim();
+    // const last_name = this.profileForm.value.last_name?.trim();
 
-    if (!first_name || !last_name) {
+    if (!first_name) {
       return;
     }
 
@@ -74,7 +74,7 @@ export class MyProfileComponent {
       this.loading = true;
       const formURlData = new FormData();
       formURlData.append('first_name', this.profileForm.value.first_name);
-      formURlData.append('last_name', this.profileForm.value.last_name);
+      // formURlData.append('last_name', this.profileForm.value.last_name);
 
       if (this.selectedFile) {
         formURlData.append('profile_image', this.selectedFile);
