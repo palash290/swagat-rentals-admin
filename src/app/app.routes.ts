@@ -51,6 +51,11 @@ export const routes: Routes = [
                   },
 
                   {
+                        path: 'assets-category',
+                        loadComponent: () => import('./components/assets-category/assets-category.component').then(m => m.AssetsCategoryComponent)
+                  },
+
+                  {
                         path: 'assets',
                         loadComponent: () => import('./components/assets/assets.component').then(m => m.AssetsComponent)
                   },
@@ -74,6 +79,67 @@ export const routes: Routes = [
                   {
                         path: 'change-password',
                         loadComponent: () => import('./components/change-password/change-password.component').then(m => m.ChangePasswordComponent)
+                  },
+
+                  {
+                        path: 'service-requests',
+                        loadComponent: () => import('./components/service-requests/service-requests.component').then(m => m.ServiceRequestsComponent)
+                  },
+                  {
+                        path: 'asset-purchase',
+                        loadComponent: () => import('./components/asset-purchase/asset-purchase.component').then(m => m.AssetPurchaseComponent)
+                  },
+
+                  {
+                        path: 'asset-purchase',
+                        loadComponent: () => import('./components/asset-purchase/asset-purchase.component').then(m => m.AssetPurchaseComponent)
+                  },
+                  {
+                        path: 'asset-purchase-detail',
+                        loadComponent: () => import('./components/asset-purchase/asset-purchase-detail/asset-purchase-detail.component').then(m => m.AssetPurchaseDetailComponent)
+                  },
+                  {
+                        path: 'add-assets',
+                        loadComponent: () => import('./components/asset-purchase/add-asset/add-asset.component').then(m => m.AddAssetComponent)
+                  },
+
+                  {
+                        path: 'payments',
+                        loadComponent: () => import('./components/payments/payments.component').then(m => m.PaymentsComponent)
+                  },
+                  {
+                        path: 'payment-details',
+                        loadComponent: () => import('./components/payments/payment-details/payment-details.component').then(m => m.PaymentDetailsComponent)
+                  },
+
+                  {
+                        path: 'agreements',
+                        loadComponent: () => import('./components/agreements/agreements.component').then(m => m.AgreementsComponent)
+                  },
+                  {
+                        path: 'agreements-details',
+                        loadComponent: () => import('./components/agreements/agreement-details/agreement-details.component').then(m => m.AgreementDetailsComponent)
+                  },
+
+                  {
+                        path: 'reparing',
+                        loadComponent: () => import('./components/reparing/reparing.component').then(m => m.ReparingComponent)
+                  },
+                  {
+                        path: 'reparing-details',
+                        loadComponent: () => import('./components/reparing/reparing-details/reparing-details.component').then(m => m.ReparingDetailsComponent)
+                  },
+                  {
+                        path: 'add-reparing',
+                        loadComponent: () => import('./components/reparing/add-reparing/add-reparing.component').then(m => m.AddReparingComponent)
+                  },
+                  {
+                        path: 'support',
+                        loadComponent: () => import('./components/support/support.component').then(m => m.SupportComponent)
+                  },
+                  {
+                        path: 'warranty-tracking',
+                        loadComponent: () => import('./components/warranty-tracking/warranty-tracking.component').then(m => m.WarrantyTrackingComponent)
                   },
             ]
       }

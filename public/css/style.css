@@ -9,9 +9,6 @@
       font-family: "Figtree", sans-serif;
       word-break: break-word;
 }
-body{
-      background-color: #F8FAFC;
-}
 
 ul {
       padding-left: 0px;
@@ -150,6 +147,10 @@ input[type="number"] {
       object-fit: cover;
 }
 
+.ct_width_18 {
+      width: 18px;
+}
+
 /* All img size css E */
 
 /* All font Weight Css S */
@@ -279,12 +280,16 @@ input[type="number"] {
 .form-check-input:focus {
       box-shadow: none;
 }
+.ct_mt_30{
+
+      margin-top: 30px;
+}
 
 /* Custom Scroll Css E */
 
 /* all padding css S */
 .ct_px_30 {
-      padding-inline: 30px;
+      padding-inline: 12px;
 }
 
 .ct_py_100 {
@@ -311,12 +316,20 @@ input[type="number"] {
       margin-top: 40px;
 }
 
-.ct_mb-35 {
+.ct_mb_35 {
       margin-bottom: 35px;
 }
 
-.ct_mb-25 {
+.ct_mt_35 {
+      margin-top: 35px;
+}
+
+.ct_mb_25 {
       margin-bottom: 25px;
+}
+
+.ct_mt_25 {
+      margin-top: 25px;
 }
 
 .ct_mb_60 {
@@ -334,7 +347,8 @@ input[type="number"] {
 
 /* all padding css E */
 
-.form-control:focus {
+.form-control:focus,
+.form-select:focus {
       box-shadow: unset;
       border-color: #e3edf9;
 }
@@ -414,14 +428,17 @@ input[type="number"] {
 
 
 
-.ct_input {
-      height: 56px;
+.ct_input,
+.ct_input_select {
+      height: 50px;
       border: 1px solid #e3edf9;
       border-radius: 5px !important;
 }
-
+.ct_input:focus{
+      border-color: var(--blue);
+}
 .filter-dropdown {
-      height: 56px;
+      height: 50px;
       border: 1px solid #e3edf9;
       border-radius: 5px !important;
 }
@@ -439,9 +456,9 @@ input[type="number"] {
 }
 
 .filter-dropdown:focus,
-.filter-dropdown:active {
+.filter-dropdown:active ,.filter-dropdown:hover {
 
-      border-color: #e3edf9;
+      border-color: var(--blue);
 
 }
 
@@ -490,7 +507,7 @@ header {
 
 .ct_side_bar ul li a {
       padding: 15px 20px;
-
+      border-radius: 4px;
       transition: 0.4s ease all;
       width: 100%;
       display: flex;
@@ -584,7 +601,7 @@ header {
 .ct_dash_card p {
       color: var(--blue);
       margin-bottom: 0px;
-      font-size: 16px;
+      font-size: 14px;
       white-space: nowrap;
 }
 
@@ -674,24 +691,21 @@ header {
 }
 
 .ct_pending_badge {
-      background-color: #f59e0b1a;
+
       color: #f59e0b;
-      padding: 6px 11px;
-      border-radius: 2px;
+
 }
 
 .ct_rejected_badge {
-      background-color: #f51b0b1a;
+
       color: #f51b0b;
-      padding: 6px 11px;
-      border-radius: 2px;
+
 }
 
 .ct_accepted_badge {
-      background-color: #4ec40014;
+
       color: #22c55e;
-      padding: 6px 11px;
-      border-radius: 2px;
+
 }
 
 /* REUSED .loader class */
@@ -777,7 +791,7 @@ header {
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 2px;
+      border-radius: 4px;
       outline: none;
       border: 1px solid var(--blue);
       background-color: var(--blue);
@@ -893,7 +907,7 @@ button.btn-close.ct_close {
 
 .ct_client_approved_status {
       background-color: #4ec40014;
-      padding: 24px 43px;
+      padding: 12px 43px;
       border-radius: 12px;
 }
 
@@ -911,7 +925,7 @@ button.btn-close.ct_close {
 
 .ct_avatar_315_256 {
       width: 315px;
-      height: 256px;
+      height: 307px;
       object-fit: cover;
       border-top-left-radius: 12px;
       border-bottom-left-radius: 12px;
@@ -975,30 +989,12 @@ button.btn-close.ct_close {
 }
 
 .ct_wrapper_white_box {
-      padding: 48px;
+      padding: 40px;
       background-color: #fff;
       border-radius: 4px;
 }
 
-@media only screen and (max-width: 767px) {
-      .ct_avatar_315_256 {
-            width: 100%;
-      }
 
-      .ct-card {
-            padding: 20px;
-      }
-
-      .ct_wrapper_white_box {
-            padding: 20px;
-      }
-
-      .ct_client_approved_status,
-      .ct_client_rejected_status,
-      .ct_client_rejected_status {
-            padding: 20px;
-      }
-}
 
 .btn-transparent {
       background: none;
@@ -1009,15 +1005,15 @@ button.btn-close.ct_close {
 
 .dashboard-tabs .nav-link {
       border: none;
-      font-weight: 500;
+      font-weight: 600;
       color: rgba(71, 85, 105, 1);
 
 }
 
 .dashboard-tabs .nav-link.active {
       border: none;
-      border-bottom: 2px solid;
-      font-size: 18px;
+      border-bottom: 1px solid;
+      font-size: 16px;
       font-weight: 600;
       color: #2563eb;
 }
@@ -1032,13 +1028,11 @@ button.btn-close.ct_close {
       color: #4b5563;
 }
 
-.ct-info-box .col-md-3 {
+.ct-info-box .ct_info_cnt:not(:last-child) {
       border-right: 1px solid #e5e7eb;
 }
 
-.ct-info-box .col-md-3:last-child {
-      border-right: none;
-}
+
 
 .ct-assign-modal .modal-content {
 
@@ -1062,9 +1056,7 @@ button.btn-close.ct_close {
 }
 
 .auth-wrapper {
-      background: url("../img/auth-background.jpg");
-      background-repeat: no-repeat;
-      background-position: left;
+  
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -1083,12 +1075,12 @@ button.btn-close.ct_close {
 /* Login Card */
 .auth-wrapper .ct-login-card {
       width: 100%;
-      max-width: 400px;
+      max-width: 538px;
       background: #ffffff;
-      padding: 35px 30px;
+      padding: 28px 30px;
       border-radius: 8px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-      height: 80vh;
+      border: 0.88px solid #E3EDF9
 }
 
 
@@ -1118,10 +1110,180 @@ button.btn-close.ct_close {
 }
 
 
+.ct_client_detail_card_grid {
+    display: grid;
+    grid-template-columns: 315px auto;
+    align-items: center;
+}
+.ct_client_detail_card_cnt {
+    padding: 30px;
+}
+
+.ct_custom_badge{
+      padding: 6px 18px;
+      border-radius: 5px;
+      text-align: center;
+}
+.ct_white_nowrap{
+      white-space: nowrap;
+}
+
+.ct_search_dropdown_list ul li img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    object-fit: cover;
+}
+.ct_search_dropdown_list li {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: 0.4s ease all;
+    padding: 10px;
+    border-radius: 10px;
+}
+.ct_search_dropdown_list li:hover{
+      background-color: var(--blue);
+      color: #fff;
+}
 
 
+.ct_search_dropdown_list {
+    background-color: #ffff;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    top: auto;
+    z-index: 999;
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+.ct_search_dropdown_list.active{
+      display: block;
+}
+.ct_grid_col_4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    gap: 15px;
+}
+
+
+
+/* Invoise css S */
+ .invoice_card{
+            max-width: 950px;
+            margin: 40px auto;
+            background:#fff;
+            padding:40px;
+            border-radius:12px;
+            box-shadow:0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .invoice_logo span{
+            background: var(--blue);
+            color:#fff;
+            padding:6px 18px;
+            border-radius:4px;
+            font-weight:600;
+            letter-spacing:1px;
+        }
+
+        .invoice_logo small{
+            letter-spacing:6px;
+            display:block;
+            margin-top:4px;
+        }
+
+        .invoice_table thead{
+            background:#f8fafc;
+        }
+
+        .invoice_table th{
+            font-weight:600;
+            font-size:16px;
+            color:#0F172A;
+            white-space: nowrap;
+            padding: 20px;
+                 border-color: #E3EDF9;
+        }
+
+        .invoice_table td{
+            font-size:16px;
+            color:#475569;
+              padding: 20px;
+              border-color: #E3EDF9;
+        }
+ .progress-container {
+    width: 100%;
+    background: #EFF6FF;
+    border-radius:40px;
+    overflow: hidden;
+    height:14px;
+  }
+
+  .progress-fill {
+    width: 75%; /* Change this for progress */
+    height: 100%;
+    background: #2563EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+        border-radius:40px;
+  }
+        
+        .ct_fs_27{
+            font-size: 27px;
+        }
+        @media (max-width:768px){
+            .invoice_card{
+                padding:20px;
+            }
+        }
+/* Invoise css E */
 /* Responsive */
-@media (max-width: 576px) {
+
+@media only screen and (max-width: 767px) {
+      .ct_avatar_315_256 {
+            width: 100%;
+      }
+
+      .ct-card {
+            padding: 20px;
+      }
+
+      .ct_wrapper_white_box {
+            padding: 20px;
+      }
+
+      .ct_client_approved_status,
+      .ct_client_rejected_status,
+      .ct_client_rejected_status {
+            padding: 20px;
+      }
+      .ct_client_detail_card_grid{
+      grid-template-columns: auto;
+      }
+      .ct_avatar_315_256{
+            border-radius: 12px;
+      }
+      .ct_grid_col_4{
+            grid-template-columns: repeat(2,1fr);
+      }
+      .ct-info-box .ct_info_cnt:not(:last-child){
+            border: none;
+      }
+      .ct-assign-modal .modal-content {
+            padding: 10px 0px;
+      }
+}
+@media (max-width: 575px) {
       .auth-wrapper .ct-login-card {
             padding: 25px 20px;
       }
@@ -1131,4 +1293,26 @@ button.btn-close.ct_close {
             height: 60px;
             font-size: 22px;
       }
+      .ct_flex_col_575{
+            flex-direction: column;
+            align-items: start !important;
+      }
+      .ct_w_100_575{
+            width: 100%;
+      }
+      .dashboard-tabs{
+            flex-direction: column;
+            width: 100%;
+            gap: 15px;
+      }
+      .dashboard-tabs .nav-link{
+            width: 100%;
+      }
+}
+
+
+.ct-assign-modal .ct-info-box {
+      border: 1px solid rgba(227, 237, 249, 1);
+      border-radius: 10px;
+      padding: 14px 26px;
 }
