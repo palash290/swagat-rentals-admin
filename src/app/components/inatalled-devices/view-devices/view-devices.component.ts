@@ -55,7 +55,7 @@ export class ViewDevicesComponent {
       device_type: this.deviceData?.device_type,
       uuid: this.deviceData?.system_uuid,
       ip: this.deviceData?.ip_address,
-      mac: this.deviceData?.mac_address,
+      mac: this.deviceData?.meta.mac_address,
 
       // CPU
       processor: cpu ? `${cpu.brand} ${cpu.model}` : 'N/A',
@@ -84,7 +84,9 @@ export class ViewDevicesComponent {
         brand: motherboard?.brand,
         model: motherboard?.model,
         serial: motherboard?.serial_number,
-        bios: motherboard?.bios_version
+        bios: motherboard?.bios_version,
+        serial_number: motherboard?.serial_number,
+        mac_address: motherboard?.mac_address
       },
 
       // GPU
@@ -97,8 +99,9 @@ export class ViewDevicesComponent {
       // MONITOR
       monitor: {
         resolution: monitor?.resolution,
-        size: monitor?.approx_size_inches,
-        serial: monitor?.serial_number
+        size: monitor?.size,
+        serial: monitor?.serial_number,
+        brand: monitor?.brand
       }
     };
   }
