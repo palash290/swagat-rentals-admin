@@ -5,7 +5,7 @@
                 <a class="ct_text_black" [routerLink]="['/home/view-client']" [queryParams]="{clientId: clientId}">
                     <i class="fa-solid fa-arrow-left me-2"></i>
                 </a>
-                Linked Devices
+                Linked Systems
             </h4>
             <!-- accept reject btn -->
             <div class="d-flex gap-4 flex-wrap d-none">
@@ -33,21 +33,21 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Device ID</th>
-                            <th>Device Type</th>
-                            <th>IP Address</th>
+                            <th>System ID</th>
+                            <th>System Type</th>
+                            <!-- <th>IP Address</th> -->
                             <th>Assigned Emp.</th>
-                            <th>Device Status</th>
+                            <th>System Status</th>
                             <th>Installed On</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of clientData; let i = index">
-                            <td>1</td>
+                            <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.ip_address || '-'}}</td>
+                            <!-- <td>{{item.ip_address || '-'}}</td> -->
                             <td>{{item.employee_name || '-'}}</td>
                             <td class="">
                                 @if(item.status == "active"){

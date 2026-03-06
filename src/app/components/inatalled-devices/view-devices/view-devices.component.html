@@ -5,7 +5,7 @@
                 <a (click)="backClicked()" class="ct_text_black">
                     <i class="fa-solid fa-arrow-left me-2"></i>
                 </a>
-                Device Details ({{deviceData?.system_uid}})
+                System Details ({{deviceData?.system_uid}})
             </h4>
         </div>
         <!-- Identity Verification -->
@@ -14,7 +14,7 @@
                 <div>
                     <h6 class="ct_fs_22 ct_fw_600 mb-1">{{deviceData?.device_name}}</h6>
                     <p class="ct_fs_14 mb-3 ct_dark_grey_text">
-                        Device ID: {{deviceData?.system_uid}}
+                        System ID: {{deviceData?.system_uid}}
                     </p>
                     <div class="d-flex gap-4 flex-wrap">
                         <div>
@@ -81,18 +81,82 @@
         <h6 class="ct_fs_18 ct_fw_600 mb-3">RAM & Storage</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p class="ct_dark_grey_text mb-0">RAM</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <h6 class="ct_fw_600">
-                                {{ parsedDevice?.ram?.total_gb || 'N/A' }} GB
-                            </h6>
+                <div class="col-12" *ngIf="(parsedDevice?.ram_modules?.length || 0) > 1">
+                    <h6 class="ct_fs_16 ct_fw_600 mb-2">RAM Modules</h6>
+                </div>
+
+                <ng-container *ngIf="(parsedDevice?.ram_modules?.length || 0) > 0; else singleRamBlock">
+                    <div class="col-md-6" *ngFor="let ramItem of parsedDevice?.ram_modules; let i = index">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM {{ i + 1 }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">
+                                    {{ ramItem?.total_gb ? ramItem?.total_gb + ' GB' : 'N/A' }}
+                                </h6>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-6" *ngFor="let ramItem of parsedDevice?.ram_modules; let i = index">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM {{ i + 1 }} Serial No</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ ramItem?.serial_no || 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngFor="let ramItem of parsedDevice?.ram_modules; let i = index">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM {{ i + 1 }} Brand</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ ramItem?.brand || 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #singleRamBlock>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">
+                                    {{ parsedDevice?.ram?.total_gb || 'N/A' }} GB
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM Serial No</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">
+                                    {{ parsedDevice?.ram?.serial_no || 'N/A' }}
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">RAM Brand</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ parsedDevice?.ram?.brand || 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-sm-6">
@@ -101,18 +165,6 @@
                         <div class="col-sm-6">
                             <h6 class="ct_fw_600">
                                 {{ parsedDevice?.rom?.ssd_gb || 'N/A' }} GB
-                            </h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <p class="ct_dark_grey_text mb-0">RAM Serial No</p>
-                        </div>
-                        <div class="col-sm-6">
-                            <h6 class="ct_fw_600">
-                                {{ parsedDevice?.ram?.serial_no || 'N/A' }}
                             </h6>
                         </div>
                     </div>
@@ -130,10 +182,22 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-sm-6">
-                            <p class="ct_dark_grey_text mb-0">RAM Brand</p>
+                            <p class="ct_dark_grey_text mb-0">HDD</p>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="ct_fw_600">{{ parsedDevice?.ram?.brand || 'N/A' }}</h6>
+                            <h6 class="ct_fw_600">
+                                {{ parsedDevice?.rom?.hdd_gb ? parsedDevice?.rom?.hdd_gb + ' GB' : 'N/A' }}
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">SSD Brand</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ parsedDevice?.rom?.ssd_brand || 'N/A' }}</h6>
                         </div>
                     </div>
                 </div>
@@ -248,7 +312,7 @@
                             <p class="ct_dark_grey_text mb-0">Monitor Size</p>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="ct_fw_600">{{ parsedDevice?.monitor.size || 'N/A' }}</h6>
+                            <h6 class="ct_fw_600">{{ parsedDevice?.monitor.size || 'N/A' }} Inch</h6>
                         </div>
                     </div>
                 </div>
@@ -283,5 +347,67 @@
                 </div>
             </div>
         </div>
+
+        <div class="mb-3">
+            <button type="button" class="ct_black_btn px-4" (click)="showOtherDetails = !showOtherDetails">
+                {{ showOtherDetails ? 'Hide Other Details' : 'Show Other Details' }}
+            </button>
+        </div>
+
+        <ng-container *ngIf="showOtherDetails">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">System Fields</h6>
+            <div class="ct-card ct_mb-35">
+                <div class="row gy-4">
+                    <div class="col-md-6" *ngFor="let item of deviceData | keyvalue">
+                        <div class="row" *ngIf="shouldShowSystemField(item.key)">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">{{ formatDisplayKey(item.key) }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ item.value ?? 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Meta</h6>
+            <div class="ct-card ct_mb-35">
+                <div class="row gy-4">
+                    <div class="col-md-6" *ngFor="let item of (deviceData?.meta || {}) | keyvalue">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">{{ formatDisplayKey(item.key) }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ item.value ?? 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Inventory Components</h6>
+            <div class="ct-card ct_mb-35" *ngFor="let item of deviceData?.inventory; let i = index">
+                <div class="d-flex justify-content-between flex-wrap gap-2 mb-3">
+                    <h6 class="ct_fw_600 mb-0">{{ item?.type ? formatDisplayKey(item.type) : ('Component ' + (i + 1)) }}
+                    </h6>
+                    <p class="mb-0 ct_dark_grey_text">{{ formatDisplayKey('asset_id') }}: {{ item?.asset_id ?? 'N/A' }}
+                    </p>
+                </div>
+                <div class="row gy-4">
+                    <div class="col-md-6" *ngFor="let detail of (item?.details || {}) | keyvalue">
+                        <div class="row" *ngIf="shouldShowDetailField(detail.key)">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">{{ formatDisplayKey(detail.key) }}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ detail.value ?? 'N/A' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
     </div>
 </div>

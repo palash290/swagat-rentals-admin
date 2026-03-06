@@ -100,7 +100,7 @@ export class ViewEmployeesComponent {
 
     this.selectedDeviceIds = selectedOptions.map((option: any) => option.value);
 
-    console.log('Selected Device IDs:', this.selectedDeviceIds);
+    console.log('Selected System IDs:', this.selectedDeviceIds);
   }
 
 

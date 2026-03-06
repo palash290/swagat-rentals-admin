@@ -18,6 +18,11 @@ export const routes: Routes = [
             path: 'reset-password',
             loadComponent: () => import('./components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
       },
+
+      {
+            path: 'landing-page',
+            loadComponent: () => import('./components/landing-page/landing-page.component').then(m => m.LandingPageComponent)
+      },
       {
             path: 'home',
             loadComponent: () => import('./components/main/main.component').then(m => m.MainComponent),
@@ -31,6 +36,10 @@ export const routes: Routes = [
                   {
                         path: 'client-list',
                         loadComponent: () => import('./components/client-list/client-list.component').then(m => m.ClientListComponent)
+                  },
+                  {
+                        path: 'add-client',
+                        loadComponent: () => import('./components/client-list/add-client/add-client.component').then(m => m.AddClientComponent)
                   },
                   {
                         path: 'view-client',

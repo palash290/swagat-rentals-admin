@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-inatalled-devices',
@@ -26,16 +27,18 @@ export class InatalledDevicesComponent {
     deviceType: ''
   };
 
+  loading: boolean = false;
+
   systemUidList: string[] = [];
   deviceTypeList: string[] = [];
 
   originalList: any[] = [];
 
-  constructor(private apiService: CommonService) { }
+  constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
   ngOnInit() {
     //this.getClientList();
-    this.getAllTasks();
+    this.getAllSystems();
   }
 
 
@@ -50,7 +53,7 @@ export class InatalledDevicesComponent {
   //   });
   // }
 
-  getAllTasks() {
+  getAllSystems() {
     let params = new URLSearchParams();
 
     if (this.searchText?.trim()) {
@@ -104,7 +107,68 @@ export class InatalledDevicesComponent {
 
   changePage(page: number) {
     this.page = page;
-    this.getAllTasks();
+    this.getAllSystems();
+  }
+
+  nextStatus!: number;
+  selectedUser: any;
+  @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+
+  get modalTitle(): string {
+    return this.nextStatus === 1 ? 'Unblock System' : 'Block System';
+  }
+
+  get modalMessage(): string {
+    return this.nextStatus === 1
+      ? 'Are you sure you want to unblock this System?'
+      : 'Are you sure you want to block this System?';
+  }
+
+  get confirmBtnText(): string {
+    return this.nextStatus === 1 ? 'Yes, Block' : 'Yes, Unblock';
+  }
+
+  systemId: any;
+
+  onToggleUser(item: any) {
+    this.selectedUser = item;
+    this.systemId = item.id;
+    this.nextStatus = item.is_block;
+  }
+
+  confirmToggle() {
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+    if (this.nextStatus == 0) {
+      formURlData.set('is_block', '1');
+    }
+
+    if (this.nextStatus == 1) {
+      formURlData.set('is_block', '0');
+    }
+
+
+    this.apiService.patch(`admin/systems/${this.systemId}/block`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.selectedUser.is_disabled = this.nextStatus;
+        this.closeModalBlock.nativeElement.click();
+        this.loading = false;
+        this.toastr.success(resp.message);
+      },
+      error: (err) => {
+        this.loading = false;
+      }
+    });
+  }
+
+  @ViewChild('blockModal') blockModal!: ElementRef;
+
+  ngAfterViewInit() {
+    const modalEl = this.blockModal.nativeElement;
+
+    modalEl.addEventListener('hidden.bs.modal', () => {
+      this.getAllSystems();
+    });
   }
 
 

@@ -2,8 +2,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Clients</h4>
         <div>
-            <a data-bs-toggle="modal" data-bs-target="#addClientModal"
-                class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+            <a routerLink="/home/add-client" class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
@@ -54,6 +53,7 @@
                                     <th>KYC Status</th>
                                     <th>Devices</th>
                                     <th>Dates</th>
+                                    <!-- <th>Block</th> -->
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -73,10 +73,23 @@
                                     </td>
                                     <td>{{ item.device_count }}</td>
                                     <td>{{ item.created_at | date: 'dd MMM yyyy' }}</td>
+                                    <!-- <td>
+                                        <div class="form-check form-switch ct_custom_switch">
+                                            <input class="form-check-input" type="checkbox" role="switch"
+                                                id="flexSwitchCheckChecked" [checked]="item.is_disabled === 1"
+                                                (change)="onToggleUser(item)" data-bs-toggle="modal"
+                                                data-bs-target="#blockAssignDeviceModal" />
+                                        </div>
+                                    </td> -->
                                     <td>
-                                        <a [routerLink]="['/home/view-client']" [queryParams]="{clientId: item.id}">
-                                            <i class="fa-regular fa-eye"></i>
-                                        </a>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <a [routerLink]="['/home/view-client']" [queryParams]="{clientId: item.id}">
+                                                <i class="fa-regular fa-eye"></i>
+                                            </a>
+                                            <a [routerLink]="['/home/add-client']" [queryParams]="{clientId: item.id}">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -101,283 +114,31 @@
     </div>
 </div>
 
-<!-- Add Client Modal -->
-<div class="modal fade ct_addclient_modal" id="addClientModal" tabindex="-1">
+<!-- vlock Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header px-0 border-0">
-                <h5 class="modal-title ct_fs_18 ct_fw_600">Add Client</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Body -->
-            <form [formGroup]="Form">
-                <div class="modal-body p-0">
-
-                    <div class="mb-3">
-                        <label class="mb-1">Client Name <span class="ct_required">*</span></label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter client name"
-                            formControlName="full_name" />
-                        <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter
-                                client name.</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Company Name </label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter company name"
-                            formControlName="company_name" />
-                        <!-- <div *ngIf="Form.controls['company_name'].invalid && Form.controls['company_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['company_name'].errors?.['required']">Please enter company name.
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Company Address </label>
-                        <textarea class="form-control ct_input" rows="3" placeholder="Enter company address"
-                            formControlName="company_address"></textarea>
-                        <!-- <div *ngIf="Form.controls['company_address'].invalid && Form.controls['company_address'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['company_address'].errors?.['required']">Please enter company
-                                address.</div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">GST No </label>
-                        <input type="text" class="form-control ct_input" placeholder="e.g. 22AAAAA0000A1Z5"
-                            formControlName="gst_no" maxlength="15" style="text-transform:uppercase" />
-                        <div *ngIf="Form.controls['gst_no'].invalid && Form.controls['gst_no'].touched" class="err_msg">
-                            <!-- <div *ngIf="Form.controls['gst_no'].errors?.['required']">Please enter GST number.</div> -->
-                            <div *ngIf="Form.controls['gst_no'].errors?.['pattern']">Invalid GST format (e.g.
-                                22AAAAA0000A1Z5).</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Mobile No <span class="ct_required">*</span></label>
-                        <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit mobile number"
-                            formControlName="mobile_no" maxlength="10" />
-                        <div *ngIf="Form.controls['mobile_no'].invalid && Form.controls['mobile_no'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['mobile_no'].errors?.['required']">Please enter mobile number.
-                            </div>
-                            <div *ngIf="Form.controls['mobile_no'].errors?.['pattern']">Enter a valid 10-digit mobile
-                                number.</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">Client Email <span class="ct_required">*</span></label>
-                        <input type="email" class="form-control ct_input" placeholder="Enter client email"
-                            formControlName="email" />
-                        <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
-                            <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
-                                Client Email is required.
-                            </div>
-                            <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
-                                class="ct_fs_14 mt-1">
-                                Invalid email format.</div>
-                        </div>
-                    </div>
-
-                    <!-- ── Section: Contact Persons ── -->
-                    <!-- <div class="ct_section_label">Contact Persons</div> -->
-
-                    <div class="mb-3">
-                        <label class="mb-1">IT Person Name </label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter IT person name"
-                            formControlName="it_person_name" />
-                        <!-- <div *ngIf="Form.controls['it_person_name'].invalid && Form.controls['it_person_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['it_person_name'].errors?.['required']">Please enter IT person
-                                name.</div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">IT Person Contact No </label>
-                        <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit number"
-                            formControlName="it_person_contact" maxlength="10" />
-                        <div *ngIf="Form.controls['it_person_contact'].invalid && Form.controls['it_person_contact'].touched"
-                            class="err_msg">
-                            <!-- <div *ngIf="Form.controls['it_person_contact'].errors?.['required']">Please enter IT person
-                                contact number.</div> -->
-                            <div *ngIf="Form.controls['it_person_contact'].errors?.['pattern']">Enter a valid 10-digit
-                                number.</div>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Administration Contact Name </label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter admin contact name"
-                            formControlName="admin_contact_name" />
-                        <!-- <div *ngIf="Form.controls['admin_contact_name'].invalid && Form.controls['admin_contact_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['admin_contact_name'].errors?.['required']">Please enter admin
-                                contact name.</div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">Administration Contact No (for payment)</label>
-                        <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit number"
-                            formControlName="admin_contact_no" maxlength="10" />
-                        <div *ngIf="Form.controls['admin_contact_no'].invalid && Form.controls['admin_contact_no'].touched"
-                            class="err_msg">
-                            <!-- <div *ngIf="Form.controls['admin_contact_no'].errors?.['required']">Please enter admin
-                                contact number.</div> -->
-                            <div *ngIf="Form.controls['admin_contact_no'].errors?.['pattern']">Enter a valid 10-digit
-                                number.</div>
-                        </div>
-                    </div>
-
-                    <!-- ── Section: Infrastructure ── -->
-                    <!-- <div class="ct_section_label">Infrastructure Details</div> -->
-
-                    <div class="row">
-                        <div class="col-6 mb-3">
-                            <label class="mb-1">Total Computers </label>
-                            <input type="number" class="form-control ct_input" placeholder="0"
-                                formControlName="total_computers" min="0" />
-                            <div *ngIf="Form.controls['total_computers'].invalid && Form.controls['total_computers'].touched"
-                                class="err_msg">
-                                <!-- <div *ngIf="Form.controls['total_computers'].errors?.['required']">Required.</div> -->
-                                <div *ngIf="Form.controls['total_computers'].errors?.['min']">Must be 0 or more.</div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 mb-3">
-                            <label class="mb-1">Total Laptops </label>
-                            <input type="number" class="form-control ct_input" placeholder="0"
-                                formControlName="total_laptops" min="0" />
-                            <div *ngIf="Form.controls['total_laptops'].invalid && Form.controls['total_laptops'].touched"
-                                class="err_msg">
-                                <!-- <div *ngIf="Form.controls['total_laptops'].errors?.['required']">Required.</div> -->
-                                <div *ngIf="Form.controls['total_laptops'].errors?.['min']">Must be 0 or more.</div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 mb-3">
-                            <label class="mb-1">Total Servers </label>
-                            <input type="number" class="form-control ct_input" placeholder="0"
-                                formControlName="total_servers" min="0" />
-                            <div *ngIf="Form.controls['total_servers'].invalid && Form.controls['total_servers'].touched"
-                                class="err_msg">
-                                <!-- <div *ngIf="Form.controls['total_servers'].errors?.['required']">Required.</div> -->
-                                <div *ngIf="Form.controls['total_servers'].errors?.['min']">Must be 0 or more.</div>
-                            </div>
-                        </div>
-
-                        <div class="col-6 mb-4">
-                            <label class="mb-1">Total GSM Gateways </label>
-                            <input type="number" class="form-control ct_input" placeholder="0"
-                                formControlName="total_gsm_gateway" min="0" />
-                            <div *ngIf="Form.controls['total_gsm_gateway'].invalid && Form.controls['total_gsm_gateway'].touched"
-                                class="err_msg">
-                                <!-- <div *ngIf="Form.controls['total_gsm_gateway'].errors?.['required']">Required.</div> -->
-                                <div *ngIf="Form.controls['total_gsm_gateway'].errors?.['min']">Must be 0 or more.</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ── Section: Agreement Dates ── -->
-                    <!-- <div class="ct_section_label">Agreement Details</div> -->
-
-                    <div class="mb-3">
-                        <label class="mb-1">Billing Date </label>
-                        <input type="date" class="form-control ct_input" formControlName="billing_date" />
-                        <!-- <div *ngIf="Form.controls['billing_date'].invalid && Form.controls['billing_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['billing_date'].errors?.['required']">Please select billing date.
-                            </div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Agreement Start Date </label>
-                        <input type="date" class="form-control ct_input" formControlName="agreement_start_date" />
-                        <!-- <div *ngIf="Form.controls['agreement_start_date'].invalid && Form.controls['agreement_start_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['agreement_start_date'].errors?.['required']">Please select
-                                agreement start date.</div>
-                        </div> -->
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">Agreement End Date </label>
-                        <input type="date" class="form-control ct_input" formControlName="agreement_end_date" />
-                        <!-- <div *ngIf="Form.controls['agreement_end_date'].invalid && Form.controls['agreement_end_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['agreement_end_date'].errors?.['required']">Please select
-                                agreement end date.</div>
-                        </div> -->
-                        <div *ngIf="Form.errors?.['endDateBeforeStart'] && Form.controls['agreement_end_date'].touched"
-                            class="err_msg">
-                            End date must be after start date.
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">Security Cheque</label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter cheque number / details"
-                            formControlName="security_cheque" />
-                    </div>
-
-                    <!-- ── Section: Documents ── -->
-                    <!-- <div class="ct_section_label">Documents</div> -->
-
-                    <div class="mb-3">
-                        <label class="mb-1">Aadhaar Card</label>
-                        <input type="file" class="form-control ct_input" accept=".pdf,.jpg,.jpeg,.png"
-                            (change)="onFileChange($event, 'aadhaar_card')" />
-                        <div *ngIf="fileErrors['aadhaar_card']" class="err_msg">{{ fileErrors['aadhaar_card'] }}</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">PAN Card</label>
-                        <input type="file" class="form-control ct_input" accept=".pdf,.jpg,.jpeg,.png"
-                            (change)="onFileChange($event, 'pan_card')" />
-                        <div *ngIf="fileErrors['pan_card']" class="err_msg">{{ fileErrors['pan_card'] }}</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">Office Rent Agreement</label>
-                        <input type="file" class="form-control ct_input" accept=".pdf,.jpg,.jpeg,.png"
-                            (change)="onFileChange($event, 'office_rent_agreement')" />
-                        <div *ngIf="fileErrors['office_rent_agreement']" class="err_msg">{{
-                            fileErrors['office_rent_agreement'] }}</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="mb-1">GST Certificate</label>
-                        <input type="file" class="form-control ct_input" accept=".pdf,.jpg,.jpeg,.png"
-                            (change)="onFileChange($event, 'gst_certificate')" />
-                        <div *ngIf="fileErrors['gst_certificate']" class="err_msg">{{ fileErrors['gst_certificate'] }}
-                        </div>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="mb-1">Gumasta</label>
-                        <input type="file" class="form-control ct_input" accept=".pdf,.jpg,.jpeg,.png"
-                            (change)="onFileChange($event, 'gumasta')" />
-                        <div *ngIf="fileErrors['gumasta']" class="err_msg">{{ fileErrors['gumasta'] }}</div>
-                    </div>
-
-                    <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
-                        data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                    <button (click)="onSubmit()" type="submit" class="ct_black_btn w-100">Add</button>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">{{ modalTitle }}</h5>
+                <p class="ct_dark_grey_text">
+                    {{ modalMessage }}
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalBlock type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmToggle()" type="submit"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
 
 <div class="loader-overlay" *ngIf="loading">
     <div class="loader">

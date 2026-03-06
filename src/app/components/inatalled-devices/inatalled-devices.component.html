@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb-25">
             <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
-                Installed Devices
+                Installed Systems
             </h4>
         </div>
         <div class="ct_wrapper_white_box">
@@ -12,7 +12,7 @@
                 <div class="search-box  ">
                     <div class="input-group position-relative">
                         <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
-                            [(ngModel)]="searchText" (input)="getAllTasks()" />
+                            [(ngModel)]="searchText" (input)="getAllSystems()" />
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             </th>
                             <th>
                                 <div class="d-flex flex-column">
-                                    <span>Device Type</span>
+                                    <span>System Type</span>
                                     <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.deviceType"
                                         (change)="applyFilter()">
                                         <option value="">All</option>
@@ -64,7 +64,8 @@
                             <th>Client ID</th>
                             <th>Client Name</th>
                             <th>Installed On</th>
-                            <th>Device Status</th>
+                            <th>System Status</th>
+                            <th>Block</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -75,7 +76,8 @@
                             <td>{{item.device_type}}</td>
                             <td>{{item.client_unique_id}}</td>
                             <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
-                                [queryParams]="{clientId: item.client_id}"><a  class="ct_hover_underline">{{item.client_name}}</a></td>
+                                [queryParams]="{clientId: item.client_id}"><a
+                                    class="ct_hover_underline">{{item.client_name}}</a></td>
                             <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td>
                             <td class="">
                                 @if(item.status == "active"){
@@ -90,6 +92,14 @@
                                 @if(item.status == "inactive"){
                                 <span class="ct_rejected_badge">Inactive</span>
                                 }
+                            </td>
+                            <td>
+                                <div class="form-check form-switch ct_custom_switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" [checked]="item.is_block === 1"
+                                        (change)="onToggleUser(item)" data-bs-toggle="modal"
+                                        data-bs-target="#blockAssignDeviceModal" />
+                                </div>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
@@ -115,5 +125,39 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- vlock Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">{{ modalTitle }}</h5>
+                <p class="ct_dark_grey_text">
+                    {{ modalMessage }}
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalBlock type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmToggle()" type="submit"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

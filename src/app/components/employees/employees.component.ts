@@ -178,7 +178,6 @@ export class EmployeesComponent {
       formURlData.set('is_disabled', 'true');
     }
 
-
     this.apiService.patch(`admin/employees/${this.employeeId}/block`, formURlData.toString()).subscribe({
       next: (resp: any) => {
         this.selectedUser.is_disabled = this.nextStatus;
