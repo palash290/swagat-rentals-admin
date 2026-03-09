@@ -89,13 +89,9 @@
         </div> -->
 
         <!-- Profile Card -->
-        <div class="ct_mb-35 ct_client_detail_card pe-3">
-            <div class="d-md-flex gap-4 align-items-center">
-                <div class="">
-                    <img [src]="clientData?.profile_image ? clientData?.profile_image : 'img/no_pro.png'"
-                        class="ct_avatar_315_256" alt="profile" />
-                </div>
-                <div class="w-100 mt-md-0 mt-3">
+        <div class="ct_mb-35 ct_client_detail_card pe-3 mt-3">
+            <div class="w-100">
+                <div class="w-100">
                     <div class="d-flex justify-content-between flex-wrap">
                         <div>
                             <div class="ct_fs_22 ct_fw_600">{{clientData?.full_name}}</div>
@@ -127,73 +123,112 @@
                             <div class="ct-info-label ct_dark_grey_text ct_fw_500">
                                 Phone Number
                             </div>
-                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.country_code || '-'}}
-                                {{clientData?.phone_number || '-'}}</div>
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">
+                                {{clientData?.country_code ? (clientData?.country_code + ' ') : ''}}{{clientData?.phone_number || '-'}}
+                            </div>
                         </div>
                         <div class="">
                             <div class="ct-info-label ct_dark_grey_text ct_fw_500">
-                                No. of Devices
+                                No. of Systems
                             </div>
                             <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.device_count || '-'}}</div>
                         </div>
                     </div>
                     <div class="text-end mt-2">
                         <a [routerLink]="['/home/client-devices']" [queryParams]="{clientId: clientData.id}"
-                            class="ct-link text-decoration-underline ct_fs_14 ct_fw_600">View Devices</a>
+                            class="ct-link text-decoration-underline ct_fs_14 ct_fw_600">View System</a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Identity Verification -->
         <div class="ct-card ct_mb-35">
-            <h6 class="ct_fs_18 ct_fw_600 mb-3">Identity Verification</h6>
-            <div class="ct-doc">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="ct-doc-icon">
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M6.55135 23.3327C6.0139 23.3327 5.56552 23.153 5.20618 22.7937C4.84685 22.4343 4.66679 21.9856 4.66602 21.4473V6.55135C4.66602 6.0139 4.84607 5.56552 5.20618 5.20618C5.56629 4.84685 6.01468 4.66679 6.55135 4.66602H21.4485C21.9852 4.66602 22.4336 4.84607 22.7937 5.20618C23.1538 5.56629 23.3335 6.01468 23.3327 6.55135V21.4485C23.3327 21.9852 23.153 22.4336 22.7937 22.7937C22.4343 23.1538 21.9856 23.3335 21.4473 23.3327H6.55135ZM6.55135 22.166H21.4485C21.6274 22.166 21.7919 22.0913 21.942 21.942C22.0921 21.7927 22.1668 21.6278 22.166 21.4473V6.55135C22.166 6.37168 22.0913 6.20679 21.942 6.05668C21.7927 5.90657 21.6278 5.8319 21.4473 5.83268H6.55135C6.37168 5.83268 6.20679 5.90735 6.05668 6.05668C5.90657 6.20602 5.8319 6.3709 5.83268 6.55135V21.4485C5.83268 21.6274 5.90735 21.7919 6.05668 21.942C6.20602 22.0921 6.37052 22.1668 6.55018 22.166M8.74935 19.2493H19.429L16.1308 14.851L13.08 18.7103L11.0383 16.2428L8.74935 19.2493Z"
-                                fill="#2563EB" />
-                        </svg>
-                    </div>
-                    Passport
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Client Details</h6>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Client ID</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.u_unique_id || '-'}}</p>
                 </div>
-                <i class="fa-regular fa-eye ct_show_eye" data-bs-toggle="modal" data-bs-target="#selfieModal"></i>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Status</p>
+                    <p class="mb-0 ct_fw_600 text-capitalize">{{clientData?.status || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">KYC Status</p>
+                    <p class="mb-0 ct_fw_600 text-capitalize">{{clientData?.kyc_status || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Company Name</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.company_name || '-'}}</p>
+                </div>
+                <div class="col-md-8">
+                    <p class="mb-1 ct_dark_grey_text">Company Address</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.company_address || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">GST Number</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.gst_number || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">IT Person Name</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.it_person_name || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">IT Person Contact</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.it_person_contact_number || '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Administration Contact</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.administration_contact_number || '-'}}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1 ct_dark_grey_text">Total Computers</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.total_computers ?? '-'}}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1 ct_dark_grey_text">Total Laptops</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.total_laptops ?? '-'}}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1 ct_dark_grey_text">Total Servers</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.total_servers ?? '-'}}</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-1 ct_dark_grey_text">Total GSM Gateways</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.total_gsm_gateways ?? '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Billing Date</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.billing_date ? (clientData?.billing_date | date:'dd-MMM-yyyy') : '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Agreement Start Date</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.agreement_start_date ? (clientData?.agreement_start_date | date:'dd-MMM-yyyy') : '-'}}</p>
+                </div>
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Agreement End Date</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.agreement_end_date ? (clientData?.agreement_end_date | date:'dd-MMM-yyyy') : '-'}}</p>
+                </div>
             </div>
         </div>
-        <!-- Selfie -->
-        <div class="ct-card">
-            <h6 class="ct_fs_18 ct_fw_600 mb-3">
-                Identity Verification Selfie
-            </h6>
-            <div class="ct-doc">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="ct-doc-icon">
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M6.55135 23.3327C6.0139 23.3327 5.56552 23.153 5.20618 22.7937C4.84685 22.4343 4.66679 21.9856 4.66602 21.4473V6.55135C4.66602 6.0139 4.84607 5.56552 5.20618 5.20618C5.56629 4.84685 6.01468 4.66679 6.55135 4.66602H21.4485C21.9852 4.66602 22.4336 4.84607 22.7937 5.20618C23.1538 5.56629 23.3335 6.01468 23.3327 6.55135V21.4485C23.3327 21.9852 23.153 22.4336 22.7937 22.7937C22.4343 23.1538 21.9856 23.3335 21.4473 23.3327H6.55135ZM6.55135 22.166H21.4485C21.6274 22.166 21.7919 22.0913 21.942 21.942C22.0921 21.7927 22.1668 21.6278 22.166 21.4473V6.55135C22.166 6.37168 22.0913 6.20679 21.942 6.05668C21.7927 5.90657 21.6278 5.8319 21.4473 5.83268H6.55135C6.37168 5.83268 6.20679 5.90735 6.05668 6.05668C5.90657 6.20602 5.8319 6.3709 5.83268 6.55135V21.4485C5.83268 21.6274 5.90735 21.7919 6.05668 21.942C6.20602 22.0921 6.37052 22.1668 6.55018 22.166M8.74935 19.2493H19.429L16.1308 14.851L13.08 18.7103L11.0383 16.2428L8.74935 19.2493Z"
-                                fill="#2563EB" />
-                        </svg>
-                    </div>
-                    Photo
-                </div>
-                <i class="fa-regular fa-eye ct_show_eye" data-bs-toggle="modal" data-bs-target="#selfieModal"></i>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- selefie preview modal -->
-<div class="modal fade" id="selfieModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content ct-preview-modal">
-            <div class="modal-header border-0">
-                <h6 class="mb-0 fw-semibold">Identity Verification</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div class="ct-card">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Documents</h6>
+            <div *ngIf="clientData?.documents?.length; else noDocuments">
+                <div class="row g-3">
+                    <div class="col-md-3" *ngFor="let doc of clientData?.documents">
+                        <a [href]="doc?.doc_url" target="_blank" class="text-decoration-none">
+                            <div class="border rounded p-2 text-center h-100">
+                                <img [src]="doc?.doc_url" [alt]="doc?.doc_type" class="img-fluid rounded"
+                                    style="max-height:120px;object-fit:cover" />
+                                <p class="mb-0 mt-2 text-capitalize">{{doc?.doc_type || '-'}}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body text-center pt-0">
-                <img src="img/empty_doc.png" alt="Selfie" class="img-fluid rounded-3" />
-            </div>
+            <ng-template #noDocuments>
+                <p class="mb-0 ct_dark_grey_text">No documents uploaded</p>
+            </ng-template>
         </div>
     </div>
 </div>

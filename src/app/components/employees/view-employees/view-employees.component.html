@@ -37,7 +37,7 @@
                             </div>
                             <div class="">
                                 <div class="ct-info-label ct_dark_grey_text ct_fw_500">
-                                    Assigned Devices
+                                    Assigned Systems
                                 </div>
                                 <div class="ct-info-value ct_fs_18 ct_fw_500">04</div>
                             </div>
@@ -50,7 +50,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Assigned Devices</h4>
+            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Assigned Systems</h4>
             <div>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#assignDeviceModal"
                     class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
@@ -59,7 +59,7 @@
                             d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
                             stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
-                    Assign Devices
+                    Assign Systems
                 </a>
             </div>
         </div>
@@ -101,8 +101,8 @@
                         </td>
                         <td>
                             <div class="d-flex align-items-center gap-3">
-                                <a data-bs-toggle="modal" data-bs-target="#editAssignDeviceModal"><img
-                                        src="img/edit.png"></a>
+                                <!-- <a data-bs-toggle="modal" data-bs-target="#editAssignDeviceModal"><img
+                                        src="img/edit.png"></a> -->
                                 <a data-bs-toggle="modal" data-bs-target="#deleteAssignDeviceModal"><img
                                         src="img/cancel.png"></a>
                             </div>
@@ -142,15 +142,28 @@
                     <label class="mb-1">System</label>
                     <div class="search-box w-100">
                         <div class="input-group position-relative">
-                            <select class="form-control ct_input" multiple #deviceSelect
-                                (change)="onDevicesChange(deviceSelect)">
+                            <div class="ct_custom_multi_select w-100">
+                                <button type="button"
+                                    class="form-control ct_input d-flex align-items-center justify-content-between text-start"
+                                    (click)="toggleSystemDropdown($event)">
+                                    <span class="ct_selected_text">{{ selectedSystemsLabel }}</span>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </button>
 
-                                <option value="" disabled>Select Devices</option>
-
-                                <option *ngFor="let member of clientDevices" [value]="member.id">
-                                    {{ member.device_name }}
-                                </option>
-                            </select>
+                                <div class="ct_multi_select_dropdown" *ngIf="isSystemDropdownOpen"
+                                    (click)="$event.stopPropagation()">
+                                    <div class="ct_multi_select_item" *ngFor="let member of clientDevices">
+                                        <label class="d-flex align-items-center gap-2 mb-0 w-100 cursor-pointer">
+                                            <input type="checkbox" [checked]="isSystemSelected(member.id)"
+                                                (change)="onSystemToggle(member.id, $event)" />
+                                            <span>{{ member.device_name || member.system_uid }}</span>
+                                        </label>
+                                    </div>
+                                    <div class="ct_multi_select_empty" *ngIf="!clientDevices?.length">
+                                        No systems found
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -189,7 +202,7 @@
                     <div class="search-box w-100">
                         <div class="input-group position-relative">
                             <input type="text" class="form-control ct_input ps-5"
-                                placeholder="Search available device" />
+                                placeholder="Search available system" />
                             <i class="fas fa-search ct_show_search"></i>
                         </div>
                     </div>

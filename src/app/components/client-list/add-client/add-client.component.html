@@ -232,66 +232,174 @@
 
                 <div class="mb-3">
                     <label class="mb-1">Aadhaar Card</label>
-                    <input type="file" class="form-control ct_input" accept="image/*"
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
                         (change)="onFileChange($event, 'aadhaar_card')" />
                     <div *ngIf="fileErrors['aadhaar_card']" class="err_msg">{{ fileErrors['aadhaar_card'] }}</div>
-                    <div *ngIf="existingDocUrls['aadhaar_card']" class="mt-2">
-                        <!-- <a [href]="existingDocUrls['aadhaar_card']" target="_blank">View uploaded document</a> -->
-                        <img *ngIf="isImageUrl(existingDocUrls['aadhaar_card'])" [src]="existingDocUrls['aadhaar_card']"
-                            alt="Aadhaar Card" class="img-fluid mt-2" style="max-height:120px" />
+                    <div *ngIf="selectedFilePreviewUrls['aadhaar_card']?.length" class="mt-2">
+                        <div class="small text-muted ">Selected files ({{ uploadedFiles['aadhaar_card'].length
+                            }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2 ">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['aadhaar_card']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="Aadhaar preview" class="img-fluid rounded border"
+                                    style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('aadhaar_card', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="existingDocs['aadhaar_card']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['aadhaar_card']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="Aadhaar Card" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('aadhaar_card', i)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">PAN Card</label>
-                    <input type="file" class="form-control ct_input" accept="image/*"
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
                         (change)="onFileChange($event, 'pan_card')" />
                     <div *ngIf="fileErrors['pan_card']" class="err_msg">{{ fileErrors['pan_card'] }}</div>
-                    <div *ngIf="existingDocUrls['pan_card']" class="mt-2">
-                        <!-- <a [href]="existingDocUrls['pan_card']" target="_blank">View uploaded document</a> -->
-                        <img *ngIf="isImageUrl(existingDocUrls['pan_card'])" [src]="existingDocUrls['pan_card']"
-                            alt="PAN Card" class="img-fluid mt-2" style="max-height:120px" />
+                    <div *ngIf="selectedFilePreviewUrls['pan_card']?.length" class="mt-2">
+                        <div class="small text-muted mb-1">Selected files ({{ uploadedFiles['pan_card'].length }}/10):
+                        </div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['pan_card']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="PAN preview" class="img-fluid rounded border"
+                                    style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('pan_card', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="existingDocs['pan_card']?.length" class="d-flex flex-wrap gap-3 mt-2">
+                        <div *ngFor="let doc of existingDocs['pan_card']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="PAN Card" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('pan_card', i)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">Office Rent Agreement</label>
-                    <input type="file" class="form-control ct_input" accept="image/*"
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
                         (change)="onFileChange($event, 'office_rent_agreement')" />
                     <div *ngIf="fileErrors['office_rent_agreement']" class="err_msg">{{
                         fileErrors['office_rent_agreement'] }}</div>
-                    <div *ngIf="existingDocUrls['office_rent_agreement']" class="mt-2">
-                        <!-- <a [href]="existingDocUrls['office_rent_agreement']" target="_blank">View uploaded document</a> -->
-                        <img *ngIf="isImageUrl(existingDocUrls['office_rent_agreement'])"
-                            [src]="existingDocUrls['office_rent_agreement']" alt="Office Rent Agreement"
-                            class="img-fluid mt-2" style="max-height:120px" />
+                    <div *ngIf="selectedFilePreviewUrls['office_rent_agreement']?.length" class="mt-2">
+                        <div class="small text-muted mb-1">Selected files ({{
+                            uploadedFiles['office_rent_agreement'].length }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['office_rent_agreement']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="Office rent agreement preview"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('office_rent_agreement', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="existingDocs['office_rent_agreement']?.length" class="d-flex flex-wrap gap-3 mt-2">
+                        <div *ngFor="let doc of existingDocs['office_rent_agreement']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="Office Rent Agreement" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('office_rent_agreement', i)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">GST Certificate</label>
-                    <input type="file" class="form-control ct_input" accept="image/*"
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
                         (change)="onFileChange($event, 'gst_certificate')" />
                     <div *ngIf="fileErrors['gst_certificate']" class="err_msg">{{ fileErrors['gst_certificate'] }}
                     </div>
-                    <div *ngIf="existingDocUrls['gst_certificate']" class="mt-2">
-                        <!-- <a [href]="existingDocUrls['gst_certificate']" target="_blank">View uploaded document</a> -->
-                        <img *ngIf="isImageUrl(existingDocUrls['gst_certificate'])"
-                            [src]="existingDocUrls['gst_certificate']" alt="GST Certificate" class="img-fluid mt-2"
-                            style="max-height:120px" />
+                    <div *ngIf="selectedFilePreviewUrls['gst_certificate']?.length" class="mt-2">
+                        <div class="small text-muted mb-1">Selected files ({{ uploadedFiles['gst_certificate'].length
+                            }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['gst_certificate']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="GST preview" class="img-fluid rounded border"
+                                    style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('gst_certificate', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="existingDocs['gst_certificate']?.length" class="d-flex flex-wrap gap-3 mt-2">
+                        <div *ngFor="let doc of existingDocs['gst_certificate']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="GST Certificate" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('gst_certificate', i)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class="mb-4">
                     <label class="mb-1">Gumasta</label>
-                    <input type="file" class="form-control ct_input" accept="image/*"
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
                         (change)="onFileChange($event, 'gumasta')" />
                     <div *ngIf="fileErrors['gumasta']" class="err_msg">{{ fileErrors['gumasta'] }}</div>
-                    <div *ngIf="existingDocUrls['gumasta']" class="mt-2">
-                        <!-- <a [href]="existingDocUrls['gumasta']" target="_blank">View uploaded document</a> -->
-                        <img *ngIf="isImageUrl(existingDocUrls['gumasta'])" [src]="existingDocUrls['gumasta']"
-                            alt="Gumasta" class="img-fluid mt-2" style="max-height:120px" />
+                    <div *ngIf="selectedFilePreviewUrls['gumasta']?.length" class="mt-2">
+                        <div class="small text-muted mb-1">Selected files ({{ uploadedFiles['gumasta'].length }}/10):
+                        </div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['gumasta']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="Gumasta preview" class="img-fluid rounded border"
+                                    style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('gumasta', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
                     </div>
+                    <div *ngIf="existingDocs['gumasta']?.length" class="d-flex flex-wrap gap-3 mt-2">
+                        <div *ngFor="let doc of existingDocs['gumasta']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="Gumasta" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('gumasta', i)"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+
                 </div>
 
                 <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"

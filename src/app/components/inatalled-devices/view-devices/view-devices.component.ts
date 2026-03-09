@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule, Location } from '@angular/common';
 
@@ -115,7 +115,7 @@ export class ViewDevicesComponent {
       // MONITOR
       monitor: {
         resolution: monitor?.resolution,
-        size: monitor?.approx_size_inches ?? monitor?.size ?? monitor?.size_inches,
+        size: monitor?.manual_size_inches,
         serial: monitor?.serial_number,
         brand: monitor?.brand
       }

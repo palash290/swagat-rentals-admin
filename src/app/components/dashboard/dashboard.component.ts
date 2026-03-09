@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { CommonModule } from '@angular/common';
 

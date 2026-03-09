@@ -12,7 +12,8 @@
         <div class="ct-card ct_mb-35">
             <div class="d-flex justify-content-between flex-wrap gap-4">
                 <div>
-                    <h6 class="ct_fs_22 ct_fw_600 mb-1">{{deviceData?.device_name}}</h6>
+                    <!-- <h6 class="ct_fs_22 ct_fw_600 mb-1">System Name: {{deviceData?.device_name}}</h6> -->
+                    <p class="ct_fs_14 mb-2 ct_dark_grey_text">System Name: {{deviceData?.device_name}}</p>
                     <p class="ct_fs_14 mb-3 ct_dark_grey_text">
                         System ID: {{deviceData?.system_uid}}
                     </p>
@@ -293,6 +294,7 @@
         </div>
 
         <!--  monitor Details -->
+        @if(parsedDevice.device_type == 'Desktop'){
         <h6 class="ct_fs_18 ct_fw_600 mb-3">Monitor Details</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
@@ -312,12 +314,13 @@
                             <p class="ct_dark_grey_text mb-0">Monitor Size</p>
                         </div>
                         <div class="col-sm-6">
-                            <h6 class="ct_fw_600">{{ parsedDevice?.monitor.size || 'N/A' }} Inch</h6>
+                            <h6 class="ct_fw_600">{{ parsedDevice?.monitor.size || 'N/A' }}</h6>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        }
 
         <!--  Warranty Details -->
         <h6 class="ct_fs_18 ct_fw_600 mb-3">Warranty Details</h6>

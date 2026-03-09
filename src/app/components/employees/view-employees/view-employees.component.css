@@ -1,0 +1,38 @@
+.ct_custom_multi_select {
+  position: relative;
+}
+
+.ct_selected_text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct_multi_select_dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+  z-index: 1056;
+  padding: 6px 0;
+}
+
+.ct_multi_select_item {
+  padding: 8px 12px;
+}
+
+.ct_multi_select_item:hover {
+  background: #f8fafc;
+}
+
+.ct_multi_select_empty {
+  padding: 10px 12px;
+  color: #64748b;
+  font-size: 13px;
+}

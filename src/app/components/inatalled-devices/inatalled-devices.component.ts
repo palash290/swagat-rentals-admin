@@ -14,10 +14,10 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 export class InatalledDevicesComponent {
 
   page: number = 1;
-  limit: number = 10;
+  limit: number = 50;
 
   deviceList: any;
-  selectedClientId: string = '';
+  selectedClientId: any = '';
   searchText: string = '';
   clientList: any;
   pagination: any;
@@ -33,25 +33,25 @@ export class InatalledDevicesComponent {
   deviceTypeList: string[] = [];
 
   originalList: any[] = [];
+  selectedDeviceIds = new Set<number | string>();
 
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
   ngOnInit() {
-    //this.getClientList();
+    this.getClientList();
     this.getAllSystems();
   }
 
-
-  // getClientList() {
-  //   this.apiService.get(`admin/clients`).subscribe({
-  //     next: (resp: any) => {
-  //       this.clientList = resp.data.items;
-  //     },
-  //     error: (error) => {
-  //       console.log(error.message);
-  //     }
-  //   });
-  // }
+  getClientList() {
+    this.apiService.get(`admin/clients`).subscribe({
+      next: (resp: any) => {
+        this.clientList = resp.data.items;
+      },
+      error: (error) => {
+        console.log(error.message);
+      }
+    });
+  }
 
   getAllSystems() {
     let params = new URLSearchParams();
@@ -69,6 +69,7 @@ export class InatalledDevicesComponent {
         this.originalList = resp.data.items || [];
         this.deviceList = [...this.originalList];   // default table data
         this.pagination = resp.data.pagination;
+        this.selectedDeviceIds.clear();
 
         // ✅ UNIQUE SYSTEM UID
         this.systemUidList = [
@@ -90,7 +91,19 @@ export class InatalledDevicesComponent {
     });
   }
 
+  searchTimeout: any;
+
+onSearch() {
+  clearTimeout(this.searchTimeout);
+
+  this.searchTimeout = setTimeout(() => {
+    this.page = 1;
+    this.getAllSystems();
+  }, 300);
+}
+
   applyFilter() {
+    // this.page = 1;
     this.deviceList = this.originalList.filter((item: any) => {
 
       const matchSystemUid =
@@ -113,6 +126,7 @@ export class InatalledDevicesComponent {
   nextStatus!: number;
   selectedUser: any;
   @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+  @ViewChild('closeModalAssign') closeModalAssign!: ElementRef;
 
   get modalTitle(): string {
     return this.nextStatus === 1 ? 'Unblock System' : 'Block System';
@@ -168,6 +182,72 @@ export class InatalledDevicesComponent {
 
     modalEl.addEventListener('hidden.bs.modal', () => {
       this.getAllSystems();
+    });
+  }
+
+  get isAllSelected(): boolean {
+    return !!this.deviceList?.length && this.deviceList.every((item: any) => this.selectedDeviceIds.has(item.id));
+  }
+
+  toggleSelectAll(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.selectedDeviceIds.clear();
+    if (checked) {
+      (this.deviceList ?? []).forEach((item: any) => this.selectedDeviceIds.add(item.id));
+    }
+  }
+
+  toggleRowSelection(event: Event, id: number | string): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      this.selectedDeviceIds.add(id);
+      return;
+    }
+    this.selectedDeviceIds.delete(id);
+  }
+
+  get canAssignDevices(): boolean {
+    return !!this.selectedClientId && this.selectedDeviceIds.size > 0;
+  }
+
+  onAssignDevicesClick(event: Event): void {
+    if (this.selectedDeviceIds.size === 0) {
+      event.preventDefault();
+      this.toastr.warning('Please select at least one system.');
+      return;
+    }
+
+    if (!this.selectedClientId) {
+      event.preventDefault();
+      this.toastr.warning('Please select a client.');
+    }
+  }
+
+  confirmAssignDevices(): void {
+    if (!this.canAssignDevices) {
+      this.toastr.warning('Please select a client and at least one system.');
+      return;
+    }
+
+    this.loading = true;
+    const payload = {
+      client_id: this.selectedClientId,
+      system_ids: Array.from(this.selectedDeviceIds)
+    };
+
+    this.apiService.post('systems/bulk-assign', payload).subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+        this.toastr.success(resp?.message || 'Systems assigned successfully.');
+        this.closeModalAssign?.nativeElement?.click();
+        this.selectedDeviceIds.clear();
+        this.selectedClientId = '';
+        this.getAllSystems();
+      },
+      error: () => {
+        this.loading = false;
+        this.toastr.warning('Something went wrong.');
+      }
     });
   }
 

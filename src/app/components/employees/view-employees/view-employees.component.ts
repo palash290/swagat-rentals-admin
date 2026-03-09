@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule } from '@angular/common';
@@ -69,6 +69,8 @@ export class ViewEmployeesComponent {
 
   clientId: any;
   clientDevices: any;
+  selectedDeviceIds: any[] = [];
+  isSystemDropdownOpen: boolean = false;
 
   getClientDevices() {
     if (!this.clientId) return;
@@ -85,6 +87,8 @@ export class ViewEmployeesComponent {
 
   onClientChange(clientId: any) {
     this.clientId = clientId;
+    this.selectedDeviceIds = [];
+    this.isSystemDropdownOpen = false;
 
     if (this.clientId) {
       this.getClientDevices();
@@ -93,14 +97,40 @@ export class ViewEmployeesComponent {
     }
   }
 
-  selectedDeviceIds: any[] = [];
+  toggleSystemDropdown(event: Event) {
+    event.stopPropagation();
+    this.isSystemDropdownOpen = !this.isSystemDropdownOpen;
+  }
 
-  onDevicesChange(selectElement: HTMLSelectElement) {
-    const selectedOptions = Array.from(selectElement.selectedOptions);
+  isSystemSelected(deviceId: number | string): boolean {
+    return this.selectedDeviceIds.includes(deviceId);
+  }
 
-    this.selectedDeviceIds = selectedOptions.map((option: any) => option.value);
+  onSystemToggle(deviceId: number | string, event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      if (!this.selectedDeviceIds.includes(deviceId)) {
+        this.selectedDeviceIds.push(deviceId);
+      }
+      return;
+    }
+    this.selectedDeviceIds = this.selectedDeviceIds.filter(id => id !== deviceId);
+  }
 
-    console.log('Selected System IDs:', this.selectedDeviceIds);
+  get selectedSystemsLabel(): string {
+    if (!this.selectedDeviceIds.length) return 'Select Systems';
+    const selectedNames = (this.clientDevices ?? [])
+      .filter((item: any) => this.selectedDeviceIds.includes(item.id))
+      .map((item: any) => item.device_name || item.system_uid || `System ${item.id}`);
+    return selectedNames.join(', ');
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.ct_custom_multi_select')) {
+      this.isSystemDropdownOpen = false;
+    }
   }
 
 
