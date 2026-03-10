@@ -16,7 +16,22 @@
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
                 </div>
+
                 <!-- Filters -->
+                <div class="d-flex align-items-center gap-2 filter-box">
+                    <div class="d-flex">
+                        <div class="ct_w_100_767">
+                            <select class="form-control ct_input" [(ngModel)]="selectedDeviceType"
+                                (change)="onDeviceTypeChange()">
+                                <option selected disabled>Select Device Type</option>
+                                <option value="">All</option>
+                                <option value="laptop">Laptop</option>
+                                <option value="desktop">Desktop</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="d-flex align-items-center gap-2 filter-box">
                     <div class="d-flex">
                         <div class="ct_w_100_767">
@@ -44,12 +59,13 @@
                     <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll($event)" />
+                                <!-- <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll($event)" /> -->
+                                Select
                             </th>
                             <th>S.No</th>
                             <th>
                                 <div class="d-flex flex-column">
-                                    <span>System ID</span>
+                                    <span>Asset Id</span>
                                     <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.system_uid"
                                         (change)="applyFilter()">
                                         <option value="">All</option>
@@ -59,6 +75,7 @@
                                     </select> -->
                                 </div>
                             </th>
+                            <th>Config</th>
                             <th>
                                 <div class="d-flex flex-column">
                                     <span>System Type</span>
@@ -71,10 +88,12 @@
                                     </select> -->
                                 </div>
                             </th>
-                            <th>Client ID</th>
-                            <th>Client Name</th>
+                            <th>Mac Address</th>
+                            <!-- <th>Client ID</th> -->
+                            <!-- <th>Client Name</th> -->
                             <th>Installed On</th>
                             <th>System Status</th>
+                            <th>Approve Status</th>
                             <th>Block</th>
                             <th>Action</th>
                         </tr>
@@ -87,11 +106,13 @@
                             </td>
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
+                            <td><span class="ct_overlay_text d-inline-block">{{item.model}}</span></td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.client_unique_id}}</td>
-                            <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
+                            <td>{{item.meta.mac_address}}</td>
+                            <!-- <td>{{item.client_unique_id}}</td> -->
+                            <!-- <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
                                 [queryParams]="{clientId: item.client_id}"><a
-                                    class="ct_hover_underline">{{item.client_name}}</a></td>
+                                    class="ct_hover_underline">{{item.client_name}}</a></td> -->
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>
                             <td class="">
                                 @if(item.status == "active"){
@@ -105,6 +126,17 @@
                                 }
                                 @if(item.status == "inactive"){
                                 <span class="ct_rejected_badge">Inactive</span>
+                                }
+                            </td>
+                            <td>
+                                @if(item.approval_status == "pending"){
+                                <span class="ct_pending_badge">Pending</span>
+                                }
+                                @if(item.approval_status == "approved"){
+                                <span class="ct_accepted_badge">Approved</span>
+                                }
+                                @if(item.approval_status == "rejected"){
+                                <span class="ct_rejected_badge">Rejected</span>
                                 }
                             </td>
                             <td>
@@ -152,7 +184,7 @@
             <div class="modal-body p-0">
                 <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Assign Systems</h5>
                 <p class="ct_dark_grey_text">
-                    Are you sure you want to assign this devices to this client
+                    Are you sure you want to assign this systems to this client?
                 </p>
                 <div class="d-flex justify-content-end gap-4 my-4">
                     <button #closeModalAssign type="button" data-bs-dismiss="modal"

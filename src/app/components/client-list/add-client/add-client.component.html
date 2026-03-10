@@ -220,15 +220,51 @@
                     </div>
                 </div>
 
-                <div class="mb-4">
+                <!-- <div class="mb-4">
                     <label class="mb-1">Security Cheque</label>
                     <input type="text" class="form-control ct_input" placeholder="Enter cheque number / details"
-                        formControlName="security_cheque" />
-                </div>
+                        formControlName="security_cheque_number" />
+                </div> -->
 
                 <!-- ── Section: Documents ── -->
                 <!-- <div class="ct_section_label">Documents</div> -->
                 <!-- accept=".pdf,.jpg,.jpeg,.png" -->
+
+
+                <div class="mb-3">
+                    <label class="mb-1">Security Cheque</label>
+                    <input type="file" class="form-control ct_input" accept="image/*" multiple
+                        (change)="onFileChange($event, 'security_cheque')" />
+                    <div *ngIf="fileErrors['security_cheque']" class="err_msg">{{
+                        fileErrors['security_cheque'] }}</div>
+                    <div *ngIf="selectedFilePreviewUrls['security_cheque']?.length" class="mt-2">
+                        <div class="small text-muted ">Selected files ({{ uploadedFiles['security_cheque'].length
+                            }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2 ">
+                            <div *ngFor="let preview of selectedFilePreviewUrls['security_cheque']; let i = index"
+                                class="position-relative">
+                                <img [src]="preview" alt="Cheque preview" class="img-fluid rounded border"
+                                    style="width:90px;height:90px;object-fit:cover" />
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('security_cheque', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="existingDocs['security_cheque']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['security_cheque']; let i = index" class="position-relative">
+                            <img [src]="doc.url" alt="Security Cheque" class="img-fluid rounded border"
+                                style="width:90px;height:90px;object-fit:cover" />
+                            <button *ngIf="clientId" type="button"
+                                class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('security_cheque', i)"><i
+                                    class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="mb-3">
                     <label class="mb-1">Aadhaar Card</label>
@@ -258,7 +294,8 @@
                             <button *ngIf="clientId" type="button"
                                 class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
                                 style="width:20px;height:20px;line-height:1"
-                                (click)="removeExistingDoc('aadhaar_card', i)"><i class="fa-solid fa-xmark"></i></button>
+                                (click)="removeExistingDoc('aadhaar_card', i)"><i
+                                    class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
 
@@ -321,13 +358,15 @@
                         </div>
                     </div>
                     <div *ngIf="existingDocs['office_rent_agreement']?.length" class="d-flex flex-wrap gap-3 mt-2">
-                        <div *ngFor="let doc of existingDocs['office_rent_agreement']; let i = index" class="position-relative">
+                        <div *ngFor="let doc of existingDocs['office_rent_agreement']; let i = index"
+                            class="position-relative">
                             <img [src]="doc.url" alt="Office Rent Agreement" class="img-fluid rounded border"
                                 style="width:90px;height:90px;object-fit:cover" />
                             <button *ngIf="clientId" type="button"
                                 class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
                                 style="width:20px;height:20px;line-height:1"
-                                (click)="removeExistingDoc('office_rent_agreement', i)"><i class="fa-solid fa-xmark"></i></button>
+                                (click)="removeExistingDoc('office_rent_agreement', i)"><i
+                                    class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
 
@@ -356,13 +395,15 @@
                         </div>
                     </div>
                     <div *ngIf="existingDocs['gst_certificate']?.length" class="d-flex flex-wrap gap-3 mt-2">
-                        <div *ngFor="let doc of existingDocs['gst_certificate']; let i = index" class="position-relative">
+                        <div *ngFor="let doc of existingDocs['gst_certificate']; let i = index"
+                            class="position-relative">
                             <img [src]="doc.url" alt="GST Certificate" class="img-fluid rounded border"
                                 style="width:90px;height:90px;object-fit:cover" />
                             <button *ngIf="clientId" type="button"
                                 class="btn btn-danger btn-sm position-absolute  btn-close-upload rounded-circle p-0"
                                 style="width:20px;height:20px;line-height:1"
-                                (click)="removeExistingDoc('gst_certificate', i)"><i class="fa-solid fa-xmark"></i></button>
+                                (click)="removeExistingDoc('gst_certificate', i)"><i
+                                    class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
 

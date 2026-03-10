@@ -18,6 +18,7 @@ export class InatalledDevicesComponent {
 
   deviceList: any;
   selectedClientId: any = '';
+  selectedDeviceType: any = '';
   searchText: string = '';
   clientList: any;
   pagination: any;
@@ -60,6 +61,10 @@ export class InatalledDevicesComponent {
       params.append('search', this.searchText.trim());
     }
 
+    if (this.selectedDeviceType) {
+      params.append('device_type', this.selectedDeviceType);
+    }
+
     params.append('page', this.page.toString());
     params.append('limit', this.limit.toString());
 
@@ -93,14 +98,19 @@ export class InatalledDevicesComponent {
 
   searchTimeout: any;
 
-onSearch() {
-  clearTimeout(this.searchTimeout);
+  onSearch() {
+    clearTimeout(this.searchTimeout);
 
-  this.searchTimeout = setTimeout(() => {
+    this.searchTimeout = setTimeout(() => {
+      this.page = 1;
+      this.getAllSystems();
+    }, 300);
+  }
+
+  onDeviceTypeChange() {
     this.page = 1;
     this.getAllSystems();
-  }, 300);
-}
+  }
 
   applyFilter() {
     // this.page = 1;

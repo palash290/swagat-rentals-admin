@@ -61,7 +61,14 @@
                                 <tr *ngFor="let item of dashboardData; let i = index">
                                     <td>{{ (page - 1) * limit + i + 1 }}</td>
                                     <td>{{ item.u_unique_id }}</td>
-                                    <td>{{ item.full_name }}</td>
+                                    <td>
+                                        <span>
+                                            {{ item.full_name }}
+                                            <i *ngIf="item.is_document_completed == 'No'"
+                                                class="fa-solid fa-triangle-exclamation ct_yellow ms-1"
+                                                title="Document pending" style="cursor: pointer;"></i>
+                                        </span>
+                                    </td>
                                     <td>{{ item.email }}</td>
                                     <td>
                                         <span *ngIf="item.kyc_status === 'approved'"

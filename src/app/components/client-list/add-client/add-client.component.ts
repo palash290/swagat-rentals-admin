@@ -82,7 +82,7 @@ export class AddClientComponent implements OnDestroy {
           billing_date: client?.billing_date ? String(client.billing_date).slice(0, 10) : '',
           agreement_start_date: client?.agreement_start_date ? String(client.agreement_start_date).slice(0, 10) : '',
           agreement_end_date: client?.agreement_end_date ? String(client.agreement_end_date).slice(0, 10) : '',
-          security_cheque: client?.security_cheque ?? ''
+          // security_cheque_number: client?.security_cheque_number ?? ''
         });
 
         this.existingDocs = {};
@@ -115,6 +115,7 @@ export class AddClientComponent implements OnDestroy {
     const mapping: Record<string, string> = {
       aadhar_card: 'aadhaar_card',
       aadhaar_card: 'aadhaar_card',
+      security_cheque: 'security_cheque',
       pan_card: 'pan_card',
       office_rent_agreement: 'office_rent_agreement',
       gst_certificate: 'gst_certificate',
@@ -165,7 +166,7 @@ export class AddClientComponent implements OnDestroy {
         billing_date: new FormControl(''),
         agreement_start_date: new FormControl(''),
         agreement_end_date: new FormControl(''),
-        security_cheque: new FormControl(''),
+        // security_cheque_number: new FormControl(''),
       },
       { validators: endDateAfterStart }
     );
@@ -290,10 +291,10 @@ export class AddClientComponent implements OnDestroy {
     formData.append('billing_date', v.billing_date);
     formData.append('agreement_start_date', v.agreement_start_date);
     formData.append('agreement_end_date', v.agreement_end_date);
-    if (v.security_cheque) formData.append('security_cheque', v.security_cheque);
+    // if (v.security_cheque_number) formData.append('security_cheque_number', v.security_cheque_number);
 
     // Append document files (if uploaded)
-    const docFields = ['aadhaar_card', 'pan_card', 'office_rent_agreement', 'gst_certificate', 'gumasta'];
+    const docFields = ['aadhaar_card', 'security_cheque', 'pan_card', 'office_rent_agreement', 'gst_certificate', 'gumasta'];
     docFields.forEach(field => {
       (this.uploadedFiles[field] ?? []).forEach(file => {
         formData.append(field, file, file.name);

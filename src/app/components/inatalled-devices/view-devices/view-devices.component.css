@@ -1,0 +1,11 @@
+.ct_accepted_badge {
+    color: #22c55e;
+}
+
+.ct_reject_badge {
+    color: #d81515;
+}
+
+.ct_pending_badge {
+    color: #e3e711;
+}

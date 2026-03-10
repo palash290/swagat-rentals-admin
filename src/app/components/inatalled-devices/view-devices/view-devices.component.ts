@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule, Location } from '@angular/common';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-view-devices',
@@ -15,8 +16,9 @@ export class ViewDevicesComponent {
   deviceData: any;
   parsedDevice: any;
   showOtherDetails: boolean = false;
+  loading: boolean = false;
 
-  constructor(private route: ActivatedRoute, private service: CommonService, private location: Location) { }
+  constructor(private route: ActivatedRoute, private service: CommonService, private location: Location, private toastr: NzMessageService) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -142,6 +144,15 @@ export class ViewDevicesComponent {
     return !hiddenKeys.includes(String(key).toLowerCase());
   }
 
+  hasValue(value: any): boolean {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim().length > 0;
+    if (typeof value === 'number') return !Number.isNaN(value);
+    if (typeof value === 'boolean') return true;
+    if (value instanceof Date) return true;
+    return false;
+  }
+
   formatDisplayKey(key: any): string {
     const acronyms = ['id', 'ip', 'mac', 'uuid', 'uid', 'cpu', 'gpu', 'ram', 'ssd', 'hdd'];
     const withSpaces = String(key ?? '')
@@ -161,6 +172,150 @@ export class ViewDevicesComponent {
 
   shouldShowDetailField(key: any): boolean {
     return String(key).toLowerCase() !== 'status';
+  }
+
+  // exportDeviceCsv() {
+  //   if (!this.deviceData) return;
+  //   const data = {
+  //     device: this.deviceData ?? {},
+  //     parsed: this.parsedDevice ?? {}
+  //   };
+  //   const rows = this.buildKeyValueRows(data);
+  //   const fallbackId = this.deviceData?.system_uid ?? this.deviceId ?? 'details';
+  //   const csv = this.buildCsv(rows, ['Field', 'Value']);
+  //   this.downloadCsv(csv, `system-${fallbackId}.csv`);
+  // }
+
+  exportDeviceCsv() {
+    if (!this.deviceData) return;
+
+    const data = {
+      device: this.deviceData ?? {},
+      parsed: this.parsedDevice ?? {}
+    };
+
+    const flatData = this.flattenObject(data);
+
+    const headers = Object.keys(flatData);
+    const values = headers.map(key => this.formatCsvValue(flatData[key]));
+
+    const csv = [
+      headers.map(h => this.escapeCsv(h)).join(','),
+      values.map(v => this.escapeCsv(v)).join(',')
+    ].join('\n');
+
+    const fallbackId = this.deviceData?.system_uid ?? this.deviceId ?? 'details';
+    this.downloadCsv(csv, `system-${fallbackId}.csv`);
+  }
+
+  private buildKeyValueRows(source: any, prefix: string = ''): Array<[string, string]> {
+    if (!source || typeof source !== 'object') return [];
+    const rows: Array<[string, string]> = [];
+    Object.keys(source).forEach((key) => {
+      const value = source[key];
+      const path = prefix ? `${prefix}.${key}` : key;
+      if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+        rows.push(...this.buildKeyValueRows(value, path));
+      } else {
+        rows.push([path, this.formatCsvValue(value)]);
+      }
+    });
+    return rows;
+  }
+
+  private flattenObject(obj: any, prefix: string = '', res: any = {}) {
+    Object.keys(obj || {}).forEach(key => {
+      const value = obj[key];
+      const newKey = prefix ? `${prefix}.${key}` : key;
+
+      if (value && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+        this.flattenObject(value, newKey, res);
+      } else {
+        res[newKey] = value;
+      }
+    });
+
+    return res;
+  }
+
+  private formatCsvValue(value: any): string {
+    if (value === null || value === undefined) return '';
+    if (value instanceof Date) return value.toISOString();
+    if (Array.isArray(value)) {
+      return value.length ? JSON.stringify(value) : '';
+    }
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  }
+
+  private buildCsv(rows: Array<[string, string]>, header: string[]): string {
+    const lines = [header.map((value) => this.escapeCsv(value)).join(',')];
+    rows.forEach(([key, value]) => {
+      lines.push([key, value].map((cell) => this.escapeCsv(cell)).join(','));
+    });
+    return lines.join('\n');
+  }
+
+  private escapeCsv(value: string): string {
+    const normalized = String(value ?? '');
+    if (/[",\n]/.test(normalized)) {
+      return `"${normalized.replace(/"/g, '""')}"`;
+    }
+    return normalized;
+  }
+
+  private downloadCsv(content: string, filename: string) {
+    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    link.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  @ViewChild('closeModalAssign1') closeModalAssign1!: ElementRef;
+  @ViewChild('closeModalAssign2') closeModalAssign2!: ElementRef;
+
+  reject(): void {
+
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+    formURlData.set('approval_status', 'rejected');
+
+    this.service.patch(`ststems/${this.deviceId}/change-approval`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+        this.toastr.success(resp?.message || 'Systems assigned successfully.');
+        this.closeModalAssign2?.nativeElement?.click();
+        this.getDeviceDetails();
+      },
+      error: () => {
+        this.loading = false;
+        this.toastr.warning('Something went wrong.');
+      }
+    });
+  }
+
+  approve(): void {
+
+    this.loading = true;
+
+    const formURlData = new URLSearchParams();
+    formURlData.set('approval_status', 'approved');
+
+    this.service.patch(`ststems/${this.deviceId}/change-approval`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+        this.toastr.success(resp?.message || 'Systems assigned successfully.');
+        this.closeModalAssign1?.nativeElement?.click();
+        this.getDeviceDetails();
+      },
+      error: () => {
+        this.loading = false;
+        this.toastr.warning('Something went wrong.');
+      }
+    });
   }
 
 

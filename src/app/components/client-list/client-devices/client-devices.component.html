@@ -34,11 +34,13 @@
                         <tr>
                             <th>S.No</th>
                             <th>System ID</th>
+                            <th>CONFIG</th>
                             <th>System Type</th>
+                             <th>Mac Address</th>
+                             <th>Installed On</th>
                             <!-- <th>IP Address</th> -->
-                            <th>Assigned Emp.</th>
+                            <!-- <th>Assigned Emp.</th> -->
                             <th>System Status</th>
-                            <th>Installed On</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -46,9 +48,12 @@
                         <tr *ngFor="let item of clientData; let i = index">
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
+                            <td>{{item.model}}</td>
                             <td>{{item.device_type}}</td>
+                            <td>{{item.meta.mac_address}}</td>
+                            <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>
                             <!-- <td>{{item.ip_address || '-'}}</td> -->
-                            <td>{{item.employee_name || '-'}}</td>
+                            <!-- <td>{{item.employee_name || '-'}}</td> -->
                             <td class="">
                                 @if(item.status == "active"){
                                 <span class="ct_accepted_badge">Active</span>
@@ -63,7 +68,6 @@
                                 <span class="ct_rejected_badge">Inactive</span>
                                 }
                             </td>
-                            <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
                                     <a [routerLink]="['/home/view-devices']" [queryParams]="{deviceId: item.id}"><i
