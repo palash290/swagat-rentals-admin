@@ -16,6 +16,28 @@
                     <a class="accept_btn"><i class="fa-solid fa-check me-2"></i>Accept</a>
                 </div>
             </div>
+
+            <div class="d-flex align-items-center gap-2 filter-box">
+                <div class="d-flex">
+                    <div class="ct_w_100_767">
+                        <select class="form-control ct_input" [(ngModel)]="selectedClientId">
+                            <option value="">Select Client</option>
+                            <option *ngFor="let agent of clientList" [value]="agent.id">
+                                {{ agent.full_name }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                @if(selectedDeviceIds.size > 0){
+                <button class="ct_black_btn px-4" data-bs-toggle="modal" data-bs-target="#assignDevicesModal">
+                    Assign Systems
+                </button>
+                } @else {
+                <button class="ct_black_btn px-4" (click)="onAssignDevicesClick($event)">
+                    Assign Systems
+                </button>
+                }
+            </div>
         </div>
         <!-- <h4 class="ct_fs_18 ct_fw_600 mb-3">Linked Systems</h4> -->
         <div class="ct_wrapper_white_box">
@@ -32,12 +54,15 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>
+                                Select
+                            </th>
                             <th>S.No</th>
                             <th>System ID</th>
-                            <th>CONFIG</th>
+                            <th>Config</th>
                             <th>System Type</th>
-                             <th>Mac Address</th>
-                             <th>Installed On</th>
+                            <th>Mac Address</th>
+                            <th>Installed On</th>
                             <!-- <th>IP Address</th> -->
                             <!-- <th>Assigned Emp.</th> -->
                             <th>System Status</th>
@@ -46,11 +71,15 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of clientData; let i = index">
+                            <td>
+                                <input type="checkbox" [checked]="selectedDeviceIds.has(item.id)"
+                                    (change)="toggleRowSelection($event, item.id)" />
+                            </td>
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
-                            <td>{{item.model}}</td>
+                            <td>{{item.system_info.cpu_model}}</td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.meta.mac_address}}</td>
+                            <td>{{item.system_info.mac_address}}</td>
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>
                             <!-- <td>{{item.ip_address || '-'}}</td> -->
                             <!-- <td>{{item.employee_name || '-'}}</td> -->
@@ -77,9 +106,9 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div *ngIf="clientData?.length == 0" class="text-center">
-                <p class="ct_fs_15 mt-5">No system found</p>
+                <div *ngIf="clientData?.length == 0" class="text-center">
+                    <p class="ct_fs_15 mt-5">No system found</p>
+                </div>
             </div>
             <div class="d-flex justify-content-end mt-3 gap-2">
                 <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
@@ -90,6 +119,29 @@
                     (click)="changePage(page + 1)">
                     Next
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Device Modal -->
+<div class="modal fade ct_delete_employee_modal" id="assignDevicesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Assign Systems</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to assign this systems to this client?
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalAssign1 type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmAssignDevices()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
             </div>
         </div>
     </div>

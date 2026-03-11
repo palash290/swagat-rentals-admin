@@ -65,7 +65,7 @@
                             <th>S.No</th>
                             <th>
                                 <div class="d-flex flex-column">
-                                    <span>Asset Id</span>
+                                    <span>System Id</span>
                                     <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.system_uid"
                                         (change)="applyFilter()">
                                         <option value="">All</option>
@@ -106,9 +106,9 @@
                             </td>
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
-                            <td><span class="ct_overlay_text d-inline-block">{{item.model}}</span></td>
+                            <td><span class="ct_overlay_text d-inline-block">{{item.system_info.cpu_model}}</span></td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.meta.mac_address}}</td>
+                            <td>{{item.system_info.mac_address}}</td>
                             <!-- <td>{{item.client_unique_id}}</td> -->
                             <!-- <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
                                 [queryParams]="{clientId: item.client_id}"><a
@@ -197,7 +197,7 @@
     </div>
 </div>
 
-<!-- vlock Assign Modal -->
+<!-- Block Assign Modal -->
 <div class="modal fade ct_delete_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">

@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <a class="accept_btn" data-bs-toggle="modal" data-bs-target="#approveDevicesModal"><i
-                            class="fa-solid fa-check me-2"></i>Accept</a>
+                            class="fa-solid fa-check me-2"></i>Approve</a>
                 </div>
             </div>
             }
@@ -463,7 +463,7 @@
                 <div class="d-flex justify-content-end gap-4 my-4">
                     <button #closeModalAssign1 type="button" data-bs-dismiss="modal"
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
-                    <button (click)="approve()" type="button"
+                    <button (click)="reject()" type="button"
                         class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
                 </div>
             </div>
@@ -486,7 +486,7 @@
                 <div class="d-flex justify-content-end gap-4 my-4">
                     <button #closeModalAssign2 type="button" data-bs-dismiss="modal"
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
-                    <button (click)="reject()" type="button" class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                    <button (click)="approve()" type="button" class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
                 </div>
             </div>
         </div>
