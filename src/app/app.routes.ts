@@ -3,7 +3,7 @@ import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
       {
-            path: '',
+            path: 'login',
             loadComponent: () => import('./components/log-in/log-in.component').then(m => m.LogInComponent)
       },
       {
@@ -20,7 +20,7 @@ export const routes: Routes = [
       },
 
       {
-            path: 'landing-page',
+            path: '',
             loadComponent: () => import('./components/landing-page/landing-page.component').then(m => m.LandingPageComponent)
       },
       {

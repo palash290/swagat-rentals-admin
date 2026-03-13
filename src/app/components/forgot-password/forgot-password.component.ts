@@ -44,7 +44,7 @@ export class ForgotPasswordComponent {
           next: (resp: any) => {
             if (resp.success == true) {
               this.loading = false;
-              this.router.navigate(['/']);
+              this.router.navigate(['/login']);
               this.toastr.success(resp.message);
               this.Form.reset();
             } else {

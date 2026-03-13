@@ -287,7 +287,7 @@ export class ViewDevicesComponent {
       next: (resp: any) => {
         this.loading = false;
         this.toastr.success(resp?.message || 'Systems assigned successfully.');
-        this.closeModalAssign2?.nativeElement?.click();
+        this.closeModalAssign1?.nativeElement?.click();
         this.getDeviceDetails();
       },
       error: () => {
@@ -308,7 +308,7 @@ export class ViewDevicesComponent {
       next: (resp: any) => {
         this.loading = false;
         this.toastr.success(resp?.message || 'Systems assigned successfully.');
-        this.closeModalAssign1?.nativeElement?.click();
+        this.closeModalAssign2?.nativeElement?.click();
         this.getDeviceDetails();
       },
       error: () => {

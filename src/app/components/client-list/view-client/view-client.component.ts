@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule, Location } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-client',
@@ -16,16 +17,23 @@ export class ViewClientComponent {
   documentsByType: Record<string, any[]> = {};
   selectedDocUrl: string = '';
   selectedDocTitle: string = '';
+  selectedDocIsPdf: boolean = false;
 
   readonly documentTypes = [
     { key: 'aadhaar_card', label: 'Aadhaar Card' },
+    { key: 'security_cheque', label: 'Security Cheque' },
     { key: 'pan_card', label: 'PAN Card' },
     { key: 'office_rent_agreement', label: 'Office Rent Agreement' },
     { key: 'gst_certificate', label: 'GST Certificate' },
     { key: 'gumasta', label: 'Gumasta' }
   ];
 
-  constructor(private route: ActivatedRoute, private service: CommonService, private location: Location) { }
+  constructor(
+    private route: ActivatedRoute,
+    private service: CommonService,
+    private location: Location,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -55,6 +63,7 @@ export class ViewClientComponent {
   openDoc(docType: { key: string; label: string }, doc: any) {
     this.selectedDocUrl = this.getDocUrl(doc);
     this.selectedDocTitle = docType?.label ?? 'Document Preview';
+    this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
   }
 
   getPrimaryDoc(typeKey: string): any | null {
@@ -115,6 +124,7 @@ export class ViewClientComponent {
     const mapping: Record<string, string> = {
       aadhar_card: 'aadhaar_card',
       aadhaar_card: 'aadhaar_card',
+      security_cheque: 'security_cheque',
       pan_card: 'pan_card',
       office_rent_agreement: 'office_rent_agreement',
       gst_certificate: 'gst_certificate',
@@ -132,6 +142,19 @@ export class ViewClientComponent {
       doc?.path ??
       ''
     ).trim();
+  }
+
+  isPdfUrl(url: string): boolean {
+    return /\.pdf(\?|#|$)/i.test(url ?? '');
+  }
+
+  getSafePdfUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  openPdfInNewTab(url: string): void {
+    if (!url) return;
+    window.open(url, '_blank');
   }
 
   private buildKeyValueRows(source: any, prefix: string = ''): Array<[string, string]> {

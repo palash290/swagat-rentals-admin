@@ -3,6 +3,7 @@ import { CommonService } from '../../../services/common.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 // ── Cross-field validator: agreement end date must be after start date ────────
 function endDateAfterStart(group: AbstractControl): ValidationErrors | null {
@@ -26,7 +27,7 @@ export class AddClientComponent implements OnDestroy {
   Form!: FormGroup;
   clientId: any;
 
-  private readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+  private readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
   private readonly MAX_SIZE_MB = 30;
   private readonly MAX_FILES_PER_DOC = 10;
   private readonly PHONE_PATTERN = /^[6-9]\d{9}$/;
@@ -34,8 +35,8 @@ export class AddClientComponent implements OnDestroy {
 
   // Holds uploaded File objects keyed by document field name
   uploadedFiles: Record<string, File[]> = {};
-  // Holds preview URLs for selected files
-  selectedFilePreviewUrls: Record<string, string[]> = {};
+  // Holds preview info for selected files
+  selectedFilePreviews: Record<string, { url: string; isPdf: boolean }[]> = {};
   // Holds per-file validation error messages
   fileErrors: Record<string, string> = {};
   // Holds existing uploaded documents in edit mode (url + id)
@@ -43,7 +44,13 @@ export class AddClientComponent implements OnDestroy {
   // Holds IDs of removed KYC docs for update API
   deleteKycIds: Array<number | string> = [];
 
-  constructor(private apiService: CommonService, private toastr: NzMessageService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private apiService: CommonService,
+    private toastr: NzMessageService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -146,7 +153,7 @@ export class AddClientComponent implements OnDestroy {
         full_name: new FormControl('', Validators.required),
         company_name: new FormControl(''),
         company_address: new FormControl(''),
-        gst_no: new FormControl('', [Validators.pattern(this.GST_PATTERN)]),
+        gst_no: new FormControl(''),
         mobile_no: new FormControl('', [Validators.required, Validators.pattern(this.PHONE_PATTERN)]),
         email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -182,7 +189,7 @@ export class AddClientComponent implements OnDestroy {
 
     const invalidType = selectedFiles.find(file => !this.ALLOWED_TYPES.includes(file.type));
     if (invalidType) {
-      this.fileErrors[fieldName] = 'Only JPG, PNG, or WEBP images are allowed.';
+      this.fileErrors[fieldName] = 'Only JPG, PNG, WEBP, or PDF files are allowed.';
       input.value = '';
       return;
     }
@@ -209,17 +216,17 @@ export class AddClientComponent implements OnDestroy {
 
   removeSelectedFile(fieldName: string, index: number): void {
     const files = this.uploadedFiles[fieldName] ?? [];
-    const previews = this.selectedFilePreviewUrls[fieldName] ?? [];
-    const previewToRevoke = previews[index];
+    const previews = this.selectedFilePreviews[fieldName] ?? [];
+    const previewToRevoke = previews[index]?.url;
     if (previewToRevoke) {
       URL.revokeObjectURL(previewToRevoke);
     }
 
     this.uploadedFiles[fieldName] = files.filter((_, i) => i !== index);
-    this.selectedFilePreviewUrls[fieldName] = previews.filter((_, i) => i !== index);
+    this.selectedFilePreviews[fieldName] = previews.filter((_, i) => i !== index);
     if (!this.uploadedFiles[fieldName].length) {
       delete this.uploadedFiles[fieldName];
-      delete this.selectedFilePreviewUrls[fieldName];
+      delete this.selectedFilePreviews[fieldName];
     }
   }
 
@@ -240,19 +247,30 @@ export class AddClientComponent implements OnDestroy {
 
   private setSelectedPreviews(fieldName: string, files: File[]): void {
     this.revokeSelectedPreviews(fieldName);
-    this.selectedFilePreviewUrls[fieldName] = files.map(file => URL.createObjectURL(file));
+    this.selectedFilePreviews[fieldName] = files.map(file => ({
+      url: URL.createObjectURL(file),
+      isPdf: file.type === 'application/pdf'
+    }));
   }
 
   private revokeSelectedPreviews(fieldName: string): void {
-    (this.selectedFilePreviewUrls[fieldName] ?? []).forEach(url => URL.revokeObjectURL(url));
-    delete this.selectedFilePreviewUrls[fieldName];
+    (this.selectedFilePreviews[fieldName] ?? []).forEach(preview => URL.revokeObjectURL(preview.url));
+    delete this.selectedFilePreviews[fieldName];
   }
 
   private clearAllSelectedFiles(): void {
-    Object.keys(this.selectedFilePreviewUrls).forEach(fieldName => {
+    Object.keys(this.selectedFilePreviews).forEach(fieldName => {
       this.revokeSelectedPreviews(fieldName);
     });
     this.uploadedFiles = {};
+  }
+
+  isPdfUrl(url: string): boolean {
+    return /\.pdf(\?|#|$)/i.test(url ?? '');
+  }
+
+  getSafePdfUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
   onSubmit() {
