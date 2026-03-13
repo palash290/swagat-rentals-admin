@@ -27,33 +27,18 @@
                     <label class="mb-1">Company Name </label>
                     <input type="text" class="form-control ct_input" placeholder="Enter company name"
                         formControlName="company_name" />
-                    <!-- <div *ngIf="Form.controls['company_name'].invalid && Form.controls['company_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['company_name'].errors?.['required']">Please enter company name.
-                            </div>
-                        </div> -->
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">Company Address </label>
                     <textarea class="form-control ct_input" rows="3" placeholder="Enter company address"
                         formControlName="company_address"></textarea>
-                    <!-- <div *ngIf="Form.controls['company_address'].invalid && Form.controls['company_address'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['company_address'].errors?.['required']">Please enter company
-                                address.</div>
-                        </div> -->
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">GST No </label>
                     <input type="text" class="form-control ct_input" placeholder="e.g. 22AAAAA0000A1Z5"
                         formControlName="gst_no" maxlength="15" style="text-transform:uppercase" />
-                    <div *ngIf="Form.controls['gst_no'].invalid && Form.controls['gst_no'].touched" class="err_msg">
-                        <!-- <div *ngIf="Form.controls['gst_no'].errors?.['required']">Please enter GST number.</div> -->
-                        <!-- <div *ngIf="Form.controls['gst_no'].errors?.['pattern']">Invalid GST format (e.g.
-                            22AAAAA0000A1Z5).</div> -->
-                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -90,11 +75,6 @@
                     <label class="mb-1">IT Person Name </label>
                     <input type="text" class="form-control ct_input" placeholder="Enter IT person name"
                         formControlName="it_person_name" />
-                    <!-- <div *ngIf="Form.controls['it_person_name'].invalid && Form.controls['it_person_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['it_person_name'].errors?.['required']">Please enter IT person
-                                name.</div>
-                        </div> -->
                 </div>
 
                 <div class="mb-4">
@@ -114,11 +94,6 @@
                     <label class="mb-1">Administration Contact Name </label>
                     <input type="text" class="form-control ct_input" placeholder="Enter admin contact name"
                         formControlName="admin_contact_name" />
-                    <!-- <div *ngIf="Form.controls['admin_contact_name'].invalid && Form.controls['admin_contact_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['admin_contact_name'].errors?.['required']">Please enter admin
-                                contact name.</div>
-                        </div> -->
                 </div>
 
                 <div class="mb-4">
@@ -189,31 +164,16 @@
                 <div class="mb-3">
                     <label class="mb-1">Billing Date </label>
                     <input type="date" class="form-control ct_input" formControlName="billing_date" />
-                    <!-- <div *ngIf="Form.controls['billing_date'].invalid && Form.controls['billing_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['billing_date'].errors?.['required']">Please select billing date.
-                            </div>
-                        </div> -->
                 </div>
 
                 <div class="mb-3">
                     <label class="mb-1">Agreement Start Date </label>
                     <input type="date" class="form-control ct_input" formControlName="agreement_start_date" />
-                    <!-- <div *ngIf="Form.controls['agreement_start_date'].invalid && Form.controls['agreement_start_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['agreement_start_date'].errors?.['required']">Please select
-                                agreement start date.</div>
-                        </div> -->
                 </div>
 
                 <div class="mb-4">
                     <label class="mb-1">Agreement End Date </label>
                     <input type="date" class="form-control ct_input" formControlName="agreement_end_date" />
-                    <!-- <div *ngIf="Form.controls['agreement_end_date'].invalid && Form.controls['agreement_end_date'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['agreement_end_date'].errors?.['required']">Please select
-                                agreement end date.</div>
-                        </div> -->
                     <div *ngIf="Form.errors?.['endDateBeforeStart'] && Form.controls['agreement_end_date'].touched"
                         class="err_msg">
                         End date must be after start date.
@@ -306,7 +266,6 @@
                                     class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="mb-3">
@@ -332,6 +291,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div *ngIf="existingDocs['pan_card']?.length" class="d-flex flex-wrap gap-3 mt-2">
                         <div *ngFor="let doc of existingDocs['pan_card']; let i = index" class="position-relative">
                             <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="PAN Card"
@@ -344,7 +304,6 @@
                                 (click)="removeExistingDoc('pan_card', i)"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="mb-3">
@@ -371,6 +330,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div *ngIf="existingDocs['office_rent_agreement']?.length" class="d-flex flex-wrap gap-3 mt-2">
                         <div *ngFor="let doc of existingDocs['office_rent_agreement']; let i = index"
                             class="position-relative">
@@ -385,7 +345,6 @@
                                     class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="mb-3">
@@ -412,6 +371,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div *ngIf="existingDocs['gst_certificate']?.length" class="d-flex flex-wrap gap-3 mt-2">
                         <div *ngFor="let doc of existingDocs['gst_certificate']; let i = index"
                             class="position-relative">
@@ -426,7 +386,6 @@
                                     class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="mb-4">
@@ -464,7 +423,6 @@
                                 (click)="removeExistingDoc('gumasta', i)"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </div>
-
                 </div>
 
                 <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"

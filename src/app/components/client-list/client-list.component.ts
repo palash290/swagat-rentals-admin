@@ -96,7 +96,6 @@ export class ClientListComponent {
     return this.nextStatus === 1 ? 'Yes, Block' : 'Yes, Unblock';
   }
 
-
   onToggleUser(item: any) {
     this.selectedUser = item;
     this.clientId = item.id;
@@ -113,7 +112,6 @@ export class ClientListComponent {
     if (this.nextStatus == 1) {
       formURlData.set('is_disabled', 'true');
     }
-
 
     this.apiService.patch(`admin/client/${this.clientId}/block`, formURlData.toString()).subscribe({
       next: (resp: any) => {

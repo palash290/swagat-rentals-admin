@@ -12,7 +12,6 @@ const scrollConfig: InMemoryScrollingOptions = {
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes, withInMemoryScrolling(scrollConfig)),
-
   provideAnimations(),
   provideHttpClient(
     withInterceptorsFromDi()
@@ -22,6 +21,6 @@ export const appConfig: ApplicationConfig = {
     useClass: HttpInterceptorService,
     multi: true,
   },
-  provideAnimationsAsync(),
+  provideAnimationsAsync()
   ]
 };

@@ -3,6 +3,10 @@ import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
       {
+            path: '',
+            loadComponent: () => import('./components/landing-page/landing-page.component').then(m => m.LandingPageComponent)
+      },
+      {
             path: 'login',
             loadComponent: () => import('./components/log-in/log-in.component').then(m => m.LogInComponent)
       },
@@ -18,11 +22,6 @@ export const routes: Routes = [
             path: 'reset-password',
             loadComponent: () => import('./components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
       },
-
-      {
-            path: '',
-            loadComponent: () => import('./components/landing-page/landing-page.component').then(m => m.LandingPageComponent)
-      },
       {
             path: 'home',
             loadComponent: () => import('./components/main/main.component').then(m => m.MainComponent),
@@ -32,7 +31,6 @@ export const routes: Routes = [
                         path: 'dashboard',
                         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
                   },
-
                   {
                         path: 'client-list',
                         loadComponent: () => import('./components/client-list/client-list.component').then(m => m.ClientListComponent)
@@ -49,7 +47,6 @@ export const routes: Routes = [
                         path: 'client-devices',
                         loadComponent: () => import('./components/client-list/client-devices/client-devices.component').then(m => m.ClientDevicesComponent)
                   },
-
                   {
                         path: 'inatalled-devices',
                         loadComponent: () => import('./components/inatalled-devices/inatalled-devices.component').then(m => m.InatalledDevicesComponent)
@@ -58,12 +55,10 @@ export const routes: Routes = [
                         path: 'view-devices',
                         loadComponent: () => import('./components/inatalled-devices/view-devices/view-devices.component').then(m => m.ViewDevicesComponent)
                   },
-
                   {
                         path: 'assets-category',
                         loadComponent: () => import('./components/assets-category/assets-category.component').then(m => m.AssetsCategoryComponent)
                   },
-
                   {
                         path: 'assets',
                         loadComponent: () => import('./components/assets/assets.component').then(m => m.AssetsComponent)
@@ -72,7 +67,6 @@ export const routes: Routes = [
                         path: 'view-assets',
                         loadComponent: () => import('./components/assets/view-assets/view-assets.component').then(m => m.ViewAssetsComponent)
                   },
-
                   {
                         path: 'employees',
                         loadComponent: () => import('./components/employees/employees.component').then(m => m.EmployeesComponent)
@@ -89,7 +83,6 @@ export const routes: Routes = [
                         path: 'change-password',
                         loadComponent: () => import('./components/change-password/change-password.component').then(m => m.ChangePasswordComponent)
                   },
-
                   {
                         path: 'service-requests',
                         loadComponent: () => import('./components/service-requests/service-requests.component').then(m => m.ServiceRequestsComponent)
@@ -98,7 +91,6 @@ export const routes: Routes = [
                         path: 'asset-purchase',
                         loadComponent: () => import('./components/asset-purchase/asset-purchase.component').then(m => m.AssetPurchaseComponent)
                   },
-
                   {
                         path: 'asset-purchase',
                         loadComponent: () => import('./components/asset-purchase/asset-purchase.component').then(m => m.AssetPurchaseComponent)
@@ -111,7 +103,6 @@ export const routes: Routes = [
                         path: 'add-assets',
                         loadComponent: () => import('./components/asset-purchase/add-asset/add-asset.component').then(m => m.AddAssetComponent)
                   },
-
                   {
                         path: 'payments',
                         loadComponent: () => import('./components/payments/payments.component').then(m => m.PaymentsComponent)
@@ -120,7 +111,6 @@ export const routes: Routes = [
                         path: 'payment-details',
                         loadComponent: () => import('./components/payments/payment-details/payment-details.component').then(m => m.PaymentDetailsComponent)
                   },
-
                   {
                         path: 'agreements',
                         loadComponent: () => import('./components/agreements/agreements.component').then(m => m.AgreementsComponent)
@@ -129,7 +119,6 @@ export const routes: Routes = [
                         path: 'agreements-details',
                         loadComponent: () => import('./components/agreements/agreement-details/agreement-details.component').then(m => m.AgreementDetailsComponent)
                   },
-
                   {
                         path: 'reparing',
                         loadComponent: () => import('./components/reparing/reparing.component').then(m => m.ReparingComponent)
@@ -149,7 +138,7 @@ export const routes: Routes = [
                   {
                         path: 'warranty-tracking',
                         loadComponent: () => import('./components/warranty-tracking/warranty-tracking.component').then(m => m.WarrantyTrackingComponent)
-                  },
+                  }
             ]
       }
 ];
