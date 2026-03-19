@@ -382,11 +382,24 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header border-0">
+                @if(singleRequest?.status == '4'){
                 <h5 class="ct-title ct_fs_22 ct_fw_600 ct_green_text d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
-
                     Completed Service Request
                 </h5>
+                }
+                @if(singleRequest?.status == '1'){
+                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                    <i class="fa-regular fa-circle-check"></i>
+                    Service Request Assigned
+                </h5>
+                }
+                @if(singleRequest?.status == '3'){
+                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Service Request Under Service
+                </h5>
+                }
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
