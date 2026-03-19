@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule, Location } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-client',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './view-client.component.html',
   styleUrl: './view-client.component.css'
 })
@@ -18,6 +20,8 @@ export class ViewClientComponent {
   selectedDocUrl: string = '';
   selectedDocTitle: string = '';
   selectedDocIsPdf: boolean = false;
+  loading: boolean = false;
+  rejectionReason: string = '';
 
   readonly documentTypes = [
     { key: 'aadhaar_card', label: 'Aadhaar Card' },
@@ -33,7 +37,8 @@ export class ViewClientComponent {
     private route: ActivatedRoute,
     private service: CommonService,
     private location: Location,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private toastr: NzMessageService
   ) { }
 
   ngOnInit() {
@@ -233,6 +238,59 @@ export class ViewClientComponent {
     link.download = filename;
     link.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  @ViewChild('closeModalAssign1') closeModalAssign1!: ElementRef;
+  @ViewChild('closeModalAssign2') closeModalAssign2!: ElementRef;
+
+  reject(): void {
+    const reason = this.rejectionReason?.trim();
+    if (!reason) {
+      this.toastr.warning('Please enter rejection reason.');
+      return;
+    }
+
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+    formURlData.set('status', 'rejected');
+    formURlData.set('reject_reason', reason);
+    formURlData.set('client_id', this.clientId);
+
+    this.service.post(`admin/client/kyc-approvals`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+        this.toastr.success(resp?.message || 'Systems assigned successfully.');
+        this.rejectionReason = '';
+        this.closeModalAssign1?.nativeElement?.click();
+        this.getClientDetails();
+      },
+      error: () => {
+        this.loading = false;
+        this.toastr.warning('Something went wrong.');
+      }
+    });
+  }
+
+  approve(): void {
+
+    this.loading = true;
+
+    const formURlData = new URLSearchParams();
+    formURlData.set('status', 'approved');
+    formURlData.set('client_id', this.clientId);
+
+    this.service.post(`admin/client/kyc-approvals`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.loading = false;
+        this.toastr.success(resp?.message || 'Systems assigned successfully.');
+        this.closeModalAssign2?.nativeElement?.click();
+        this.getClientDetails();
+      },
+      error: () => {
+        this.loading = false;
+        this.toastr.warning('Something went wrong.');
+      }
+    });
   }
 
 }

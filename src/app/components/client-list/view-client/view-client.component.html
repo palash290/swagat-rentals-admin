@@ -7,22 +7,34 @@
                 </a>
                 Client Details ({{clientData?.u_unique_id}})
             </h4>
+
+            @if(clientData?.kyc_status !== 'pending'){
             <button type="button" class="ct_black_btn px-4" (click)="exportClientCsv()" [disabled]="!clientData">
                 Export CSV
             </button>
+            }
+
             <!-- accept reject btn -->
-            <div class="d-flex gap-4 flex-wrap d-none">
+            @if(clientData?.kyc_status == 'pending'){
+            <div class="d-flex gap-4 flex-wrap">
                 <div>
-                    <a class="reject_btn"><i class="fa-solid fa-xmark me-2"></i>Reject</a>
+                    <a class="reject_btn" data-bs-toggle="modal" data-bs-target="#rejectDevicesModal"
+                        (click)="rejectionReason = ''"><i class="fa-solid fa-xmark me-2"></i>Reject</a>
                 </div>
                 <div>
-                    <a class="accept_btn"><i class="fa-solid fa-check me-2"></i>Accept</a>
+                    <a class="accept_btn" data-bs-toggle="modal" data-bs-target="#approveDevicesModal"><i
+                            class="fa-solid fa-check me-2"></i>Accept</a>
                 </div>
             </div>
+            }
+
+
         </div>
 
         <!-- Status approved -->
-        <!-- <div class="ct_client_approved_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+        @if(clientData?.kyc_status == 'approved'){
+        <div
+            class="ct_client_approved_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35 mt-2">
             <div class="ct_green_text ct_fs_18 ct_fw_600">
                 <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -33,18 +45,21 @@
                         d="M20.733 12.3517L14.8975 18.1872L12.4665 15.7562C12.2085 15.4984 11.8587 15.3536 11.4939 15.3537C11.1292 15.3538 10.7794 15.4989 10.5216 15.7569C10.2638 16.0149 10.119 16.3647 10.1191 16.7295C10.1193 17.0942 10.2643 17.444 10.5223 17.7018L13.8278 21.0073C13.9683 21.1478 14.135 21.2593 14.3186 21.3354C14.5021 21.4114 14.6989 21.4506 14.8975 21.4506C15.0962 21.4506 15.293 21.4114 15.4765 21.3354C15.6601 21.2593 15.8268 21.1478 15.9673 21.0073L22.6773 14.2959C22.9278 14.0366 23.0664 13.6893 23.0632 13.3288C23.0601 12.9682 22.9155 12.6234 22.6605 12.3684C22.4056 12.1135 22.0607 11.9689 21.7002 11.9658C21.3397 11.9626 20.9924 12.1012 20.733 12.3517Z"
                         fill="#22C55E" />
                 </svg>
-
                 Approved
             </div>
             <div>
-                <p class="mb-0 ct_fs_14 ct_dark_grey_text">Approved on</p>
-                <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p>
+                <!-- <p class="mb-0 ct_fs_14 ct_dark_grey_text">Approved on</p>
+                <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p> -->
             </div>
-        </div> -->
+        </div>
+        }
+
 
         <!-- Status rejected -->
-        <!-- <div class="d-none">
-            <div class="ct_client_rejected_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+        @if(clientData?.kyc_status == 'rejected'){
+        <div class="">
+            <div
+                class="ct_client_rejected_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35 mt-2">
                 <div class="ct_red_text ct_fs_18 ct_fw_600">
                     <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -57,15 +72,19 @@
                     Rejected
                 </div>
                 <div>
-                    <p class="mb-0 ct_fs_14 ct_dark_grey_text">Rejected on</p>
-                    <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p>
+                    <!-- <p class="mb-0 ct_fs_14 ct_dark_grey_text">Rejected on</p>
+                    <p class="mb-0 ct_fs_14 ct_dark_grey_text">12 Feb 2024</p> -->
                 </div>
             </div>
-        </div> -->
+        </div>
+        }
+
 
         <!-- Status pending -->
-        <!-- <div class="d-none">
-            <div class="ct_client_pending_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35">
+        @if(clientData?.kyc_status == 'pending'){
+        <div class="">
+            <div
+                class="ct_client_pending_status d-flex flex-wrap justify-content-between align-items-center ct_mb-35 mt-3">
                 <div class="ct_dark_yellow_text ct_fs_18 ct_fw_600">
                     <svg class="me-2" width="33" height="33" viewBox="0 0 33 33" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +108,9 @@
                     Pending
                 </div>
             </div>
-        </div> -->
+        </div>
+        }
+
 
         <!-- Profile Card -->
         <div class="ct_mb-35 ct_client_detail_card pe-3 mt-3">
@@ -279,13 +300,13 @@
 
             <div class="modal-body text-center pt-0">
                 <ng-container *ngIf="selectedDocUrl; else noPreview">
-                    <img *ngIf="!selectedDocIsPdf" [src]="selectedDocUrl"
-                        [alt]="selectedDocTitle || 'Document'" class="img-fluid rounded-3" />
-                    <iframe *ngIf="selectedDocIsPdf" [src]="getSafePdfUrl(selectedDocUrl)"
-                        class="img-fluid rounded-3" style="width:100%;height:60vh;"></iframe>
+                    <img *ngIf="!selectedDocIsPdf" [src]="selectedDocUrl" [alt]="selectedDocTitle || 'Document'"
+                        class="img-fluid rounded-3" />
+                    <iframe *ngIf="selectedDocIsPdf" [src]="getSafePdfUrl(selectedDocUrl)" class="img-fluid rounded-3"
+                        style="width:100%;height:60vh;"></iframe>
                     <div *ngIf="selectedDocIsPdf" class="mt-3">
-                        <button type="button" class="ct_black_btn px-3"
-                            (click)="openPdfInNewTab(selectedDocUrl)">Open PDF in new tab</button>
+                        <button type="button" class="ct_black_btn px-3" (click)="openPdfInNewTab(selectedDocUrl)">Open
+                            PDF in new tab</button>
                     </div>
                 </ng-container>
                 <ng-template #noPreview>
@@ -293,5 +314,64 @@
                 </ng-template>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Assign Device Modal -->
+<div class="modal fade ct_delete_employee_modal" id="rejectDevicesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Reject Client</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to reject this client?
+                </p>
+                <div class="mb-3">
+                    <label class="form-label">Rejection Reason</label>
+                    <textarea class="form-control ct_input" rows="3" placeholder="Enter reason"
+                        [(ngModel)]="rejectionReason"></textarea>
+                </div>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalAssign1 type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="reject()" type="button" class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Device Modal -->
+<div class="modal fade ct_delete_employee_modal" id="approveDevicesModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Approve Client</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to approve this client?
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalAssign2 type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="approve()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>
