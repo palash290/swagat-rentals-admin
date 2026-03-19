@@ -7,6 +7,7 @@
                 </a>
                 Linked Systems
             </h4>
+            
             <!-- accept reject btn -->
             <div class="d-flex gap-4 flex-wrap d-none">
                 <div>
@@ -77,7 +78,7 @@
                             </td>
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
-                            <td>{{item.system_info.cpu_model}}</td>
+                            <td><span class="ct_overlay_text d-inline-block">{{item.system_info.cpu_model}}</span></td>
                             <td>{{item.device_type}}</td>
                             <td>{{item.system_info.mac_address}}</td>
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>

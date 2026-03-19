@@ -17,43 +17,24 @@
                         <div class="search-box w-100 ">
                             <div class="input-group position-relative">
                                 <input type="text" class="form-control ct_input ps-5"
-                                    placeholder="Search by ID, Name or others..." />
+                                    placeholder="Search by ID, Name or others..." [(ngModel)]="searchText"
+                                    (input)="getAllRequests()" />
 
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
                         </div>
                         <!-- Filters -->
-                        <div class="dropdown ct_w_100_575">
-                            <button class="btn filter-dropdown dropdown-toggle ct_w_100_575" type="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M7.08026 12.8429H0.779541" stroke="#475569" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M9.89038 3.15039H16.1911" stroke="#475569" stroke-width="1.5"
-                                        stroke-linecap="round" stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M5.47629 3.09625C5.47629 1.8006 4.41813 0.75 3.11314 0.75C1.80816 0.75 0.75 1.8006 0.75 3.09625C0.75 4.39191 1.80816 5.44251 3.11314 5.44251C4.41813 5.44251 5.47629 4.39191 5.47629 3.09625Z"
-                                        stroke="#475569" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                    <path fill-rule="evenodd" clip-rule="evenodd"
-                                        d="M16.75 12.8037C16.75 11.5081 15.6926 10.4575 14.3876 10.4575C13.0818 10.4575 12.0237 11.5081 12.0237 12.8037C12.0237 14.0994 13.0818 15.15 14.3876 15.15C15.6926 15.15 16.75 14.0994 16.75 12.8037Z"
-                                        stroke="#475569" stroke-width="1.5" stroke-linecap="round"
-                                        stroke-linejoin="round" />
-                                </svg>
-                                Filters
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="#">Active</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"> Pending</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#"> Rejected</a>
-                                </li>
-                            </ul>
+                        <div class="d-flex align-items-center gap-2 filter-box">
+                            <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
+                                <select class="form-select ct_input" [(ngModel)]="status" (change)="onStatusChange()">
+                                    <option selected disabled>Status</option>
+                                    <option value="">All</option>
+                                    <option value="0">Open</option>
+                                    <option value="1">Assigned</option>
+                                    <option value="3">Under Service</option>
+                                    <option value="4">Completed</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive mt-4 ct_custom_table">
@@ -72,57 +53,59 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>#CID238976</td>
-                                    <td>John Doe</td>
-                                    <td>#SID238976</td>
-                                    <td>Hardware</td>
+                                <tr *ngFor="let item of requestsList; let i = index">
+                                    <td>{{ (page - 1) * limit + i + 1 }}</td>
+                                    <td>{{item.client_unique_id}}</td>
+                                    <td>{{item.client_name}}</td>
+                                    <td>{{item.system_uid}}</td>
+                                    <td>{{item.request_title}}</td>
                                     <td class="">
+                                        @if(item.status == '0'){
                                         <span class="ct_blue_text"> Open</span>
+                                        }
+                                        @if(item.status == '1'){
+                                        <span class="ct_pending_badge"> Assigned </span>
+                                        }
+                                        @if(item.status == '3'){
+                                        <span class="ct_pending_badge"> Under Service </span>
+                                        }
+                                        @if(item.status == '4'){
+                                        <span class="ct_accepted_badge">Completed </span>
+                                        }
                                     </td>
-                                    <td class="">--</td>
-                                    <td>12 Aug 2026</td>
+                                    <td class="">{{item.employee_name || '--'}}</td>
+                                    <td>{{item.created_at | date:'dd MMM yyyy'}}</td>
                                     <td>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#assignOpenModal">
+                                        @if(item.status == '0'){
+                                        <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
+                                            data-bs-target="#assignOpenModal">
                                             <img src="img/action-user-icon.png" class="ct_width_18" />
                                         </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>#CID238976</td>
-                                    <td>John Doe</td>
-                                    <td>#DID238976</td>
-                                    <td>Software</td>
-                                    <td class="">
-                                        <span class="ct_pending_badge"> Assigned </span>
-                                    </td>
-                                    <td>Jessica Doe</td>
-                                    <td>12 Aug 2026</td>
-                                    <td>
-                                        <a href="#" class="ct_lh_0" data-bs-toggle="modal"
-                                            data-bs-target="#assignModal"><i class="fa-regular fa-eye"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>#CID238976</td>
-                                    <td>John Doe</td>
-                                    <td>#DID238976</td>
-                                    <td>Software</td>
-                                    <td class="">
-                                        <span class="ct_accepted_badge">Completed </span>
-                                    </td>
-                                    <td>Jessica Doe</td>
-                                    <td>12 Aug 2026</td>
-                                    <td>
-                                        <a href="#" data-bs-toggle="modal" data-bs-target="#assignCompModal"
-                                            class="ct_lh_0"><i class="fa-regular fa-eye"></i></a>
+                                        <!-- <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
+                                            data-bs-target="#assignCompModal" class="ct_lh_0"><i
+                                                class="fa-regular fa-eye"></i></a> -->
+                                        } @else {
+                                        <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
+                                            data-bs-target="#assignCompModal" class="ct_lh_0"><i
+                                                class="fa-regular fa-eye"></i></a>
+                                        }
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div *ngIf="requestsList?.length == 0" class="text-center">
+                        <p class="ct_fs_15 mt-5">No employee found</p>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                        <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
+                            Prev
+                        </button>
+                        {{pagination?.page}}
+                        <button class="btn btn-sm btn-secondary"
+                            [disabled]="page >= pagination?.total / pagination?.limit" (click)="changePage(page + 1)">
+                            Next
+                        </button>
                     </div>
                 </div>
             </div>
@@ -140,7 +123,7 @@
                     <i class="fa-regular fa-clock"></i>
                     Assign Service Request
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAssignModal></button>
             </div>
             <div class="modal-body">
                 <!-- Info Row -->
@@ -149,23 +132,23 @@
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                #SID238976
+                                {{singleRequest?.system_uid}}
                             </div>
                         </div>
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">Brand/Model:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Dell OptiPlex 7090
+                                {{singleRequest?.system_model}}
                             </div>
                         </div>
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">John Doe</div>
+                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name}}</div>
                         </div>
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Software
+                                {{singleRequest?.request_title}}
                             </div>
                         </div>
                     </div>
@@ -173,36 +156,43 @@
                 <!-- Description -->
                 <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
                 <div class="ct-description mb-4 ct_fs_13">
-                    Hi, I’m facing an issue in group chats. When I type // to tag
-                    someone, sometimes the user list doesn’t appear or the tag
-                    doesn’t get added correctly. This happens mostly in larger
-                    groups. Please check and let me know if there’s a fix.
+                    {{singleRequest?.request_description}}
                 </div>
-                <!-- Assign To -->
                 <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
-                <!-- Search -->
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search by ID, Name or others..." />
-
-                        <i class="fas fa-search ct_show_search"></i>
+                        <!-- <input type="text" class="form-control ct_input ps-5"
+                            placeholder="Search by ID, Name or others..." /> -->
+                        <select class="form-select" [(ngModel)]="employeeId" required
+                            (change)="onClientChange($any($event.target).value)">
+                            <option [ngValue]="null" selected disabled>Select Employee</option>
+                            <option *ngFor="let client of employeeList" [value]="client.id">
+                                {{ client.full_name }}
+                            </option>
+                        </select>
+                        <!-- <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !employeeId">
+                            Please select employee.
+                        </div> -->
                     </div>
                 </div>
                 <div class="my-3">
                     <label class="form-label">Service Date</label>
-                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" />
+                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" [(ngModel)]="assignedDate"
+                        [min]="minServiceDate" required />
+                    <!-- <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !assignedDate">
+                        Please select service date.
+                    </div> -->
                 </div>
-                <!-- Checkbox -->
                 <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheck" checked />
-                    <label class="form-check-label ct_fw_500" for="urgentCheck">
+                    <input class="form-check-input" type="checkbox" id="urgentCheckAssign" [(ngModel)]="isUrgent" />
+                    <label class="form-check-label ct_fw_500" for="urgentCheckAssign">
                         Mark this request as Urgent.
                     </label>
                 </div>
-                <!-- Buttons -->
                 <div class="d-flex gap-3">
-                    <button class="ct_black_btn px-4">Assign Service</button>
+                    <button class="ct_black_btn px-4" (click)="assignServiceRequest()">
+                        Assign Service
+                    </button>
                     <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
                         Cancel
                     </button>
@@ -212,88 +202,6 @@
     </div>
 </div>
 
-<!-- Action Assign Popup -->
-<div class="modal fade ct-assign-modal" id="assignModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px;">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header border-0">
-                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_dark_yellow_text">
-                    <svg class="me-2" width="26" height="26" viewBox="0 0 26 26" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M13 1.625C10.7502 1.625 8.551 2.29213 6.68039 3.54203C4.80978 4.79193 3.35182 6.56847 2.49088 8.64698C1.62993 10.7255 1.40467 13.0126 1.84357 15.2192C2.28248 17.4257 3.36584 19.4525 4.95667 21.0433C6.54749 22.6342 8.57432 23.7175 10.7809 24.1564C12.9874 24.5953 15.2745 24.3701 17.353 23.5091C19.4315 22.6482 21.2081 21.1902 22.458 19.3196C23.7079 17.449 24.375 15.2498 24.375 13C24.3716 9.98422 23.172 7.09294 21.0395 4.96046C18.9071 2.82798 16.0158 1.62844 13 1.625ZM13 22.75C10.4141 22.75 7.93419 21.7228 6.10571 19.8943C4.27723 18.0658 3.25001 15.5859 3.25001 13C3.25001 10.4141 4.27723 7.93419 6.10571 6.10571C7.93419 4.27723 10.4141 3.25 13 3.25V13L19.8908 19.8908C18.9872 20.7978 17.9133 21.5174 16.7307 22.008C15.5482 22.4987 14.2803 22.7509 13 22.75Z"
-                            fill="#F59E0B" />
-                    </svg>
-                    Assign Service Request
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Info Row -->
-                <div class="ct-info-box mb-4">
-                    <div class="ct_grid_col_4">
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                #DID238976
-                            </div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System Name:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Dell OptiPlex 7090
-                            </div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">John Doe</div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Software
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Description -->
-                <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
-                <div class="ct-description mb-4 ct_fs_13">
-                    Hi, I’m facing an issue in group chats. When I type // to tag
-                    someone, sometimes the user list doesn’t appear or the tag
-                    doesn’t get added correctly. This happens mostly in larger
-                    groups. Please check and let me know if there’s a fix.
-                </div>
-                <!-- Assign To -->
-                <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
-                <!-- Search -->
-                <div class="input-group position-relative">
-                    <input type="text" class="form-control ct_input" placeholder="#EID238976 John Doe"
-                        value="#EID238976 John Doe" />
-                </div>
-                <div class="my-3">
-                    <label class="form-label">Service Date</label>
-                    <input type="date" class="form-control ct_input" />
-                </div>
-                <!-- Checkbox -->
-                <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheck" checked />
-                    <label class="form-check-label ct_fw_500" for="urgentCheck">
-                        Urgent.
-                    </label>
-                </div>
-                <!-- Buttons -->
-                <div class="d-flex gap-3">
-                    <button class="ct_black_btn px-4">Mark As Complete</button>
-                    <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Action Complete Popup -->
 <div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1">
@@ -301,11 +209,24 @@
         <div class="modal-content">
             <!-- Header -->
             <div class="modal-header border-0">
+                @if(singleRequest?.status == '4'){
                 <h5 class="ct-title ct_fs_22 ct_fw_600 ct_green_text d-flex align-items-center gap-2">
                     <i class="fa-regular fa-circle-check"></i>
-
                     Completed Service Request
                 </h5>
+                }
+                @if(singleRequest?.status == '1'){
+                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                    <i class="fa-regular fa-circle-check"></i>
+                    Service Request Assigned
+                </h5>
+                }
+                @if(singleRequest?.status == '3'){
+                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Service Request Under Service
+                </h5>
+                }
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -315,23 +236,23 @@
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                #DID238976
+                                {{singleRequest?.system_uid}}
                             </div>
                         </div>
                         <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System Name:</div>
+                            <div class="ct-label ct_fs_14 ct_fw_600">Brand/Model:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Dell OptiPlex 7090
+                                {{singleRequest?.system_model}}
                             </div>
                         </div>
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">John Doe</div>
+                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name}}</div>
                         </div>
                         <div class="ct_info_cnt">
                             <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Software
+                                {{singleRequest?.request_title}}
                             </div>
                         </div>
                     </div>
@@ -339,33 +260,33 @@
                 <!-- Description -->
                 <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
                 <div class="ct-description mb-4 ct_fs_13">
-                    Hi, I’m facing an issue in group chats. When I type // to tag
-                    someone, sometimes the user list doesn’t appear or the tag
-                    doesn’t get added correctly. This happens mostly in larger
-                    groups. Please check and let me know if there’s a fix.
+                    {{singleRequest?.request_description}}
                 </div>
                 <!-- Assign To -->
                 <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
                 <!-- Search -->
                 <div class="input-group position-relative">
-                    <input type="text" class="form-control ct_input" placeholder="#EID238976 John Doe"
-                        value="#EID238976 John Doe" />
+                    <input type="text" class="form-control ct_input" placeholder="--"
+                        [value]="singleRequest?.employee_name" disabled />
                 </div>
                 <!-- Checkbox -->
                 <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheck" checked />
+                    <input class="form-check-input" type="checkbox" id="urgentCheck"
+                        [checked]="singleRequest?.mark_as_urgent === 1" />
                     <label class="form-check-label ct_fw_500" for="urgentCheck">
                         Urgent.
                     </label>
                 </div>
-                <!-- Buttons -->
-                <div class="d-flex gap-3">
-                    <button class="ct_black_btn px-4">Assign Service</button>
-                    <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

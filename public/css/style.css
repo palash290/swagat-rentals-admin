@@ -101,6 +101,10 @@ input[type="number"] {
       color: var(--green);
 }
 
+.ct_orange_text {
+      color: #f59e0b;
+}
+
 .ct_blue_text {
       color: var(--blue);
 
@@ -699,9 +703,7 @@ header {
 }
 
 .ct_pending_badge {
-
       color: #f59e0b;
-
 }
 
 .ct_rejected_badge {

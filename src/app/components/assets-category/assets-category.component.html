@@ -39,7 +39,7 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Name</th>
+                            <th>Display Name</th>
                             <th>System Status</th>
                             <!-- <th>Installed On</th> -->
                             <!-- <th>Action</th> -->
@@ -48,7 +48,7 @@
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
-                            <td>{{item.name}}</td>
+                            <td>{{item.display_name}}</td>
                             <td class="">
                                 @if(item.is_active == "1"){
                                 <span class="ct_accepted_badge">Active</span>

@@ -25,7 +25,8 @@ export class ViewClientComponent {
     { key: 'pan_card', label: 'PAN Card' },
     { key: 'office_rent_agreement', label: 'Office Rent Agreement' },
     { key: 'gst_certificate', label: 'GST Certificate' },
-    { key: 'gumasta', label: 'Gumasta' }
+    { key: 'gumasta', label: 'Gumasta' },
+    { key: 'selfie', label: 'Selfie' }
   ];
 
   constructor(
@@ -79,31 +80,24 @@ export class ViewClientComponent {
     return name || '';
   }
 
-  // exportClientCsv() {
-  //   if (!this.clientData) return;
-  //   const rows = this.buildKeyValueRows(this.clientData);
-  //   const csv = this.buildCsv(rows, ['Field', 'Value']);
-  //   const fallbackId = this.clientData?.u_unique_id ?? this.clientId ?? 'details';
-  //   this.downloadCsv(csv, `client-${fallbackId}.csv`);
-  // }
   exportClientCsv() {
-  if (!this.clientData) return;
+    if (!this.clientData) return;
 
-  const headers = Object.keys(this.clientData)
-    .filter(key => !this.shouldSkipCsvField(key));
+    const headers = Object.keys(this.clientData)
+      .filter(key => !this.shouldSkipCsvField(key));
 
-  const values = headers.map(key =>
-    this.formatCsvValue(this.clientData[key])
-  );
+    const values = headers.map(key =>
+      this.formatCsvValue(this.clientData[key])
+    );
 
-  const csv = [
-    headers.map(h => this.escapeCsv(h)).join(','),
-    values.map(v => this.escapeCsv(v)).join(',')
-  ].join('\n');
+    const csv = [
+      headers.map(h => this.escapeCsv(h)).join(','),
+      values.map(v => this.escapeCsv(v)).join(',')
+    ].join('\n');
 
-  const fallbackId = this.clientData?.u_unique_id ?? this.clientId ?? 'details';
-  this.downloadCsv(csv, `client-${fallbackId}.csv`);
-}
+    const fallbackId = this.clientData?.u_unique_id ?? this.clientId ?? 'details';
+    this.downloadCsv(csv, `client-${fallbackId}.csv`);
+  }
 
   private groupDocumentsByType(docs: any[]): Record<string, any[]> {
     const grouped: Record<string, any[]> = {};
@@ -128,7 +122,8 @@ export class ViewClientComponent {
       pan_card: 'pan_card',
       office_rent_agreement: 'office_rent_agreement',
       gst_certificate: 'gst_certificate',
-      gumasta: 'gumasta'
+      gumasta: 'gumasta',
+      selfie: 'selfie'
     };
     return mapping[normalized] ?? null;
   }

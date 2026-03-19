@@ -84,22 +84,22 @@
                 <!-- Nav Tabs -->
                 <ul class="nav nav-tabs dashboard-tabs" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+                        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
                             type="button">
-                            Pending Payments
+                            Recent Service Requests
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                        <button class="nav-link" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
                             type="button">
-                            Recent Service Requests
+                            Pending Payments
                         </button>
                     </li>
                 </ul>
                 <!-- Tab Content -->
                 <div class="ct_wrapper_white_box px-4">
                     <div class="tab-content p-4 border-0" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel">
+                        <div class="tab-pane fade" id="home" role="tabpanel">
                             <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
                                 <!-- Search -->
                                 <div class="search-box w-100">
@@ -219,18 +219,8 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel">
-                            <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
-                                <!-- Search -->
-                                <div class="search-box w-100">
-                                    <div class="input-group position-relative">
-                                        <input type="text" class="form-control ct_input ps-5"
-                                            placeholder="Search by ID, Name or others..." />
-                                        <i class="fas fa-search ct_show_search"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="table-responsive mt-4 ct_custom_table">
+                        <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                            <div class="table-responsive ct_custom_table">
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -246,59 +236,47 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>#CID238976</td>
-                                            <td>John Doe</td>
-                                            <td>#DID238976</td>
-                                            <td>Hardware</td>
+                                        <tr *ngFor="let item of requestsList; let i = index">
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{item.client_unique_id}}</td>
+                                            <td>{{item.client_name}}</td>
+                                            <td>{{item.system_uid}}</td>
+                                            <td>{{item.request_title}}</td>
                                             <td class="">
+                                                @if(item.status == '0'){
                                                 <span class="ct_blue_text"> Open</span>
+                                                }
+                                                @if(item.status == '1'){
+                                                <span class="ct_pending_badge"> Assigned </span>
+                                                }
+                                                @if(item.status == '3'){
+                                                <span class="ct_pending_badge"> Under Service </span>
+                                                }
+                                                @if(item.status == '4'){
+                                                <span class="ct_accepted_badge">Completed </span>
+                                                }
                                             </td>
-                                            <td class="">--</td>
-                                            <td>12 Aug 2026</td>
+                                            <td class="">{{item.employee_name || '--'}}</td>
+                                            <td>{{item.created_at | date:'dd MMM yyyy'}}</td>
                                             <td>
-                                                <a data-bs-toggle="modal" data-bs-target="#assignModal">
+                                                @if(item.status == '0'){
+                                                <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
+                                                    data-bs-target="#assignModal">
                                                     <img src="img/action-user-icon.png" />
                                                 </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>#CID238976</td>
-                                            <td>John Doe</td>
-                                            <td>#DID238976</td>
-                                            <td>Software</td>
-                                            <td class="">
-                                                <span class="ct_blue_text"> Open</span>
-                                            </td>
-                                            <td>--</td>
-                                            <td>12 Aug 2026</td>
-                                            <td>
-                                                <a data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                    <img src="img/action-user-icon.png" />
+                                                } @else {
+                                                <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
+                                                    data-bs-target="#assignCompModal" class="ct_lh_0">
+                                                    <i class="fa-regular fa-eye"></i>
                                                 </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>#CID238976</td>
-                                            <td>John Doe</td>
-                                            <td>#DID238976</td>
-                                            <td>Software</td>
-                                            <td class="">
-                                                <span class="ct_blue_text"> Open</span>
-                                            </td>
-                                            <td>--</td>
-                                            <td>12 Aug 2026</td>
-                                            <td>
-                                                <a data-bs-toggle="modal" data-bs-target="#assignModal">
-                                                    <img src="img/action-user-icon.png" />
-                                                </a>
+                                                }
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+                            </div>
+                            <div *ngIf="requestsList?.length == 0" class="text-center">
+                                <p class="ct_fs_15 mt-5">No service requests found</p>
                             </div>
                         </div>
                     </div>
@@ -317,7 +295,7 @@
                 <h5 class="ct-title ct_fs_22 ct_fw_600">
                     Assign Service Request
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAssignModal></button>
             </div>
             <div class="modal-body">
                 <!-- Info Row -->
@@ -326,23 +304,23 @@
                         <div class="col-md-3">
                             <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                #DID238976
+                                {{singleRequest?.system_uid || '--'}}
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="ct-label ct_fs_14 ct_fw_600">System Name:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Dell OptiPlex 7090
+                                {{singleRequest?.system_model || '--'}}
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">John Doe</div>
+                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name || '--'}}</div>
                         </div>
                         <div class="col-md-3">
                             <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
                             <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                Software
+                                {{singleRequest?.request_title || '--'}}
                             </div>
                         </div>
                     </div>
@@ -350,40 +328,125 @@
                 <!-- Description -->
                 <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
                 <div class="ct-description mb-4 ct_fs_13">
-                    Hi, I’m facing an issue in group chats. When I type // to tag
-                    someone, sometimes the user list doesn’t appear or the tag
-                    doesn’t get added correctly. This happens mostly in larger
-                    groups. Please check and let me know if there’s a fix.
+                    {{singleRequest?.request_description || '--'}}
                 </div>
                 <!-- Assign To -->
                 <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
                 <!-- Search -->
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search by ID, Name or others..." />
-                        <i class="fas fa-search ct_show_search"></i>
+                        <select class="form-select" [(ngModel)]="employeeId" required>
+                            <option [ngValue]="null" selected disabled>Select Employee</option>
+                            <option *ngFor="let client of employeeList" [value]="client.id">
+                                {{ client.full_name }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !employeeId">
+                        Please select employee.
                     </div>
                 </div>
                 <div class="my-3">
                     <label class="form-label">Service Date</label>
-                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" />
+                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" [(ngModel)]="assignedDate"
+                        [min]="minServiceDate" required />
+                    <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !assignedDate">
+                        Please select service date.
+                    </div>
                 </div>
                 <!-- Checkbox -->
                 <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheck" checked />
-                    <label class="form-check-label ct_fw_500" for="urgentCheck">
+                    <input class="form-check-input" type="checkbox" id="urgentCheckDash" [(ngModel)]="isUrgent" />
+                    <label class="form-check-label ct_fw_500" for="urgentCheckDash">
                         Mark this request as Urgent.
                     </label>
                 </div>
                 <!-- Buttons -->
                 <div class="d-flex gap-3">
-                    <button class="ct_black_btn">Assign Service</button>
+                    <button class="ct_black_btn" (click)="assignServiceRequest()"
+                        [disabled]="!employeeId || !assignedDate || isAssigning">
+                        Assign Service
+                    </button>
                     <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
                         Cancel
                     </button>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Action Complete Popup -->
+<div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px;">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header border-0">
+                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_green_text d-flex align-items-center gap-2">
+                    <i class="fa-regular fa-circle-check"></i>
+
+                    Completed Service Request
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Info Row -->
+                <div class="ct-info-box mb-4">
+                    <div class="ct_grid_col_4">
+                        <div class="ct_info_cnt">
+                            <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                {{singleRequest?.system_uid}}
+                            </div>
+                        </div>
+                        <div class="ct_info_cnt">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Brand/Model:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                {{singleRequest?.system_model}}
+                            </div>
+                        </div>
+                        <div class="ct_info_cnt">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
+                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name}}</div>
+                        </div>
+                        <div class="ct_info_cnt">
+                            <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
+                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                {{singleRequest?.request_title}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Description -->
+                <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
+                <div class="ct-description mb-4 ct_fs_13">
+                    {{singleRequest?.request_description}}
+                </div>
+                <!-- Assign To -->
+                <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
+                <!-- Search -->
+                <div class="input-group position-relative">
+                    <input type="text" class="form-control ct_input" placeholder="--"
+                        [value]="singleRequest?.employee_name" disabled />
+                </div>
+                <!-- Checkbox -->
+                <div class="form-check my-4">
+                    <input class="form-check-input" type="checkbox" id="urgentCheck"
+                        [checked]="singleRequest?.mark_as_urgent === 1" />
+                    <label class="form-check-label ct_fw_500" for="urgentCheck">
+                        Urgent.
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

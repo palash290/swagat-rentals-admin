@@ -21,7 +21,7 @@ export class ClientDevicesComponent {
   status: string = '';
 
   page: number = 1;
-  limit: number = 10;
+  limit: number = 20;
   pagination: any;
 
   selectedClientId: any = '';

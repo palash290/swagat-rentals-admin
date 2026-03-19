@@ -9,7 +9,7 @@
             </h4>
         </div>
         <!-- Profile Card -->
-        <div class="ct_mb-35 ct_client_detail_card pe-3">
+        <div class="ct_mb-35 ct_client_detail_card pe-3 mt-4">
             <div class="d-md-flex gap-4 align-items-center">
                 <div class="">
                     <img [src]="employeeData?.profile_image ? employeeData?.profile_image : 'img/no_pro.png'"
@@ -39,7 +39,7 @@
                                 <div class="ct-info-label ct_dark_grey_text ct_fw_500">
                                     Assigned Systems
                                 </div>
-                                <div class="ct-info-value ct_fs_18 ct_fw_500">04</div>
+                                <div class="ct-info-value ct_fs_18 ct_fw_500">{{employeeData?.assigned_devices}}</div>
                             </div>
                         </div>
                         <div>
@@ -49,9 +49,9 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mt-4">
             <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Assigned Systems</h4>
-            <div>
+            <!-- <div>
                 <a href="#" data-bs-toggle="modal" data-bs-target="#assignDeviceModal"
                     class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -61,9 +61,9 @@
                     </svg>
                     Assign Systems
                 </a>
-            </div>
+            </div> -->
         </div>
-        <div class="table-responsive mt-4 ct_custom_table">
+        <div class="table-responsive mt-2 ct_custom_table">
             <table class="table">
                 <thead>
                     <tr>
@@ -74,7 +74,7 @@
                         <th>Client Name</th>
                         <th>Installed On</th>
                         <th>System Status</th>
-                        <th>Action</th>
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -99,14 +99,14 @@
                             <span class="ct_rejected_badge">Inactive</span>
                             }
                         </td>
-                        <td>
+                        <!-- <td>
                             <div class="d-flex align-items-center gap-3">
-                                <!-- <a data-bs-toggle="modal" data-bs-target="#editAssignDeviceModal"><img
-                                        src="img/edit.png"></a> -->
+                                <a data-bs-toggle="modal" data-bs-target="#editAssignDeviceModal"><img
+                                        src="img/edit.png"></a>
                                 <a data-bs-toggle="modal" data-bs-target="#deleteAssignDeviceModal"><img
                                         src="img/cancel.png"></a>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>

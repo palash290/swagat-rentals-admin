@@ -39,9 +39,9 @@ export class ViewEmployeesComponent {
   }
 
   getDevices() {
-    this.service.get(`systems`).subscribe({
+    this.service.get(`admin/employees/${this.employeeId}/devices`).subscribe({
       next: (resp: any) => {
-        this.deviceList = resp.data.items;
+        this.deviceList = resp.data;
         this.getClientList();
       },
       error: (error) => {
