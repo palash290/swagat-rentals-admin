@@ -124,22 +124,22 @@
             <form [formGroup]="Form">
                 <div class="modal-body p-0">
                     <div class="mb-3">
-                        <label class="mb-1">Client Name</label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter client name"
+                        <label class="mb-1">Employee Name</label>
+                        <input type="text" class="form-control ct_input" placeholder="Enter employee name"
                             formControlName="full_name" />
                         <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
                             class="err_msg">
                             <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter
-                                client name.</div>
+                                Employee name.</div>
                         </div>
                     </div>
                     <div class="mb-4">
-                        <label class="mb-1">Client Email</label>
-                        <input type="email" class="form-control ct_input" placeholder="Enter client email"
+                        <label class="mb-1">Employee Email</label>
+                        <input type="email" class="form-control ct_input" placeholder="Enter employee email"
                             formControlName="email" />
                         <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
                             <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
-                                Client Email is required.
+                                Employee Email is required.
                             </div>
                             <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
                                 class="ct_fs_14 mt-1">

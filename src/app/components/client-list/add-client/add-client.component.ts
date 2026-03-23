@@ -30,7 +30,7 @@ export class AddClientComponent implements OnDestroy {
   private readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
   private readonly MAX_SIZE_MB = 30;
   private readonly MAX_FILES_PER_DOC = 10;
-  private readonly PHONE_PATTERN = /^[6-9]\d{9}$/;
+  private readonly PHONE_PATTERN = /^\+?[0-9]{10,15}$/;
   private readonly GST_PATTERN = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
   // Holds uploaded File objects keyed by document field name
@@ -276,8 +276,7 @@ export class AddClientComponent implements OnDestroy {
   onSubmit() {
     this.Form.markAllAsTouched();
 
-    const full_name = this.Form.value.full_name?.trim();
-    if (!full_name) return;
+    const full_name = (this.Form.value.full_name ?? '').trim();
 
     if (this.Form.invalid) {
       this.loading = false;
@@ -293,22 +292,23 @@ export class AddClientComponent implements OnDestroy {
     // Append all reactive-form values
     const v = this.Form.value;
     formData.append('full_name', full_name);
-    formData.append('company_name', v.company_name);
-    formData.append('company_address', v.company_address);
-    formData.append('gst_number', v.gst_no?.toUpperCase());
-    formData.append('mobile_no', v.mobile_no);
-    formData.append('email', v.email);
-    formData.append('it_person_name', v.it_person_name);
-    formData.append('it_person_contact_number', v.it_person_contact);
-    formData.append('administration_contact_number', v.admin_contact_name);
-    formData.append('admin_contact_no', v.admin_contact_no);
-    formData.append('total_computers', v.total_computers);
-    formData.append('total_laptops', v.total_laptops);
-    formData.append('total_servers', v.total_servers);
-    formData.append('total_gsm_gateways', v.total_gsm_gateway);
-    formData.append('billing_date', v.billing_date);
-    formData.append('agreement_start_date', v.agreement_start_date);
-    formData.append('agreement_end_date', v.agreement_end_date);
+    formData.append('company_name', v.company_name ?? '');
+    formData.append('company_address', v.company_address ?? '');
+    formData.append('gst_number', (v.gst_no ?? '').toUpperCase());
+    formData.append('mobile_no', v.mobile_no ?? '');
+    formData.append('email', v.email ?? '');
+    formData.append('it_person_name', v.it_person_name ?? '');
+    formData.append('it_person_contact_number', v.it_person_contact ?? '');
+    formData.append('administration_contact_name', v.admin_contact_name ?? '');
+    formData.append('administration_contact_number', v.admin_contact_no ?? '');
+    formData.append('admin_contact_no', v.admin_contact_no ?? '');
+    formData.append('total_computers', v.total_computers ?? 0);
+    formData.append('total_laptops', v.total_laptops ?? 0);
+    formData.append('total_servers', v.total_servers ?? 0);
+    formData.append('total_gsm_gateways', v.total_gsm_gateway ?? 0);
+    formData.append('billing_date', v.billing_date ?? '');
+    formData.append('agreement_start_date', v.agreement_start_date ?? '');
+    formData.append('agreement_end_date', v.agreement_end_date ?? '');
     // if (v.security_cheque_number) formData.append('security_cheque_number', v.security_cheque_number);
 
     // Append document files (if uploaded)

@@ -9,7 +9,7 @@
             </h4>
         </div>
         <!-- Body -->
-        <form [formGroup]="Form">
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
             <div class="modal-body p-0">
 
                 <div class="mb-3">
@@ -43,14 +43,13 @@
 
                 <div class="mb-3">
                     <label class="mb-1">Mobile No <span class="ct_required">*</span></label>
-                    <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit mobile number"
-                        formControlName="mobile_no" maxlength="10" />
+                    <input type="tel" class="form-control ct_input" placeholder="Enter mobile number"
+                        formControlName="mobile_no" maxlength="15" />
                     <div *ngIf="Form.controls['mobile_no'].invalid && Form.controls['mobile_no'].touched"
                         class="err_msg">
                         <div *ngIf="Form.controls['mobile_no'].errors?.['required']">Please enter mobile number.
                         </div>
-                        <div *ngIf="Form.controls['mobile_no'].errors?.['pattern']">Enter a valid 10-digit mobile
-                            number.</div>
+                        <div *ngIf="Form.controls['mobile_no'].errors?.['pattern']">Enter a valid phone number.</div>
                     </div>
                 </div>
 
@@ -79,13 +78,13 @@
 
                 <div class="mb-4">
                     <label class="mb-1">IT Person Contact No </label>
-                    <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit number"
-                        formControlName="it_person_contact" maxlength="10" />
+                    <input type="tel" class="form-control ct_input" placeholder="Enter phone number"
+                        formControlName="it_person_contact" maxlength="15" />
                     <div *ngIf="Form.controls['it_person_contact'].invalid && Form.controls['it_person_contact'].touched"
                         class="err_msg">
                         <!-- <div *ngIf="Form.controls['it_person_contact'].errors?.['required']">Please enter IT person
                                 contact number.</div> -->
-                        <div *ngIf="Form.controls['it_person_contact'].errors?.['pattern']">Enter a valid 10-digit
+                        <div *ngIf="Form.controls['it_person_contact'].errors?.['pattern']">Enter a valid phone
                             number.</div>
                     </div>
                 </div>
@@ -98,13 +97,13 @@
 
                 <div class="mb-4">
                     <label class="mb-1">Administration Contact No (for payment)</label>
-                    <input type="tel" class="form-control ct_input" placeholder="Enter 10-digit number"
-                        formControlName="admin_contact_no" maxlength="10" />
+                    <input type="tel" class="form-control ct_input" placeholder="Enter phone number"
+                        formControlName="admin_contact_no" maxlength="15" />
                     <div *ngIf="Form.controls['admin_contact_no'].invalid && Form.controls['admin_contact_no'].touched"
                         class="err_msg">
                         <!-- <div *ngIf="Form.controls['admin_contact_no'].errors?.['required']">Please enter admin
                                 contact number.</div> -->
-                        <div *ngIf="Form.controls['admin_contact_no'].errors?.['pattern']">Enter a valid 10-digit
+                        <div *ngIf="Form.controls['admin_contact_no'].errors?.['pattern']">Enter a valid phone
                             number.</div>
                     </div>
                 </div>
@@ -431,13 +430,13 @@
                 </button>
                 <!-- <button type="submit" class="ct_black_btn w-100">Add</button> -->
             </div>
+            <div class="d-flex gap-3 mt-5 pt-3">
+                <button type="submit" class="ct_black_btn px-4">{{clientId ? 'Update' : 'Add'}} Client</button>
+                <button type="button" routerLink="/home/client-list" class="ct_bule_transparent_btn px-4">
+                    Cancel
+                </button>
+            </div>
         </form>
-        <div class="d-flex gap-3 mt-5 pt-3">
-            <button (click)="onSubmit()" class="ct_black_btn px-4">{{clientId ? 'Update' : 'Add'}} Client</button>
-            <button routerLink="/home/client-list" class="ct_bule_transparent_btn px-4">
-                Cancel
-            </button>
-        </div>
     </div>
 </div>
 
