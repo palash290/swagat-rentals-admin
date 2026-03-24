@@ -1,0 +1,165 @@
+<div class="ct_inner_header_bg mt-4 ct_px_30">
+    <div class="d-flex justify-content-between align-items-center">
+        <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Client Requests</h4>
+
+    </div>
+</div>
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="ct_wrapper_white_box">
+                    <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5 mb-4">
+                        <!-- Search -->
+                        <div class="search-box w-100">
+                            <div class="input-group position-relative">
+                                <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                                    [(ngModel)]="searchText" (input)="getAllEmployee()" />
+                                <i class="fas fa-search ct_show_search"></i>
+                            </div>
+                        </div>
+                        <!-- Filters -->
+                        <div class="d-flex align-items-center gap-2 filter-box">
+                            <!-- <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
+                                <select class="form-select ct_input" [(ngModel)]="status" (change)="onStatusChange()">
+                                    <option value="">Status</option>
+                                    <option value="accepted">Accepted</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="table-responsive mt-4 ct_custom_table">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Client ID</th>
+                                    <th>Client Name</th>
+                                    <th>Email</th>
+                                    <th>KYC Status</th>
+                                    <th>Systems</th>
+                                    <th>Dates</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of employeeList; let i = index">
+                                    <td>{{ (page - 1) * limit + i + 1 }}</td>
+                                    <td>{{ item.u_unique_id }}</td>
+                                    <td>
+                                        <span>
+                                            {{ item.full_name }}
+                                            <i *ngIf="item.is_document_completed == 'No'"
+                                                class="fa-solid fa-triangle-exclamation ct_yellow ms-1"
+                                                title="Document pending" style="cursor: pointer;"></i>
+                                        </span>
+                                    </td>
+                                    <td>{{ item.email }}</td>
+                                    <td>
+                                        <span *ngIf="item.kyc_status === 'approved'"
+                                            class="ct_accepted_badge">Approved</span>
+                                        <span *ngIf="item.kyc_status === 'pending'"
+                                            class="ct_pending_badge">Pending</span>
+                                        <span *ngIf="item.kyc_status === 'rejected'"
+                                            class="ct_rejected_badge">Rejected</span>
+                                    </td>
+                                    <td>{{ item.device_count }}</td>
+                                    <td>{{ item.created_at | date: 'dd MMM yyyy' }}</td>
+
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <button type="button" class="btn btn-sm ct_black_btn"
+                                                data-bs-toggle="modal" data-bs-target="#approveKycModal"
+                                                (click)="openApproveModal(item)">
+                                                Approve
+                                            </button>
+                                            <button type="button" class="btn btn-sm ct_bule_transparent_btn"
+                                                data-bs-toggle="modal" data-bs-target="#rejectKycModal"
+                                                (click)="openRejectModal(item)">
+                                                Reject
+                                            </button>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div *ngIf="employeeList?.length == 0" class="text-center">
+                        <p class="ct_fs_15 mt-5">No request found</p>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                        <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
+                            Prev
+                        </button>
+                        {{pagination?.page}}
+                        <button class="btn btn-sm btn-secondary"
+                            [disabled]="page >= pagination?.total / pagination?.limit" (click)="changePage(page + 1)">
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Approve KYC Modal -->
+<div class="modal fade ct_delete_employee_modal" id="approveKycModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Approve KYC</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to approve this client?
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeApproveModal type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="approveKyc()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes, Approve</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject KYC Modal -->
+<div class="modal fade ct_delete_employee_modal" id="rejectKycModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Reject KYC</h5>
+                <p class="ct_dark_grey_text mb-2">
+                    Please provide a rejection reason.
+                </p>
+                <textarea class="form-control ct_input" rows="3" placeholder="Enter reason"
+                    [(ngModel)]="rejectionReason"></textarea>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeRejectModal type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="rejectKyc()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Reject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+</div>

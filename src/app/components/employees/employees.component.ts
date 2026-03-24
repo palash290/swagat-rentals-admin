@@ -28,6 +28,7 @@ export class EmployeesComponent {
   @ViewChild('closeModalAdd') closeModalAdd!: ElementRef;
   @ViewChild('closeModalDelete') closeModalDelete!: ElementRef;
   @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+  @ViewChild('closeModalSubAdmin') closeModalSubAdmin!: ElementRef;
 
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
@@ -146,6 +147,8 @@ export class EmployeesComponent {
 
   nextStatus!: number; // 0 or 1
   selectedUser: any;
+  selectedRoleUser: any;
+  targetRole: 'sub_admin' | 'employee' = 'sub_admin';
 
   get modalTitle(): string {
     return this.nextStatus === 1 ? 'Block User' : 'Unblock User';
@@ -199,5 +202,33 @@ export class EmployeesComponent {
     });
   }
 
+  openSubAdminModal(item: any) {
+    this.selectedRoleUser = item;
+    this.employeeId = item.id;
+    this.targetRole = item?.role === 'sub_admin' ? 'employee' : 'sub_admin';
+  }
+
+  confirmMakeSubAdmin() {
+    if (!this.employeeId) return;
+    this.loading = true;
+
+    this.apiService.patch(`admin/employees/${this.employeeId}/role`, { role: this.targetRole }).subscribe({
+      next: (resp: any) => {
+        this.closeModalSubAdmin.nativeElement.click();
+        this.loading = false;
+        this.toastr.success(resp.message || 'Role updated.');
+        this.getAllEmployee();
+      },
+      error: (error) => {
+        this.loading = false;
+        const msg =
+          error.error?.message ||
+          error.error?.error ||
+          error.message ||
+          'Something went wrong.';
+        this.toastr.error(msg);
+      }
+    });
+  }
 
 }

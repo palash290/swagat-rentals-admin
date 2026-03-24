@@ -1,0 +1,36 @@
+.login-role-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border: 1px solid #dbe7ff;
+  border-radius: 12px;
+  background: #f4f8ff;
+  margin: 0 auto 20px;
+  width: 100%;
+}
+
+.login-role-tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #1b4fe0;
+  font-weight: 600;
+  padding: 8px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  flex: 1;
+  text-align: center;
+}
+
+.login-role-tab.active {
+  background: #1e5df0;
+  color: #ffffff;
+  box-shadow: 0 6px 14px rgba(30, 93, 240, 0.28);
+}
+
+.login-role-tab:focus-visible {
+  outline: 2px solid #8fb4ff;
+  outline-offset: 2px;
+}

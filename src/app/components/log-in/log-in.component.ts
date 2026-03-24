@@ -15,6 +15,7 @@ export class LogInComponent {
 
   Form!: FormGroup;
   loading: boolean = false;
+  loginRole: 'admin' | 'sub_admin' = 'admin';
 
   constructor(private fb: FormBuilder, public validationErrorService: ValidationErrorService, private toastr: NzMessageService,
     private service: CommonService, private router: Router
@@ -38,6 +39,12 @@ export class LogInComponent {
       const formURlData = new URLSearchParams();
       formURlData.set('email', this.Form.value.email);
       formURlData.set('password', this.Form.value.password);
+      if (this.loginRole === 'sub_admin') {
+        formURlData.set('role', 'sub_admin');
+      }
+      if (this.loginRole === 'admin') {
+        formURlData.set('role', 'admin');
+      }
       this.service.post('admin/login', formURlData.toString()).subscribe({
         next: (resp: any) => {
           if (resp.success == true) {
@@ -45,6 +52,7 @@ export class LogInComponent {
             this.loading = false;
             this.toastr.success(resp.message);
             this.router.navigateByUrl('/home/dashboard');
+            localStorage.setItem('role', resp.data.role);
           } else {
             this.toastr.warning(resp.message);
             this.loading = false;
@@ -71,5 +79,8 @@ export class LogInComponent {
     this.isPasswordVisible = !this.isPasswordVisible;
   }
 
+  setRole(role: 'admin' | 'sub_admin') {
+    this.loginRole = role;
+  }
 
 }

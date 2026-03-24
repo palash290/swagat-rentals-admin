@@ -4,7 +4,8 @@
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+            <div
+                [ngClass]="userRole === 'sub_admin' ? 'col-xxl-4 col-xl-4 col-lg-4 col-md-6 mb-4' : 'col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4'">
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
@@ -21,7 +22,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+            <div
+                [ngClass]="userRole === 'sub_admin' ? 'col-xxl-4 col-xl-4 col-lg-4 col-md-6 mb-4' : 'col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4'">
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
@@ -38,7 +40,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
+            <div
+                [ngClass]="userRole === 'sub_admin' ? 'col-xxl-4 col-xl-4 col-lg-4 col-md-6 mb-4' : 'col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4'">
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
@@ -56,7 +59,7 @@
                 </div>
             </div>
             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-6 mb-4">
-                <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
+                <div *ngIf="userRole !== 'sub_admin'" class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
                             {{dashboardData?.total_employees}}
@@ -259,7 +262,7 @@
                                             <td class="">{{item.employee_name || '--'}}</td>
                                             <td>{{item.created_at | date:'dd MMM yyyy'}}</td>
                                             <td>
-                                                @if(item.status == '0'){
+                                                @if(item.status == '0' && userRole !== 'sub_admin'){
                                                 <a (click)="getRequestDetail(item)" data-bs-toggle="modal"
                                                     data-bs-target="#assignModal">
                                                     <img src="img/action-user-icon.png" />
@@ -275,7 +278,7 @@
                                     </tbody>
                                 </table>
                                 <div *ngIf="requestsList?.length == 0" class="text-center">
-                                    <p class="ct_fs_15 mt-5">No service requests found</p>
+                                    <p class="ct_fs_15 mt-5">No requests found</p>
                                 </div>
                             </div>
                         </div>

@@ -22,6 +22,7 @@ export class DashboardComponent {
   isUrgent: boolean = false;
   isAssigning: boolean = false;
   showAssignErrors: boolean = false;
+  userRole: string | null = null;
 
   @ViewChild('closeAssignModal') closeAssignModal!: ElementRef;
 
@@ -31,6 +32,7 @@ export class DashboardComponent {
     // this.apiService.refreshSidebar$.subscribe(() => {
     //   this.getProfile();
     // });
+    this.userRole = localStorage.getItem('role');
     this.getProfile();
     this.getRecentRequests();
     this.getAllEmployee();

@@ -22,6 +22,7 @@ export class ViewClientComponent {
   selectedDocIsPdf: boolean = false;
   loading: boolean = false;
   rejectionReason: string = '';
+  userRole: string | null = null;
 
   readonly documentTypes = [
     { key: 'aadhaar_card', label: 'Aadhaar Card' },
@@ -42,6 +43,7 @@ export class ViewClientComponent {
   ) { }
 
   ngOnInit() {
+    this.userRole = localStorage.getItem('role');
     this.route.queryParams.subscribe(params => {
       this.clientId = params['clientId'];
     });

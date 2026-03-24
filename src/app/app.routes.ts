@@ -32,6 +32,14 @@ export const routes: Routes = [
                         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
                   },
                   {
+                        path: 'client-request-admin',
+                        loadComponent: () => import('./components/client-request-admin/client-request-admin.component').then(m => m.ClientRequestAdminComponent)
+                  },
+                  {
+                        path: 'view-client-request',
+                        loadComponent: () => import('./components/client-request-admin/view-client-request/view-client-request.component').then(m => m.ViewClientRequestComponent)
+                  },
+                  {
                         path: 'client-list',
                         loadComponent: () => import('./components/client-list/client-list.component').then(m => m.ClientListComponent)
                   },

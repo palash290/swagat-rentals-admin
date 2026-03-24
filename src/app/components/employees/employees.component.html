@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Employees</h4>
         <div>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#addClientModal"
+            <a  data-bs-toggle="modal" data-bs-target="#addClientModal"
                 class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -51,6 +51,7 @@
                                     <th>Email</th>
                                     <th>Assigned Systems</th>
                                     <th>Block</th>
+                                    <th>Make Subadmin</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -68,6 +69,13 @@
                                                 (change)="onToggleUser(item)" data-bs-toggle="modal"
                                                 data-bs-target="#blockAssignDeviceModal" />
                                         </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm ct_black_btn"
+                                            data-bs-toggle="modal" data-bs-target="#makeSubAdminModal"
+                                            (click)="openSubAdminModal(item)">
+                                            {{ item.role === 'sub_admin' ? 'Remove Subadmin' : 'Make Subadmin' }}
+                                        </button>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
@@ -176,6 +184,34 @@
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
                     <button (click)="deleteTeam()" type="submit" class="ct_blue_text ct_fw_600 btn-transparent">Yes ,
                         Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Make Subadmin Modal -->
+<div class="modal fade ct_delete_employee_modal" id="makeSubAdminModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">
+                    {{ targetRole === 'sub_admin' ? 'Make Subadmin' : 'Remove Subadmin' }}
+                </h5>
+                <p class="ct_dark_grey_text">
+                    {{ targetRole === 'sub_admin'
+                        ? 'Are you sure you want to make this employee a Subadmin?'
+                        : 'Are you sure you want to remove Subadmin access for this employee?'
+                    }}
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalSubAdmin type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmMakeSubAdmin()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes, Confirm</button>
                 </div>
             </div>
         </div>

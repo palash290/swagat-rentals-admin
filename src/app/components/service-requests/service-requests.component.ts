@@ -26,6 +26,7 @@ export class ServiceRequestsComponent {
   isUrgent: boolean = false;
   isAssigning: boolean = false;
   minServiceDate: string = '';
+  userRole: string | null = null;
   // showAssignErrors: boolean = false;
 
   @ViewChild('closeAssignModal') closeAssignModal!: ElementRef;
@@ -33,6 +34,7 @@ export class ServiceRequestsComponent {
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
   ngOnInit() {
+    this.userRole = localStorage.getItem('role');
     this.getAllRequests();
     this.getAllEmployee();
     this.assignedDate = this.getTodayDate();
@@ -108,6 +110,10 @@ export class ServiceRequestsComponent {
   }
 
   assignServiceRequest() {
+    if (this.userRole === 'sub_admin') {
+      this.toastr.warning('You do not have permission to assign service requests.');
+      return;
+    }
     if (!this.singleRequest?.id) {
       this.toastr.warning('Please select a service request.');
       return;

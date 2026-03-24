@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 filter-box">
+                <div class="d-flex align-items-center gap-2 filter-box" *ngIf="userRole !== 'sub_admin'">
                     <div class="d-flex">
                         <div class="ct_w_100_767">
                             <select class="form-control ct_input" [(ngModel)]="selectedClientId">
@@ -51,14 +51,14 @@
                     <button class="ct_black_btn px-4" (click)="onAssignDevicesClick($event)">
                         Assign Systems
                     </button>
-                    }
+                            }
                 </div>
             </div>
             <div class="table-responsive mt-4 ct_custom_table">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>
+                            <th *ngIf="userRole !== 'sub_admin'">
                                 <!-- <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll($event)" /> -->
                                 Select
                             </th>
@@ -100,7 +100,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
-                            <td>
+                            <td *ngIf="userRole !== 'sub_admin'">
                                 <input type="checkbox" [checked]="selectedDeviceIds.has(item.id)"
                                     (change)="toggleRowSelection($event, item.id)" />
                             </td>

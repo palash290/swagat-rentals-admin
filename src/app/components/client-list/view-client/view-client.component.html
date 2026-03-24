@@ -15,6 +15,7 @@
             }
 
             <!-- accept reject btn -->
+            @if(userRole !== 'sub_admin'){
             @if(clientData?.kyc_status == 'pending'){
             <div class="d-flex gap-4 flex-wrap">
                 <div>
@@ -26,6 +27,7 @@
                             class="fa-solid fa-check me-2"></i>Accept</a>
                 </div>
             </div>
+            }
             }
 
 
@@ -132,7 +134,12 @@
                             <div class="ct-info-label ct_dark_grey_text ct_fw_500">
                                 Date of Birth
                             </div>
-                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.dob || '-'}}</div>
+                            @if(clientData?.dob){
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{clientData?.dob | date:'dd-MMM-yyyy'}}</div>
+                            }@else {
+                            <div class="ct-info-value ct_fs_18 ct_fw_500">{{'-'}}</div>
+
+                            }
                         </div>
                         <div class="">
                             <div class="ct-info-label ct_dark_grey_text ct_fw_500">Country</div>

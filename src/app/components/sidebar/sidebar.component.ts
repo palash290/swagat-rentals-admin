@@ -11,8 +11,13 @@ import { Router, RouterLink } from '@angular/router';
 export class SidebarComponent {
 
   @ViewChild('closeModalAdd') closeModalAdd!: ElementRef;
+  userRole: string | null = null;
 
   constructor(private router: Router) { }
+
+  ngOnInit() {
+    this.userRole = localStorage.getItem('role');
+  }
 
   isActive(route: string): boolean {
     return this.router.isActive(route, true);

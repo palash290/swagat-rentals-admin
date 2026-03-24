@@ -15,7 +15,7 @@ export class MyProfileComponent {
   profileForm!: FormGroup;
   userDet: any;
   userEmail: any;
-  first_name: any;
+  full_name: any;
   last_name: any;
   designation: any;
   loading: boolean = false;
@@ -33,7 +33,7 @@ export class MyProfileComponent {
 
   initForm() {
     this.profileForm = new FormGroup({
-      first_name: new FormControl('', Validators.required),
+      full_name: new FormControl('', Validators.required),
       // last_name: new FormControl('', Validators.required),
       email: new FormControl({ value: this.userEmail, disabled: true }),
     });
@@ -43,11 +43,11 @@ export class MyProfileComponent {
     this.service.get('admin/me').subscribe({
       next: (resp: any) => {
         this.userEmail = resp.data.email;
-        this.first_name = resp.data.first_name;
+        this.full_name = resp.data.full_name;
         // this.last_name = resp.data.last_name;
         this.profileImg = resp.data.profile_image;
         this.profileForm.patchValue({
-          first_name: this.first_name,
+          full_name: this.full_name,
           last_name: this.last_name,
           email: this.userEmail,
           company_name: resp.data.company_name
@@ -62,17 +62,17 @@ export class MyProfileComponent {
   onSubmit() {
     this.profileForm.markAllAsTouched();
 
-    const first_name = this.profileForm.value.first_name?.trim();
+    const full_name = this.profileForm.value.full_name?.trim();
     // const last_name = this.profileForm.value.last_name?.trim();
 
-    if (!first_name) {
+    if (!full_name) {
       return;
     }
 
     if (this.profileForm.valid) {
       this.loading = true;
       const formURlData = new FormData();
-      formURlData.append('first_name', this.profileForm.value.first_name);
+      formURlData.append('full_name', this.profileForm.value.full_name);
       // formURlData.append('last_name', this.profileForm.value.last_name);
 
       if (this.selectedFile) {

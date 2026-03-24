@@ -17,10 +17,12 @@ export class ViewDevicesComponent {
   parsedDevice: any;
   showOtherDetails: boolean = false;
   loading: boolean = false;
+  userRole: string | null = null;
 
   constructor(private route: ActivatedRoute, private service: CommonService, private location: Location, private toastr: NzMessageService) { }
 
   ngOnInit() {
+    this.userRole = localStorage.getItem('role');
     this.route.queryParams.subscribe(params => {
       this.deviceId = params['deviceId'];
     });

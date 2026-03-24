@@ -6,13 +6,27 @@
             <!-- Login Section -->
             <div class="ct-login-wrapper">
                   <div class="ct-login-card">
+                        <div class="login-role-tabs" role="tablist">
+                              <button type="button" class="login-role-tab"
+                                    [class.active]="loginRole === 'admin'" (click)="setRole('admin')">
+                                    Admin
+                              </button>
+                              <button type="button" class="login-role-tab"
+                                    [class.active]="loginRole === 'sub_admin'" (click)="setRole('sub_admin')">
+                                    Sub Admin
+                              </button>
+                        </div>
+                        
                         <div class="text-center mb-4">
-                              <div class="ct-title ct_fs_30 ct_fw_600 mb-2">Admin Login</div>
+                              <div class="ct-title ct_fs_30 ct_fw_600 mb-2">
+                                    {{ loginRole === 'admin' ? 'Admin' : 'Sub Admin' }} Login
+                              </div>
                               <div class="ct-subtitle ct_dark_grey_text">
                                     Secure admin access to manage clients,
                                     systems, billing and services.
                               </div>
                         </div>
+                      
                         <form [formGroup]="Form">
                               <div class="mb-3">
                                     <label class="form-label small">Email</label>

@@ -18,7 +18,7 @@
                             </label>
                         </div>
                         <div>
-                            <h4 class="ct_fs_20 ct_fw_500 mb-0  mt-4">{{first_name}}</h4>
+                            <h4 class="ct_fs_20 ct_fw_500 mb-0  mt-4">{{full_name}}</h4>
                             <p class="ct_fs_14">{{userEmail}}</p>
                         </div>
                     </div>
@@ -28,10 +28,10 @@
                                 <label for="" class="mb-1 ct_text_black ct_fs_15 ct_fw_400">Full
                                     Name</label>
                                 <input type="text" class="form-control ct_input ct_fs_14" placeholder="Enter Full Name"
-                                    formControlName="first_name">
-                                <div *ngIf="profileForm.controls['first_name'].invalid && profileForm.controls['first_name'].touched"
+                                    formControlName="full_name">
+                                <div *ngIf="profileForm.controls['full_name'].invalid && profileForm.controls['full_name'].touched"
                                     class="err_msg">
-                                    <div *ngIf="profileForm.controls['first_name'].errors?.['required']">Please enter
+                                    <div *ngIf="profileForm.controls['full_name'].errors?.['required']">Please enter
                                         your full name.</div>
                                 </div>
                             </div>

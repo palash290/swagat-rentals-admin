@@ -22,6 +22,7 @@ export class InatalledDevicesComponent {
   searchText: string = '';
   clientList: any;
   pagination: any;
+  userRole: string | null = null;
 
   filters = {
     system_uid: '',
@@ -39,6 +40,7 @@ export class InatalledDevicesComponent {
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
   ngOnInit() {
+    this.userRole = localStorage.getItem('role');
     this.getClientList();
     this.getAllSystems();
   }
