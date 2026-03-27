@@ -20,6 +20,7 @@ export class ViewClientComponent {
   selectedDocUrl: string = '';
   selectedDocTitle: string = '';
   selectedDocIsPdf: boolean = false;
+  selectedDocIsVideo: boolean = false;
   loading: boolean = false;
   rejectionReason: string = '';
   userRole: string | null = null;
@@ -31,7 +32,8 @@ export class ViewClientComponent {
     { key: 'office_rent_agreement', label: 'Office Rent Agreement' },
     { key: 'gst_certificate', label: 'GST Certificate' },
     { key: 'gumasta', label: 'Gumasta' },
-    { key: 'selfie', label: 'Selfie' }
+    { key: 'selfie', label: 'Selfie' },
+    { key: 'Verification_Video', label: 'Verification Video' }
   ];
 
   constructor(
@@ -72,6 +74,7 @@ export class ViewClientComponent {
     this.selectedDocUrl = this.getDocUrl(doc);
     this.selectedDocTitle = docType?.label ?? 'Document Preview';
     this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
+    this.selectedDocIsVideo = this.isVideoUrl(this.selectedDocUrl);
   }
 
   getPrimaryDoc(typeKey: string): any | null {
@@ -130,7 +133,8 @@ export class ViewClientComponent {
       office_rent_agreement: 'office_rent_agreement',
       gst_certificate: 'gst_certificate',
       gumasta: 'gumasta',
-      selfie: 'selfie'
+      selfie: 'selfie',
+      verification_video: 'Verification_Video'
     };
     return mapping[normalized] ?? null;
   }
@@ -148,6 +152,10 @@ export class ViewClientComponent {
 
   isPdfUrl(url: string): boolean {
     return /\.pdf(\?|#|$)/i.test(url ?? '');
+  }
+
+  isVideoUrl(url: string): boolean {
+    return /\.(mp4|webm|ogg)(\?|#|$)/i.test(url ?? '');
   }
 
   getSafePdfUrl(url: string): SafeResourceUrl {

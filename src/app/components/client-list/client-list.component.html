@@ -52,7 +52,8 @@
                                     <th>Email</th>
                                     <th>KYC Status</th>
                                     <th>Systems</th>
-                                    <th>Dates</th>
+                                    <th>Payment Status</th>
+                                    <th>Joining Date</th>
                                     <!-- <th>Block</th> -->
                                     <th>Action</th>
                                 </tr>
@@ -79,6 +80,7 @@
                                             class="ct_rejected_badge">Rejected</span>
                                     </td>
                                     <td>{{ item.device_count }}</td>
+                                    <td>{{'-'}}</td>
                                     <td>{{ item.created_at | date: 'dd MMM yyyy' }}</td>
                                     <!-- <td>
                                         <div class="form-check form-switch ct_custom_switch">

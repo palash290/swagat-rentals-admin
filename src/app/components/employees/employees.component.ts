@@ -2,12 +2,12 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-employees',
-  imports: [RouterLink, CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [RouterLink, CommonModule, FormsModule],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css'
 })
@@ -22,10 +22,8 @@ export class EmployeesComponent {
   clientList: any;
   pagination: any;
 
-  Form!: FormGroup;
   loading: boolean = false;
   employeeId: any;
-  @ViewChild('closeModalAdd') closeModalAdd!: ElementRef;
   @ViewChild('closeModalDelete') closeModalDelete!: ElementRef;
   @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
   @ViewChild('closeModalSubAdmin') closeModalSubAdmin!: ElementRef;
@@ -34,14 +32,6 @@ export class EmployeesComponent {
 
   ngOnInit() {
     this.getAllEmployee();
-    this.initForm();
-  }
-
-  initForm() {
-    this.Form = new FormGroup({
-      full_name: new FormControl('', Validators.required),
-      email: new FormControl('', Validators.required),
-    });
   }
 
   getAllEmployee() {
@@ -68,48 +58,6 @@ export class EmployeesComponent {
         this.employeeList = [];
       }
     });
-  }
-
-  onSubmit() {
-    this.Form.markAllAsTouched();
-
-    const full_name = this.Form.value.full_name?.trim();
-
-    if (!full_name) {
-      return;
-    }
-
-    if (this.Form.valid) {
-      this.loading = true;
-      const formURlData = new URLSearchParams();
-      formURlData.append('full_name', full_name);
-      formURlData.append('email', this.Form.value.email);
-
-      this.apiService.post('admin/employees', formURlData.toString()).subscribe({
-        next: (resp: any) => {
-          if (resp.success == true) {
-            this.toastr.success(resp.message);
-            this.loading = false;
-            this.closeModalAdd.nativeElement.click();
-            this.getAllEmployee();
-            this.Form.reset();
-            this.employeeId = null;
-          } else {
-            this.toastr.warning(resp.message);
-            this.loading = false;
-            this.getAllEmployee();
-          }
-        },
-        error: (error) => {
-          this.toastr.warning('Something went wrong.');
-          console.log(error.message);
-          this.loading = false;
-        }
-      });
-    } else {
-      this.loading = false;
-      this.toastr.warning('Please check all the fields!');
-    }
   }
 
   getId(id: any) {
@@ -151,13 +99,13 @@ export class EmployeesComponent {
   targetRole: 'sub_admin' | 'employee' = 'sub_admin';
 
   get modalTitle(): string {
-    return this.nextStatus === 1 ? 'Block User' : 'Unblock User';
+    return this.nextStatus === 1 ? 'Block Employee' : 'Unblock Employee';
   }
 
   get modalMessage(): string {
     return this.nextStatus === 1
-      ? 'Are you sure you want to block this user?'
-      : 'Are you sure you want to unblock this user?';
+      ? 'Are you sure you want to block this employee?'
+      : 'Are you sure you want to unblock this employee?';
   }
 
   get confirmBtnText(): string {

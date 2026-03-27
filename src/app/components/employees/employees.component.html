@@ -2,8 +2,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Employees</h4>
         <div>
-            <a  data-bs-toggle="modal" data-bs-target="#addClientModal"
-                class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+            <a routerLink="/home/add-employee" class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
@@ -49,6 +48,8 @@
                                     <th>Employee ID</th>
                                     <th>Employee Name</th>
                                     <th>Email</th>
+                                    <th>Joining Date</th>
+                                    <th>Password</th>
                                     <th>Assigned Systems</th>
                                     <th>Block</th>
                                     <th>Make Subadmin</th>
@@ -61,6 +62,8 @@
                                     <td>{{item.e_unique_id}}</td>
                                     <td>{{item.full_name}}</td>
                                     <td>{{item.email}}</td>
+                                    <td>{{item.employment_from | date:'dd-MMM-yyyy'}}</td>
+                                    <td>{{item.show_password || '-'}}</td>
                                     <td>{{item.assigned_devices}}</td>
                                     <td>
                                         <div class="form-check form-switch ct_custom_switch">
@@ -82,6 +85,10 @@
                                             <a [routerLink]="['/home/view-employees']"
                                                 [queryParams]="{employeeId: item.id}" class="ct_lh_0"><i
                                                     class="fa-regular fa-eye"></i></a>
+                                            <a [routerLink]="['/home/add-employee']"
+                                                [queryParams]="{employeeId: item.id}" class="ct_lh_0">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
                                             <a data-bs-toggle="modal" data-bs-target="#deleteAssignDeviceModal"
                                                 (click)="getId(item.id)">
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -115,52 +122,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<!-- Add Client Modal -->
-<div class="modal fade ct_addclient_modal" id="addClientModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header px-0 border-0">
-                <h5 class="modal-title ct_fs_18 ct_fw_600">Add Employee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <!-- Body -->
-            <form [formGroup]="Form">
-                <div class="modal-body p-0">
-                    <div class="mb-3">
-                        <label class="mb-1">Employee Name</label>
-                        <input type="text" class="form-control ct_input" placeholder="Enter employee name"
-                            formControlName="full_name" />
-                        <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
-                            class="err_msg">
-                            <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter
-                                Employee name.</div>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <label class="mb-1">Employee Email</label>
-                        <input type="email" class="form-control ct_input" placeholder="Enter employee email"
-                            formControlName="email" />
-                        <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
-                            <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
-                                Employee Email is required.
-                            </div>
-                            <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
-                                class="ct_fs_14 mt-1">
-                                Invalid email format.</div>
-                        </div>
-                    </div>
-                    <button #closeModalAdd type="button" hidden class="ct_outline_btn ct_ff_Matter_Medium"
-                        data-bs-dismiss="modal">
-                        Cancel
-                    </button>
-                    <button (click)="onSubmit()" class="ct_black_btn w-100">Add</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>

@@ -80,6 +80,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./components/employees/employees.component').then(m => m.EmployeesComponent)
                   },
                   {
+                        path: 'add-employee',
+                        loadComponent: () => import('./components/employees/add-employee/add-employee.component').then(m => m.AddEmployeeComponent)
+                  },
+                  {
                         path: 'view-employees',
                         loadComponent: () => import('./components/employees/view-employees/view-employees.component').then(m => m.ViewEmployeesComponent)
                   },

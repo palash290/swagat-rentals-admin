@@ -37,6 +37,20 @@
                             </div>
                             <div class="">
                                 <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                    Gender
+                                </div>
+                                <div class="ct-info-value ct_fs_18 ct_fw_500">{{employeeData?.gender || '-'}}</div>
+                            </div>
+                            <div class="">
+                                <div class="ct-info-label ct_dark_grey_text ct_fw_500">
+                                    Date of Birth
+                                </div>
+                                <div class="ct-info-value ct_fs_18 ct_fw_500">
+                                    {{employeeData?.date_of_birth | date:'dd-MMM-yyyy'}}
+                                </div>
+                            </div>
+                            <div class="">
+                                <div class="ct-info-label ct_dark_grey_text ct_fw_500">
                                     Assigned Systems
                                 </div>
                                 <div class="ct-info-value ct_fs_18 ct_fw_500">{{employeeData?.assigned_devices}}</div>
@@ -45,6 +59,92 @@
                         <div>
                             <!-- <span class="ct_rejected_badge">Remove</span> -->
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Details -->
+        <div class="ct_wrapper_white_box mt-4">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <h6 class="ct_fs_18 ct_fw_600 mb-3">Employment Details</h6>
+                    <div class="mb-2"><strong>Designation:</strong> {{employeeData?.designation || '-'}}</div>
+                    <div class="mb-2"><strong>Employment From:</strong>
+                        {{employeeData?.employment_from ? (employeeData?.employment_from | date:'dd-MMM-yyyy') : '-'}}
+                    </div>
+                    <div class="mb-2"><strong>Employment To:</strong>
+                        {{employeeData?.employment_to ? (employeeData?.employment_to | date:'dd-MMM-yyyy') : 'Present'}}
+                    </div>
+                    <div class="mb-2"><strong>CTC Breakdown:</strong> {{employeeData?.ctc_breakdown || '-'}}</div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h6 class="ct_fs_18 ct_fw_600 mb-3">Bank Details</h6>
+                    <div class="mb-2"><strong>Bank Name:</strong> {{employeeData?.bank_name || '-'}}</div>
+                    <div class="mb-2"><strong>IFSC Code:</strong> {{employeeData?.ifsc_code || '-'}}</div>
+                    <div class="mb-2"><strong>Account Number:</strong> {{employeeData?.bank_account_number || '-'}}
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h6 class="ct_fs_18 ct_fw_600 mb-3">Address</h6>
+                    <div class="mb-2"><strong>Current Address:</strong>
+                        {{employeeData?.current_address || '-'}}</div>
+                    <div class="mb-2"><strong>Permanent Address:</strong>
+                        {{employeeData?.permanent_address || '-'}}</div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <h6 class="ct_fs_18 ct_fw_600 mb-3">Account</h6>
+                    <div class="mb-2"><strong>Status:</strong> {{employeeData?.status || '-'}}</div>
+                    <div class="mb-2"><strong>Role:</strong> {{employeeData?.role || '-'}}</div>
+                    <div class="mb-2"><strong>Verified:</strong>
+                        {{employeeData?.is_verified === 1 ? 'Yes' : 'No'}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="ct-card ct_mb-35">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Documents</h6>
+            <p class="mb-3 ct_fs_12 ct_dark_grey_text" *ngIf="!employeeData?.documents?.length">
+                No documents uploaded yet.
+            </p>
+            <div class="row g-3">
+                <div class="col-12" *ngFor="let docType of documentTypes; trackBy: trackByDocType">
+                    <div class="border rounded p-3">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="ct-doc-icon">
+                                <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M6.55135 23.3327C6.0139 23.3327 5.56552 23.153 5.20618 22.7937C4.84685 22.4343 4.66679 21.9856 4.66602 21.4473V6.55135C4.66602 6.0139 4.84607 5.56552 5.20618 5.20618C5.56629 
+                                        4.84685 6.01468 4.66679 6.55135 4.66602H21.4485C21.9852 4.66602 22.4336 4.84607 22.7937 5.20618C23.1538 5.56629 23.3335 6.01468 23.3327
+                                         6.55135V21.4485C23.3327 21.9852 23.153 22.4336 22.7937 22.7937C22.4343 23.1538 21.9856 23.3335 21.4473 23.3327H6.55135ZM6.55135 22.166H21.4485C21.6274 22.166 21.7919 22.0913 
+                                         21.942 21.942C22.0921 21.7927 22.1668 21.6278 22.166 21.4473V6.55135C22.166 6.37168 22.0913 6.20679 21.942 6.05668C21.7927 5.90657 21.6278 5.8319 21.4473 5.83268H6.55135C6.37168 5.83268 
+                                        6.20679 5.90735 6.05668 6.05668C5.90657 6.20602 5.8319 6.3709 5.83268 6.55135V21.4485C5.83268 21.6274 5.90735 21.7919 6.05668 21.942C6.20602 22.0921 6.37052 22.1668 6.55018 22.166M8.74935 19.2493H19.429L16.1308 14.851L13.08 18.7103L11.0383 16.2428L8.74935 19.2493Z"
+                                        fill="#2563EB" />
+                                </svg>
+                            </div>
+                            <div class="ct_fw_600">{{docType.label}}</div>
+                        </div>
+
+                        <ng-container *ngIf="documentsByType[docType.key]?.length; else notUploadedSection">
+                            <div class="row g-2">
+                                <div class="col-12 col-sm-6 col-md-4 col-lg-3"
+                                    *ngFor="let doc of documentsByType[docType.key]">
+                                    <div
+                                        class="ct-doc border rounded p-2 h-100 d-flex align-items-center justify-content-between">
+                                        <div class="ct_fs_12 text-truncate me-2">
+                                            {{doc?.doc_type || docType.label}}
+                                        </div>
+                                        <i class="fa-regular fa-eye ct_show_eye" data-bs-toggle="modal"
+                                            data-bs-target="#employeeDocPreviewModal"
+                                            (click)="openDoc(docType, doc)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #notUploadedSection>
+                            <div class="ct_fs_12 ct_dark_grey_text">Not uploaded</div>
+                        </ng-template>
                     </div>
                 </div>
             </div>
@@ -113,6 +213,34 @@
         </div>
         <div *ngIf="deviceList?.length == 0" class="text-center">
             <p class="ct_fs_15 mt-5">No system found</p>
+        </div>
+    </div>
+</div>
+
+<!-- document preview modal -->
+<div class="modal fade" id="employeeDocPreviewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content ct-preview-modal">
+            <div class="modal-header border-0">
+                <h6 class="mb-0 fw-semibold">{{selectedDocTitle || 'Document Preview'}}</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center pt-0">
+                <ng-container *ngIf="selectedDocUrl; else noPreview">
+                    <img *ngIf="!selectedDocIsPdf" [src]="selectedDocUrl" [alt]="selectedDocTitle || 'Document'"
+                        class="img-fluid rounded-3" />
+                    <iframe *ngIf="selectedDocIsPdf" [src]="getSafePdfUrl(selectedDocUrl)" class="img-fluid rounded-3"
+                        style="width:100%;height:60vh;"></iframe>
+                    <div *ngIf="selectedDocIsPdf" class="mt-3">
+                        <button type="button" class="ct_black_btn px-3" (click)="openPdfInNewTab(selectedDocUrl)">Open
+                            PDF in new tab</button>
+                    </div>
+                </ng-container>
+                <ng-template #noPreview>
+                    <p class="mb-0 ct_dark_grey_text">No preview available</p>
+                </ng-template>
+            </div>
         </div>
     </div>
 </div>

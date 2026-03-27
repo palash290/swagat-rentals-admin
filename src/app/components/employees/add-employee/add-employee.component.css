@@ -1,0 +1,8 @@
+.btn-close-upload {
+    top: -5px;
+    right: -5px;
+}
+
+.ct_input::file-selector-button {
+    height: 50px;
+}

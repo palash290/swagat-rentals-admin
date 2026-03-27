@@ -1,0 +1,252 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/employees" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                {{ employeeId ? 'Update' : 'Add New' }} Employee
+            </h4>
+        </div>
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Full Name <span class="ct_required">*</span></label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter full name"
+                        formControlName="full_name" />
+                    <div *ngIf="Form.controls['full_name'].invalid && Form.controls['full_name'].touched"
+                        class="err_msg">
+                        <div *ngIf="Form.controls['full_name'].errors?.['required']">Please enter full name.</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Date of Birth</label>
+                    <input type="date" class="form-control ct_input" formControlName="date_of_birth" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Gender</label>
+                    <select class="form-select ct_input" formControlName="gender">
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-group mb-4">
+                        <label for="" class="mb-1">Phone Number</label>
+                        <ngx-intl-tel-input name="phone" [cssClass]="'form-control ct_input w-full ps-5 ct_pe_90'"
+                            [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                            [customPlaceholder]="'Enter PhoneNumber'"
+                            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                            [selectFirstCountry]="false" [selectedCountryISO]="selectedCountry" [maxLength]="15"
+                            [phoneValidation]="true" formControlName="phone_number">
+                        </ngx-intl-tel-input>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="mb-1">Email Address <span class="ct_required">*</span></label>
+                    <input type="email" class="form-control ct_input" placeholder="Enter email address"
+                        formControlName="email" />
+                    <div *ngIf="Form.controls['email'].invalid && Form.controls['email'].touched" class="err_msg">
+                        <div *ngIf="Form.controls['email'].errors?.['required']" class="ct_fs_14 mt-1">
+                            Email is required.
+                        </div>
+                        <div *ngIf="Form.controls['email'].errors?.['email'] && !Form.controls['email'].errors?.['required']"
+                            class="ct_fs_14 mt-1">
+                            Invalid email format.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Current Address</label>
+                    <textarea rows="2" class="form-control ct_input" placeholder="Enter current address"
+                        formControlName="current_address"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Permanent Address</label>
+                    <textarea rows="2" class="form-control ct_input" placeholder="Enter permanent address"
+                        formControlName="permanent_address"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Selfie</label>
+                    <input type="file" class="form-control ct_input" accept="image/*"
+                        (change)="onFileChange($event, 'selfie')" />
+                    <div *ngIf="fileErrors['selfie']" class="err_msg">{{ fileErrors['selfie'] }}</div>
+                    <div *ngIf="selectedFilePreviews['selfie']?.length" class="mt-2">
+                        <div class="small text-muted">Selected file:</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviews['selfie']; let i = index"
+                                class="position-relative">
+                                <img *ngIf="!preview.isPdf" [src]="preview.url" alt="Selfie preview"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                                <!-- <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('selfie', i)"><i class="fa-solid fa-xmark"></i></button> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="existingDocs['selfie']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['selfie']" class="position-relative">
+                            <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="Selfie"
+                                class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                            <iframe *ngIf="isPdfUrl(doc.url)" [src]="getSafePdfUrl(doc.url)"
+                                class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Aadhaar Card</label>
+                    <input type="file" class="form-control ct_input" accept="image/*,application/pdf" multiple
+                        (change)="onFileChange($event, 'aadhar_card')" />
+                    <div *ngIf="fileErrors['aadhar_card']" class="err_msg">{{ fileErrors['aadhar_card'] }}</div>
+                    <div *ngIf="selectedFilePreviews['aadhar_card']?.length" class="mt-2">
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['aadhar_card']?.length || 0
+                            }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviews['aadhar_card']; let i = index"
+                                class="position-relative">
+                                <img *ngIf="!preview.isPdf" [src]="preview.url" alt="Aadhaar preview"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                                <iframe *ngIf="preview.isPdf" [src]="getSafePdfUrl(preview.url)"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('aadhar_card', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="existingDocs['aadhar_card']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['aadhar_card']; let i = index" class="position-relative">
+                            <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="Aadhar Card"
+                                class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                            <iframe *ngIf="isPdfUrl(doc.url)" [src]="getSafePdfUrl(doc.url)"
+                                class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                            <button *ngIf="employeeId" type="button"
+                                class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('aadhar_card', i)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Job Role / Designation</label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter job role or designation"
+                        formControlName="designation" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Employment Duration (From-To) <span class="ct_required">*</span></label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="date" class="form-control ct_input" formControlName="employment_from" />
+                            <div *ngIf="Form.controls['employment_from'].invalid && Form.controls['employment_from'].touched"
+                                class="err_msg">
+                                <div *ngIf="Form.controls['employment_from'].errors?.['required']">Please select
+                                    employment from date.</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <input type="date" class="form-control ct_input" formControlName="employment_to" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">CTC Breakdown</label>
+                    <textarea rows="2" class="form-control ct_input" placeholder="Enter CTC breakdown"
+                        formControlName="ctc_breakdown"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Bank Account Number</label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter bank account number"
+                        formControlName="bank_account_number" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">IFSC Code</label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter IFSC code"
+                        formControlName="ifsc_code" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Bank Name</label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter bank name"
+                        formControlName="bank_name" />
+                </div>
+
+                <div class="mb-4">
+                    <label class="mb-1">Uploaded Documents</label>
+                    <input type="file" class="form-control ct_input" accept="image/*,application/pdf" multiple
+                        (change)="onFileChange($event, 'other_documents')" />
+                    <div *ngIf="fileErrors['other_documents']" class="err_msg">{{ fileErrors['other_documents'] }}
+                    </div>
+                    <div *ngIf="selectedFilePreviews['other_documents']?.length" class="mt-2">
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['other_documents']?.length ||
+                            0 }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviews['other_documents']; let i = index"
+                                class="position-relative">
+                                <img *ngIf="!preview.isPdf" [src]="preview.url" alt="Document preview"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                                <iframe *ngIf="preview.isPdf" [src]="getSafePdfUrl(preview.url)"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('other_documents', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="existingDocs['other_documents']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['other_documents']; let i = index"
+                            class="position-relative">
+                            <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="Other Document"
+                                class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                            <iframe *ngIf="isPdfUrl(doc.url)" [src]="getSafePdfUrl(doc.url)"
+                                class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                            <button *ngIf="employeeId" type="button"
+                                class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('other_documents', i)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mt-5 pt-3">
+                <button type="submit" class="ct_black_btn px-4">{{ employeeId ? 'Update' : 'Add' }} Employee</button>
+                <button type="button" routerLink="/home/employees" class="ct_bule_transparent_btn px-4">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+</div>

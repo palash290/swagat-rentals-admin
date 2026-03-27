@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-employees',
@@ -17,7 +18,22 @@ export class ViewEmployeesComponent {
   deviceList: any;
   clientList: any;
 
-  constructor(private route: ActivatedRoute, private service: CommonService) { }
+  documentsByType: Record<string, any[]> = {};
+  selectedDocUrl: string = '';
+  selectedDocTitle: string = '';
+  selectedDocIsPdf: boolean = false;
+
+  readonly documentTypes = [
+    { key: 'aadhar_card', label: 'Aadhar Card' },
+    { key: 'other_documents', label: 'Other Documents' },
+    { key: 'selfie', label: 'Selfie' }
+  ];
+
+  constructor(
+    private route: ActivatedRoute,
+    private service: CommonService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -30,12 +46,90 @@ export class ViewEmployeesComponent {
     this.service.get(`admin/employees/${this.employeeId}`).subscribe({
       next: (resp: any) => {
         this.employeeData = resp.data;
+        this.normalizeEmployeeData();
         this.getDevices();
       },
       error: (error) => {
         console.log(error.message);
       }
     });
+  }
+
+  private normalizeEmployeeData(): void {
+    const employee = this.employeeData ?? {};
+
+    if (employee?.profile_image) {
+      employee.profile_image = this.toAbsoluteUrl(employee.profile_image);
+    }
+
+    this.documentsByType = {};
+    (employee?.documents ?? []).forEach((doc: any) => {
+      const fieldName = this.mapDocTypeToField(doc?.doc_type);
+      const docUrl = this.getDocUrl(doc);
+      if (!fieldName || !docUrl) return;
+      if (!this.documentsByType[fieldName]) {
+        this.documentsByType[fieldName] = [];
+      }
+      this.documentsByType[fieldName].push({
+        ...doc,
+        url: docUrl
+      });
+    });
+
+    const profileUrl = String(employee?.profile_image ?? '').trim();
+    if (profileUrl && !(this.documentsByType['selfie']?.length)) {
+      this.documentsByType['selfie'] = [{
+        id: null,
+        doc_type: 'Selfie',
+        url: this.toAbsoluteUrl(profileUrl)
+      }];
+    }
+  }
+
+  private mapDocTypeToField(docType: string): string | null {
+    const normalized = String(docType ?? '')
+      .trim()
+      .toLowerCase()
+      .replace(/[\s-]+/g, '_');
+    const mapping: Record<string, string> = {
+      aadhar_card: 'aadhar_card',
+      aadhaar_card: 'aadhar_card',
+      other_documents: 'other_documents',
+      selfie: 'selfie'
+    };
+    return mapping[normalized] ?? null;
+  }
+
+  private getDocUrl(doc: any): string {
+    const raw = String(doc?.doc_url ?? doc?.document_url ?? doc?.file_url ?? doc?.url ?? doc?.path ?? '').trim();
+    return this.toAbsoluteUrl(raw);
+  }
+
+  private toAbsoluteUrl(path: string): string {
+    if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
+    return `${this.service.baseUrl}${path.startsWith('/') ? path.slice(1) : path}`;
+  }
+
+  isPdfUrl(url: string): boolean {
+    return /\.pdf(\?|#|$)/i.test(url ?? '');
+  }
+
+  getSafePdfUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  trackByDocType = (_: number, item: { key: string }) => item.key;
+
+  openDoc(docType: { key: string; label: string }, doc: any) {
+    this.selectedDocUrl = this.getDocUrl(doc);
+    this.selectedDocTitle = docType?.label ?? 'Document Preview';
+    this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
+  }
+
+  openPdfInNewTab(url: string): void {
+    if (!url) return;
+    window.open(url, '_blank');
   }
 
   getDevices() {
