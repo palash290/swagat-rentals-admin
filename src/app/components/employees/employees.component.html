@@ -22,9 +22,8 @@
                         <!-- Search -->
                         <div class="search-box w-100">
                             <div class="input-group position-relative">
-                                <input type="text" class="form-control ct_input ps-5"
-                                    placeholder="Search..." [(ngModel)]="searchText"
-                                    (input)="getAllEmployee()" />
+                                <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                                    [(ngModel)]="searchText" (input)="getAllEmployee()" />
                                 <i class="fas fa-search ct_show_search"></i>
                             </div>
                         </div>
@@ -62,7 +61,9 @@
                                     <td>{{item.e_unique_id}}</td>
                                     <td>{{item.full_name}}</td>
                                     <td>{{item.email}}</td>
-                                    <td>{{item.employment_from | date:'dd-MMM-yyyy'}}</td>
+                                    <td>
+                                        {{item.employment_from ? (item.employment_from | date:'dd-MMM-yyyy') : '-'}}
+                                    </td>
                                     <td>{{item.show_password || '-'}}</td>
                                     <td>{{item.assigned_devices}}</td>
                                     <td>
@@ -74,9 +75,8 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm ct_black_btn"
-                                            data-bs-toggle="modal" data-bs-target="#makeSubAdminModal"
-                                            (click)="openSubAdminModal(item)">
+                                        <button type="button" class="btn btn-sm ct_black_btn" data-bs-toggle="modal"
+                                            data-bs-target="#makeSubAdminModal" (click)="openSubAdminModal(item)">
                                             {{ item.role === 'sub_admin' ? 'Remove Subadmin' : 'Make Subadmin' }}
                                         </button>
                                     </td>
@@ -164,8 +164,8 @@
                 </h5>
                 <p class="ct_dark_grey_text">
                     {{ targetRole === 'sub_admin'
-                        ? 'Are you sure you want to make this employee a Subadmin?'
-                        : 'Are you sure you want to remove Subadmin access for this employee?'
+                    ? 'Are you sure you want to make this employee a Subadmin?'
+                    : 'Are you sure you want to remove Subadmin access for this employee?'
                     }}
                 </p>
                 <div class="d-flex justify-content-end gap-4 my-4">

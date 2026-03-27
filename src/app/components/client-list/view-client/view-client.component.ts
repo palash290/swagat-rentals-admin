@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonService } from '../../../services/common.service';
 import { CommonModule, Location } from '@angular/common';
@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './view-client.component.html',
   styleUrl: './view-client.component.css'
 })
-export class ViewClientComponent {
+export class ViewClientComponent implements AfterViewInit, OnDestroy {
 
   clientId: any;
   clientData: any;
@@ -50,6 +50,28 @@ export class ViewClientComponent {
       this.clientId = params['clientId'];
     });
     this.getClientDetails();
+  }
+
+  ngAfterViewInit(): void {
+    const modalEl = this.docPreviewModal?.nativeElement as HTMLElement | undefined;
+    if (!modalEl) return;
+
+    this.onDocPreviewHidden = () => {
+      const video = modalEl.querySelector('video') as HTMLVideoElement | null;
+      if (video) {
+        video.pause();
+        video.currentTime = 0;
+      }
+    };
+
+    modalEl.addEventListener('hidden.bs.modal', this.onDocPreviewHidden);
+  }
+
+  ngOnDestroy(): void {
+    const modalEl = this.docPreviewModal?.nativeElement as HTMLElement | undefined;
+    if (modalEl && this.onDocPreviewHidden) {
+      modalEl.removeEventListener('hidden.bs.modal', this.onDocPreviewHidden);
+    }
   }
 
   getClientDetails() {
@@ -252,6 +274,9 @@ export class ViewClientComponent {
 
   @ViewChild('closeModalAssign1') closeModalAssign1!: ElementRef;
   @ViewChild('closeModalAssign2') closeModalAssign2!: ElementRef;
+  @ViewChild('docPreviewModal') docPreviewModal!: ElementRef;
+
+  private onDocPreviewHidden?: () => void;
 
   reject(): void {
     const reason = this.rejectionReason?.trim();
