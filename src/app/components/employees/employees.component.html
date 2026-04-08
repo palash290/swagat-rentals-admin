@@ -106,9 +106,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div *ngIf="employeeList?.length == 0" class="text-center">
-                        <p class="ct_fs_15 mt-5">No employee found</p>
+                        <div *ngIf="employeeList?.length == 0" class="text-center">
+                            <p class="ct_fs_15 mt-5">No employee found</p>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3 gap-2">
                         <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">

@@ -18,6 +18,7 @@ export class AddEmployeeComponent implements OnDestroy {
   loading: boolean = false;
   Form!: FormGroup;
   employeeId: any;
+  userEmail: any;
 
   SearchCountryField = SearchCountryField
   CountryISO = CountryISO;
@@ -47,7 +48,6 @@ export class AddEmployeeComponent implements OnDestroy {
       this.employeeId = params['employeeId'];
     });
     this.initForm();
-    this.getEmployeeDetails();
   }
 
   ngOnDestroy(): void {
@@ -72,6 +72,8 @@ export class AddEmployeeComponent implements OnDestroy {
     this.apiService.get(`admin/employees/${this.employeeId}`).subscribe({
       next: (resp: any) => {
         const employee = resp?.data ?? resp;
+        debugger
+        this.userEmail = employee?.email;
 
         const dialCode = String(employee?.country_code ?? '').trim();
         const phoneNumber = String(employee?.phone_number ?? employee?.mobile ?? employee?.mobile_no ?? '').trim();
@@ -150,6 +152,7 @@ export class AddEmployeeComponent implements OnDestroy {
       date_of_birth: new FormControl(''),
       gender: new FormControl(''),
       phone_number: new FormControl('', [Validators.required]),
+      // email: new FormControl({ value: this.userEmail || '', disabled: true }),
       email: new FormControl('', [Validators.required, Validators.email]),
       current_address: new FormControl(''),
       permanent_address: new FormControl(''),
@@ -161,6 +164,9 @@ export class AddEmployeeComponent implements OnDestroy {
       ifsc_code: new FormControl(''),
       bank_name: new FormControl('')
     });
+    if (this.employeeId) {
+      this.getEmployeeDetails();
+    }
   }
 
   onFileChange(event: Event, fieldName: string): void {
@@ -272,10 +278,10 @@ export class AddEmployeeComponent implements OnDestroy {
     this.Form.markAllAsTouched();
 
     const full_name = (this.Form.value.full_name ?? '').trim();
-    // if (!full_name || this.Form.invalid) {
-    //   this.toastr.warning('Please check all the fields!');
-    //   return;
-    // }
+    if (!full_name || this.Form.invalid) {
+      this.toastr.warning('Please check all the fields!');
+      return;
+    }
 
     this.loading = true;
 
@@ -284,21 +290,23 @@ export class AddEmployeeComponent implements OnDestroy {
     formData.append('full_name', full_name);
     formData.append('date_of_birth', this.withTime(v.date_of_birth ?? ''));
     formData.append('gender', v.gender ?? '');
-    const phoneVal = v.phone_number;
-    const dialCode = String(phoneVal?.dialCode ?? '').trim();
-    let phoneNumber =
-      phoneVal?.number ??
-      phoneVal?.nationalNumber ??
-      (typeof phoneVal === 'string' ? phoneVal : '');
-    phoneNumber = String(phoneNumber ?? '').replace(/\s+/g, '');
-    if (dialCode && phoneNumber.startsWith(dialCode)) {
-      phoneNumber = phoneNumber.slice(dialCode.length);
-    }
-    if (phoneNumber.startsWith('+')) {
-      phoneNumber = phoneNumber.slice(1);
-    }
-    formData.append('country_code', dialCode);
-    formData.append('phone_number', phoneNumber);
+    // const phoneVal = v.phone_number;
+    // const dialCode = String(phoneVal?.dialCode ?? '').trim();
+    // let phoneNumber =
+    //   phoneVal?.number ??
+    //   phoneVal?.nationalNumber ??
+    //   (typeof phoneVal === 'string' ? phoneVal : '');
+    // phoneNumber = String(phoneNumber ?? '').replace(/\s+/g, '');
+    // if (dialCode && phoneNumber.startsWith(dialCode)) {
+    //   phoneNumber = phoneNumber.slice(dialCode.length);
+    // }
+    // if (phoneNumber.startsWith('+')) {
+    //   phoneNumber = phoneNumber.slice(1);
+    // }
+    // formData.append('country_code', dialCode);
+    // formData.append('phone_number', phoneNumber);
+    formData.append('country_code', v.phone_number?.dialCode);
+    formData.append('phone_number', v.phone_number?.nationalNumber);
     formData.append('email', v.email ?? '');
     formData.append('current_address', v.current_address ?? '');
     formData.append('permanent_address', v.permanent_address ?? '');

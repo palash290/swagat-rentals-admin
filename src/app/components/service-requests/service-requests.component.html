@@ -7,6 +7,7 @@
         </div>
     </div>
 </div>
+
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
         <div class="row">
@@ -93,9 +94,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div *ngIf="requestsList?.length == 0" class="text-center">
-                        <p class="ct_fs_15 mt-5">No request found</p>
+                        <div *ngIf="requestsList?.length == 0" class="text-center">
+                            <p class="ct_fs_15 mt-5">No request found</p>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3 gap-2">
                         <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">

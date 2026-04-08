@@ -50,6 +50,7 @@
                                     <th>Client ID</th>
                                     <th>Client Name</th>
                                     <th>Email</th>
+                                    <th>Password</th>
                                     <th>KYC Status</th>
                                     <th>Systems</th>
                                     <th>Payment Status</th>
@@ -71,6 +72,7 @@
                                         </span>
                                     </td>
                                     <td>{{ item.email }}</td>
+                                    <td>{{ item.show_password || '-' }}</td>
                                     <td>
                                         <span *ngIf="item.kyc_status === 'approved'"
                                             class="ct_accepted_badge">Approved</span>
@@ -103,9 +105,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div *ngIf="dashboardData?.length == 0" class="text-center">
-                        <p class="ct_fs_15 mt-5">No client found</p>
+                        <div *ngIf="dashboardData?.length == 0" class="text-center">
+                            <p class="ct_fs_15 mt-5">No client found</p>
+                        </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3 gap-2">
                         <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
