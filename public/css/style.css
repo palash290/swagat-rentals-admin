@@ -537,13 +537,46 @@ header {
 .ct_side_bar ul li a:hover,
 .ct_side_bar ul li a.active {
       background-color: var(--blue);
-      color: #fff;
+      color: #fff !important;
       font-weight: 500;
 }
 
 .ct_side_bar ul li a.active svg,
 .ct_side_bar ul li a:hover svg {
       filter: invert(1);
+}
+
+.ct_side_bar ul li.ct_has_sub_menu {
+      display: flex;
+      flex-direction: column;
+}
+
+.ct_side_bar ul li .ct_sub_menu {
+      margin-top: 8px;
+      padding-left: 34px;
+      display: none;
+}
+
+.ct_side_bar ul li .ct_sub_menu.ct_sub_menu_open {
+      display: block;
+}
+
+.ct_side_bar ul li .ct_sub_menu li+li {
+      margin-top: 6px;
+}
+
+.ct_side_bar ul li .ct_sub_menu a {
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #475569;
+      background: transparent;
+}
+
+.ct_side_bar ul li .ct_sub_menu a:hover,
+.ct_side_bar ul li .ct_sub_menu a.active {
+      background-color: var(--blue);
+      color: #fff;
+      font-weight: 500;
 }
 
 

@@ -150,7 +150,15 @@ export const routes: Routes = [
                   {
                         path: 'warranty-tracking',
                         loadComponent: () => import('./components/warranty-tracking/warranty-tracking.component').then(m => m.WarrantyTrackingComponent)
-                  }
+                  },
+                  {
+                        path: 'gsm-gateways',
+                        loadComponent: () => import('./components/gsm-gateways/gsm-gateways.component').then(m => m.GsmGatewaysComponent)
+                  },
+                  {
+                        path: 'servers',
+                        loadComponent: () => import('./components/servers/servers.component').then(m => m.ServersComponent)
+                  },
             ]
       }
 ];

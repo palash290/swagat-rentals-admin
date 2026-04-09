@@ -12,11 +12,14 @@ export class SidebarComponent {
 
   @ViewChild('closeModalAdd') closeModalAdd!: ElementRef;
   userRole: string | null = null;
+  showClientSubMenu = false;
+  showAssetsSubMenu = false;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
     this.userRole = localStorage.getItem('role');
+    // this.showClientSubMenu = this.isActive('/home/client-list');
   }
 
   isActive(route: string): boolean {
@@ -27,6 +30,14 @@ export class SidebarComponent {
 
   toggleMenu() {
     this.toggleEvent.emit(false);
+  }
+
+  toggleClientSubMenu() {
+    this.showClientSubMenu = !this.showClientSubMenu;
+  }
+
+    toggleAssetsSubMenu() {
+    this.showAssetsSubMenu = !this.showAssetsSubMenu;
   }
 
 
