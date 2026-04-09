@@ -8,3 +8,44 @@
     /* increase only button height */
 
 }
+
+.ct_multi_select {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
+.ct_multi_select_input {
+    display: flex;
+    align-items: center;
+    min-height: 50px;
+    padding: 10px 14px;
+    background: #fff;
+}
+
+.ct_multi_select_menu {
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow: auto;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    margin-top: 6px;
+    padding: 6px 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.ct_multi_select_option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+}
+
+.ct_multi_select_option:hover {
+    background: #f7f7f7;
+}

@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy } from '@angular/core';
 import { CommonService } from '../../../services/common.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -58,10 +58,47 @@ export class AddClientComponent implements OnDestroy {
     });
     this.initForm();
     this.getClientDetails();
+    this.getServerList();
+    this.getGatewayList();
   }
 
   ngOnDestroy(): void {
     this.clearAllSelectedFiles();
+  }
+
+  serverList: any[] = [];
+  serverAllocations: Array<{ server_id: number; allocated_quantity: number }> = [];
+  selectedServerIds: number[] = [];
+  serverDropdownOpen: boolean = false;
+  serverQtyErrors: Record<number, string> = {};
+  gatewayList: any[] = [];
+  gatewayAllocations: Array<{ gateway_id: number; allocated_quantity: number }> = [];
+  selectedGatewayIds: number[] = [];
+  gatewayDropdownOpen: boolean = false;
+  gatewayQtyErrors: Record<number, string> = {};
+
+  getServerList() {
+    this.apiService.get(`admin/servers`).subscribe({
+      next: (resp: any) => {
+        this.serverList = resp.data.items;
+      },
+      error: (error) => {
+        console.log(error.message);
+        this.serverList = [];
+      }
+    });
+  }
+
+  getGatewayList() {
+    this.apiService.get(`admin/gsm-gateways`).subscribe({
+      next: (resp: any) => {
+        this.gatewayList = resp.data.items;
+      },
+      error: (error) => {
+        console.log(error.message);
+        this.gatewayList = [];
+      }
+    });
   }
 
   getClientDetails() {
@@ -82,8 +119,8 @@ export class AddClientComponent implements OnDestroy {
           it_person_contact: client?.it_person_contact_number ?? client?.it_person_contact ?? '',
           admin_contact_name: client?.administration_contact_name ?? client?.admin_contact_name ?? '',
           admin_contact_no: client?.administration_contact_number ?? client?.admin_contact_no ?? '',
-          total_computers: Number(client?.total_computers ?? 0),
-          total_laptops: Number(client?.total_laptops ?? 0),
+          // total_computers: Number(client?.total_computers ?? 0),
+          // total_laptops: Number(client?.total_laptops ?? 0),
           total_servers: Number(client?.total_servers ?? 0),
           total_gsm_gateway: Number(client?.total_gsm_gateways ?? client?.total_gsm_gateway ?? 0),
           billing_date: client?.billing_date ? String(client.billing_date).slice(0, 10) : '',
@@ -91,6 +128,26 @@ export class AddClientComponent implements OnDestroy {
           agreement_end_date: client?.agreement_end_date ? String(client.agreement_end_date).slice(0, 10) : '',
           // security_cheque_number: client?.security_cheque_number ?? ''
         });
+
+        const allocations = (client?.server_allocations ?? client?.server_allocation ?? []) as Array<any>;
+        if (Array.isArray(allocations) && allocations.length) {
+          this.serverAllocations = allocations.map(a => ({
+            server_id: Number(a.server_id ?? a.server?.id ?? a.id),
+            allocated_quantity: Number(a.allocated_quantity ?? a.quantity ?? 0)
+          })).filter(a => !!a.server_id);
+          this.selectedServerIds = this.serverAllocations.map(a => a.server_id);
+          this.Form.patchValue({ server_ids: this.selectedServerIds });
+        }
+
+        const gatewayAllocations = (client?.gateway_allocations ?? client?.gateway_allocation ?? []) as Array<any>;
+        if (Array.isArray(gatewayAllocations) && gatewayAllocations.length) {
+          this.gatewayAllocations = gatewayAllocations.map(a => ({
+            gateway_id: Number(a.gateway_id ?? a.gateway?.id ?? a.id),
+            allocated_quantity: Number(a.allocated_quantity ?? a.quantity ?? 0)
+          })).filter(a => !!a.gateway_id);
+          this.selectedGatewayIds = this.gatewayAllocations.map(a => a.gateway_id);
+          this.Form.patchValue({ gateway_ids: this.selectedGatewayIds });
+        }
 
         this.existingDocs = {};
         this.deleteKycIds = [];
@@ -164,10 +221,12 @@ export class AddClientComponent implements OnDestroy {
         admin_contact_no: new FormControl('', [Validators.pattern(this.PHONE_PATTERN)]),
 
         // ── Infrastructure ──────────────────────────────────────────────────
-        total_computers: new FormControl(0, [Validators.min(0)]),
-        total_laptops: new FormControl(0, [Validators.min(0)]),
-        total_servers: new FormControl(0, [Validators.min(0)]),
+        // total_computers: new FormControl(0, [Validators.min(0)]),
+        // total_laptops: new FormControl(0, [Validators.min(0)]),
+        total_servers: new FormControl(''),
+        server_ids: new FormControl([], Validators.required),
         total_gsm_gateway: new FormControl(0, [Validators.min(0)]),
+        gateway_ids: new FormControl([], Validators.required),
 
         // ── Agreement Details ───────────────────────────────────────────────
         billing_date: new FormControl(''),
@@ -284,6 +343,52 @@ export class AddClientComponent implements OnDestroy {
       return;
     }
 
+    if (!this.serverAllocations.length) {
+      this.loading = false;
+      this.toastr.warning('Please select at least one server.');
+      return;
+    }
+
+    const invalidAllocation = this.serverAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
+    if (invalidAllocation) {
+      this.loading = false;
+      this.toastr.warning('Please enter quantity for selected servers.');
+      return;
+    }
+
+    const overAllocated = this.serverAllocations.find(a => {
+      const maxQty = this.getServerTotalQuantity(a.server_id);
+      return maxQty && Number(a.allocated_quantity || 0) > maxQty;
+    });
+    if (overAllocated) {
+      this.loading = false;
+      this.toastr.warning('Allocated quantity cannot exceed server total quantity.');
+      return;
+    }
+
+    if (!this.gatewayAllocations.length) {
+      this.loading = false;
+      this.toastr.warning('Please select at least one gateway.');
+      return;
+    }
+
+    const invalidGatewayAllocation = this.gatewayAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
+    if (invalidGatewayAllocation) {
+      this.loading = false;
+      this.toastr.warning('Please enter quantity for selected gateways.');
+      return;
+    }
+
+    const overGatewayAllocated = this.gatewayAllocations.find(a => {
+      const maxQty = this.getGatewayTotalQuantity(a.gateway_id);
+      return maxQty && Number(a.allocated_quantity || 0) > maxQty;
+    });
+    if (overGatewayAllocated) {
+      this.loading = false;
+      this.toastr.warning('Allocated gateway quantity cannot exceed gateway total quantity.');
+      return;
+    }
+
     this.loading = true;
 
     const formData = new FormData();
@@ -302,10 +407,12 @@ export class AddClientComponent implements OnDestroy {
     formData.append('administration_contact_name', v.admin_contact_name ?? '');
     formData.append('administration_contact_number', v.admin_contact_no ?? '');
     formData.append('admin_contact_no', v.admin_contact_no ?? '');
-    formData.append('total_computers', v.total_computers ?? 0);
-    formData.append('total_laptops', v.total_laptops ?? 0);
-    formData.append('total_servers', v.total_servers ?? 0);
-    formData.append('total_gsm_gateways', v.total_gsm_gateway ?? 0);
+    // formData.append('total_computers', v.total_computers ?? 0);
+    // formData.append('total_laptops', v.total_laptops ?? 0);
+    const totalServersAllocated: any = this.serverAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
+    formData.append('total_servers', totalServersAllocated ?? 0);
+    const totalGatewaysAllocated: any = this.gatewayAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
+    formData.append('total_gsm_gateways', totalGatewaysAllocated ?? 0);
     formData.append('billing_date', v.billing_date ?? '');
     formData.append('agreement_start_date', v.agreement_start_date ?? '');
     formData.append('agreement_end_date', v.agreement_end_date ?? '');
@@ -322,6 +429,9 @@ export class AddClientComponent implements OnDestroy {
     if (this.clientId && this.deleteKycIds.length) {
       formData.append('deleteKycIds', JSON.stringify(this.deleteKycIds));
     }
+
+    formData.append('server_allocations', JSON.stringify(this.serverAllocations));
+    formData.append('gateway_allocations', JSON.stringify(this.gatewayAllocations));
 
     const endpoint = this.clientId ? `admin/clients/${this.clientId}` : 'admin/clients';
 
@@ -347,5 +457,152 @@ export class AddClientComponent implements OnDestroy {
     });
   }
 
+  toggleServerDropdown(event?: Event) {
+    if (event) event.stopPropagation();
+    this.serverDropdownOpen = !this.serverDropdownOpen;
+  }
+
+  closeServerDropdown() {
+    this.serverDropdownOpen = false;
+  }
+
+  @HostListener('document:click')
+  onDocumentClick() {
+    this.closeServerDropdown();
+    this.closeGatewayDropdown();
+  }
+
+  isServerSelected(serverId: number): boolean {
+    return this.selectedServerIds.includes(Number(serverId));
+  }
+
+  toggleServerSelection(serverId: number, event?: Event) {
+    if (event) event.stopPropagation();
+    const id = Number(serverId);
+    if (this.selectedServerIds.includes(id)) {
+      this.selectedServerIds = this.selectedServerIds.filter(sid => sid !== id);
+    } else {
+      this.selectedServerIds = [...this.selectedServerIds, id];
+    }
+    this.Form.patchValue({ server_ids: this.selectedServerIds });
+    this.syncServerAllocations(this.selectedServerIds);
+  }
+
+  onServerSelectionChange() {
+    const ids = (this.Form.get('server_ids')?.value ?? []).map((v: any) => Number(v));
+    this.selectedServerIds = ids;
+    this.syncServerAllocations(ids);
+  }
+
+  private syncServerAllocations(ids: number[]) {
+    const existing = new Map(this.serverAllocations.map(a => [a.server_id, a]));
+    this.serverAllocations = ids.map(id => existing.get(id) ?? { server_id: id, allocated_quantity: 0 });
+    Object.keys(this.serverQtyErrors).forEach(key => {
+      const id = Number(key);
+      if (!ids.includes(id)) {
+        delete this.serverQtyErrors[id];
+      }
+    });
+  }
+
+  toggleGatewayDropdown(event?: Event) {
+    if (event) event.stopPropagation();
+    this.gatewayDropdownOpen = !this.gatewayDropdownOpen;
+  }
+
+  closeGatewayDropdown() {
+    this.gatewayDropdownOpen = false;
+  }
+
+  isGatewaySelected(gatewayId: number): boolean {
+    return this.selectedGatewayIds.includes(Number(gatewayId));
+  }
+
+  toggleGatewaySelection(gatewayId: number, event?: Event) {
+    if (event) event.stopPropagation();
+    const id = Number(gatewayId);
+    if (this.selectedGatewayIds.includes(id)) {
+      this.selectedGatewayIds = this.selectedGatewayIds.filter(gid => gid !== id);
+    } else {
+      this.selectedGatewayIds = [...this.selectedGatewayIds, id];
+    }
+    this.Form.patchValue({ gateway_ids: this.selectedGatewayIds });
+    this.syncGatewayAllocations(this.selectedGatewayIds);
+  }
+
+  onGatewaySelectionChange() {
+    const ids = (this.Form.get('gateway_ids')?.value ?? []).map((v: any) => Number(v));
+    this.selectedGatewayIds = ids;
+    this.syncGatewayAllocations(ids);
+  }
+
+  private syncGatewayAllocations(ids: number[]) {
+    const existing = new Map(this.gatewayAllocations.map(a => [a.gateway_id, a]));
+    this.gatewayAllocations = ids.map(id => existing.get(id) ?? { gateway_id: id, allocated_quantity: 0 });
+    Object.keys(this.gatewayQtyErrors).forEach(key => {
+      const id = Number(key);
+      if (!ids.includes(id)) {
+        delete this.gatewayQtyErrors[id];
+      }
+    });
+  }
+
+  getServerName(serverId: number): string {
+    const server = this.serverList.find(s => Number(s.id) === Number(serverId));
+    return server?.server_name ?? `Server #${serverId}`;
+  }
+
+  getServerTotalQuantity(serverId: number): number {
+    const server = this.serverList.find(s => Number(s.id) === Number(serverId));
+    return Number(server?.total_left ?? 0);
+  }
+
+  getGatewayName(gatewayId: number): string {
+    const gateway = this.gatewayList.find(g => Number(g.id) === Number(gatewayId));
+    return gateway?.gateway_name ?? `Gateway #${gatewayId}`;
+  }
+
+  getGatewayTotalQuantity(gatewayId: number): number {
+    const gateway = this.gatewayList.find(g => Number(g.id) === Number(gatewayId));
+    return Number(gateway?.total_left ?? 0);
+  }
+
+  onAllocatedQuantityChange(alloc: { server_id: number; allocated_quantity: number }) {
+    const maxQty = this.getServerTotalQuantity(alloc.server_id);
+    const qty = Number(alloc.allocated_quantity || 0);
+    if (qty < 0) {
+      this.serverQtyErrors[alloc.server_id] = 'Quantity must be 0 or more.';
+      return;
+    }
+    if (maxQty && qty > maxQty) {
+      this.serverQtyErrors[alloc.server_id] = `Quantity cannot exceed ${maxQty}.`;
+      return;
+    }
+    delete this.serverQtyErrors[alloc.server_id];
+  }
+
+  onGatewayAllocatedQuantityChange(alloc: { gateway_id: number; allocated_quantity: number }) {
+    const maxQty = this.getGatewayTotalQuantity(alloc.gateway_id);
+    const qty = Number(alloc.allocated_quantity || 0);
+    if (qty < 0) {
+      this.gatewayQtyErrors[alloc.gateway_id] = 'Quantity must be 0 or more.';
+      return;
+    }
+    if (maxQty && qty > maxQty) {
+      this.gatewayQtyErrors[alloc.gateway_id] = `Quantity cannot exceed ${maxQty}.`;
+      return;
+    }
+    delete this.gatewayQtyErrors[alloc.gateway_id];
+  }
+
+  getSelectedServersLabel(): string {
+    if (!this.selectedServerIds.length) return 'Select Server';
+    return this.selectedServerIds.map(id => this.getServerName(id)).join(', ');
+  }
+
+  getSelectedGatewaysLabel(): string {
+    if (!this.selectedGatewayIds.length) return 'Select Gateway';
+    return this.selectedGatewayIds.map(id => this.getGatewayName(id)).join(', ');
+  }
 
 }

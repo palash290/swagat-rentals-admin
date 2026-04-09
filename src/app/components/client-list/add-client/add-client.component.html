@@ -112,13 +112,12 @@
                 <!-- <div class="ct_section_label">Infrastructure Details</div> -->
 
                 <div class="row">
-                    <div class="col-6 mb-3">
+                    <!-- <div class="col-6 mb-3">
                         <label class="mb-1">Total Computers </label>
                         <input type="number" class="form-control ct_input" placeholder="0"
                             formControlName="total_computers" min="0" />
                         <div *ngIf="Form.controls['total_computers'].invalid && Form.controls['total_computers'].touched"
                             class="err_msg">
-                            <!-- <div *ngIf="Form.controls['total_computers'].errors?.['required']">Required.</div> -->
                             <div *ngIf="Form.controls['total_computers'].errors?.['min']">Must be 0 or more.</div>
                         </div>
                     </div>
@@ -129,32 +128,87 @@
                             formControlName="total_laptops" min="0" />
                         <div *ngIf="Form.controls['total_laptops'].invalid && Form.controls['total_laptops'].touched"
                             class="err_msg">
-                            <!-- <div *ngIf="Form.controls['total_laptops'].errors?.['required']">Required.</div> -->
                             <div *ngIf="Form.controls['total_laptops'].errors?.['min']">Must be 0 or more.</div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="col-6 mb-3">
-                        <label class="mb-1">Total Servers </label>
-                        <input type="number" class="form-control ct_input" placeholder="0"
-                            formControlName="total_servers" min="0" />
-                        <div *ngIf="Form.controls['total_servers'].invalid && Form.controls['total_servers'].touched"
+                        <label class="mb-1">Server Allocations</label>
+                        <div class="ct_multi_select" (click)="toggleServerDropdown($event)">
+                            <div class="ct_multi_select_input ct_input">
+                                {{ getSelectedServersLabel() }}
+                            </div>
+                            <div class="ct_multi_select_menu" *ngIf="serverDropdownOpen"
+                                (click)="$event.stopPropagation()">
+                                <div class="ct_multi_select_option" *ngFor="let agent of serverList"
+                                    (click)="toggleServerSelection(agent.id, $event)">
+                                    <input type="checkbox" [checked]="isServerSelected(agent.id)" />
+                                    <span>{{ agent.server_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="Form.controls['server_ids'].invalid && Form.controls['server_ids'].touched"
                             class="err_msg">
-                            <!-- <div *ngIf="Form.controls['total_servers'].errors?.['required']">Required.</div> -->
-                            <div *ngIf="Form.controls['total_servers'].errors?.['min']">Must be 0 or more.</div>
+                            <div *ngIf="Form.controls['server_ids'].errors?.['required']">Please select server.</div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3" *ngIf="serverAllocations?.length">
+                        <label class="mb-1">Selected Servers</label>
+                        <div class="row">
+                            <div class="col-6 mb-2" *ngFor="let alloc of serverAllocations">
+                                <div class="mb-1">
+                                    {{ getServerName(alloc.server_id) }}
+                                    <span class="ct_dark_grey_text"> (Total: {{ getServerTotalQuantity(alloc.server_id)
+                                        }})</span>
+                                </div>
+                                <input type="number" class="form-control ct_input" placeholder="Enter Quantity"
+                                    [(ngModel)]="alloc.allocated_quantity" [ngModelOptions]="{ standalone: true }"
+                                    min="0" (input)="onAllocatedQuantityChange(alloc)" />
+                                <div *ngIf="serverQtyErrors[alloc.server_id]" class="err_msg">
+                                    {{ serverQtyErrors[alloc.server_id] }}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col-6 mb-4">
-                        <label class="mb-1">Total GSM Gateways </label>
-                        <input type="number" class="form-control ct_input" placeholder="0"
-                            formControlName="total_gsm_gateway" min="0" />
-                        <div *ngIf="Form.controls['total_gsm_gateway'].invalid && Form.controls['total_gsm_gateway'].touched"
+                        <label class="mb-1">Gateway Allocations</label>
+                        <div class="ct_multi_select" (click)="toggleGatewayDropdown($event)">
+                            <div class="ct_multi_select_input ct_input">
+                                {{ getSelectedGatewaysLabel() }}
+                            </div>
+                            <div class="ct_multi_select_menu" *ngIf="gatewayDropdownOpen"
+                                (click)="$event.stopPropagation()">
+                                <div class="ct_multi_select_option" *ngFor="let agent of gatewayList"
+                                    (click)="toggleGatewaySelection(agent.id, $event)">
+                                    <input type="checkbox" [checked]="isGatewaySelected(agent.id)" />
+                                    <span>{{ agent.gateway_name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="Form.controls['gateway_ids'].invalid && Form.controls['gateway_ids'].touched"
                             class="err_msg">
-                            <!-- <div *ngIf="Form.controls['total_gsm_gateway'].errors?.['required']">Required.</div> -->
-                            <div *ngIf="Form.controls['total_gsm_gateway'].errors?.['min']">Must be 0 or more.</div>
+                            <div *ngIf="Form.controls['gateway_ids'].errors?.['required']">Please select gateway.</div>
                         </div>
                     </div>
+                    <div class="col-12 mb-3" *ngIf="gatewayAllocations?.length">
+                        <label class="mb-1">Selected Gateways</label>
+                        <div class="row">
+                            <div class="col-6 mb-2" *ngFor="let alloc of gatewayAllocations">
+                                <div class="mb-1">
+                                    {{ getGatewayName(alloc.gateway_id) }}
+                                    <span class="ct_dark_grey_text"> (Total: {{ getGatewayTotalQuantity(alloc.gateway_id) }})</span>
+                                </div>
+                                <input type="number" class="form-control ct_input" placeholder="Enter Quantity"
+                                    [(ngModel)]="alloc.allocated_quantity" [ngModelOptions]="{ standalone: true }"
+                                    min="0" (input)="onGatewayAllocatedQuantityChange(alloc)" />
+                                <div *ngIf="gatewayQtyErrors[alloc.gateway_id]" class="err_msg">
+                                    {{ gatewayQtyErrors[alloc.gateway_id] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <!-- ── Section: Agreement Dates ── -->
@@ -215,7 +269,8 @@
                         </div>
                     </div>
                     <div *ngIf="existingDocs['security_cheque']?.length" class="d-flex flex-wrap gap-2 mt-2">
-                        <div *ngFor="let doc of existingDocs['security_cheque']; let i = index" class="position-relative">
+                        <div *ngFor="let doc of existingDocs['security_cheque']; let i = index"
+                            class="position-relative">
                             <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="Security Cheque"
                                 class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
                             <iframe *ngIf="isPdfUrl(doc.url)" [src]="getSafePdfUrl(doc.url)"
