@@ -716,7 +716,7 @@ header {
 }
 
 .ct_overlay_text {
-      width: 200px;
+      width: 160px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;

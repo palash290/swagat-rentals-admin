@@ -73,6 +73,9 @@
                     <p class="mb-3 ct_fs_14">
                         Installation Employee: {{deviceData?.employee_name || 'N/A'}}
                     </p>
+                    <p>
+                        Created On: {{ deviceData?.created_at ? (deviceData.created_at | date:'dd MMM yyyy, hh:mm a') : 'N/A' }}
+                    </p>
                     <div class="ct_blue_text ct_fs_14 ct_fw_600">
                         @if(deviceData?.is_warranty_active == '1'){
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">

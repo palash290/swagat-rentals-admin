@@ -129,7 +129,8 @@ export class AddEmployeeComponent implements OnDestroy {
       .replace(/[\s-]+/g, '_');
     const mapping: Record<string, string> = {
       aadhar_card: 'aadhar_card',
-      aadhaar_card: 'aadhar_card',
+      police_verifications: 'police_verifications',
+      // aadhaar_card: 'aadhar_card',
       other_documents: 'other_documents',
       selfie: 'selfie'
     };
@@ -180,7 +181,7 @@ export class AddEmployeeComponent implements OnDestroy {
       delete this.existingDocs['selfie'];
     }
 
-    const allowMultiple = fieldName === 'aadhar_card' || fieldName === 'other_documents';
+    const allowMultiple = fieldName === 'aadhar_card' || fieldName === 'other_documents' || fieldName === 'police_verifications';
     const allowedTypes = fieldName === 'selfie' ? this.IMAGE_TYPES : this.ALLOWED_TYPES;
     const maxFiles = allowMultiple ? this.MAX_FILES_PER_DOC : 1;
 
@@ -325,6 +326,10 @@ export class AddEmployeeComponent implements OnDestroy {
 
     (this.uploadedFiles['aadhar_card'] ?? []).forEach(file => {
       formData.append('aadhar_card', file, file.name);
+    });
+
+    (this.uploadedFiles['police_verifications'] ?? []).forEach(file => {
+      formData.append('police_verifications', file, file.name);
     });
 
     (this.uploadedFiles['other_documents'] ?? []).forEach(file => {

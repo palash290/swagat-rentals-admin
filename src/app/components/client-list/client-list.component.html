@@ -100,6 +100,12 @@
                                             <a [routerLink]="['/home/add-client']" [queryParams]="{clientId: item.id}">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
+                                            @if (item.is_relocated == 0 && item.kyc_status === 'approved') {
+                                            <a title="Relocate" data-bs-toggle="modal"
+                                                data-bs-target="#relocateEmployeeModal" (click)="getClientId(item)">
+                                                <i class="fa-solid fa-registered"></i>
+                                            </a>
+                                            }
                                         </div>
                                     </td>
                                 </tr>
@@ -126,7 +132,7 @@
 </div>
 
 <!-- vlock Assign Modal -->
-<div class="modal fade ct_delete_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
+<div class="modal fade ct_relocate_employee_modal" id="blockAssignDeviceModal" tabindex="-1" #blockModal>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <!-- Header -->
@@ -143,6 +149,32 @@
                     <button #closeModalBlock type="button" data-bs-dismiss="modal"
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
                     <button (click)="confirmToggle()" type="submit"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Re-locate -->
+<!-- vlock Assign Modal -->
+<div class="modal fade ct_delete_employee_modal" id="relocateEmployeeModal" tabindex="-1" #blockModal>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Relocate Employee</h5>
+                <p class="ct_dark_grey_text">
+                    Are you sure you want to mark this employee as relocated?
+                </p>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeModalLocate type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="relocate()" type="submit"
                         class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
                 </div>
             </div>

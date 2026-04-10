@@ -144,6 +144,48 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="mb-1">Police Verifications</label>
+                    <input type="file" class="form-control ct_input" accept="image/*,application/pdf" multiple
+                        (change)="onFileChange($event, 'police_verifications')" />
+                    <div *ngIf="fileErrors['police_verifications']" class="err_msg">{{
+                        fileErrors['police_verifications'] }}</div>
+                    <div *ngIf="selectedFilePreviews['police_verifications']?.length" class="mt-2">
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['police_verifications']?.length
+                            || 0
+                            }}/10):</div>
+                        <div class="d-flex flex-wrap gap-4 mt-2">
+                            <div *ngFor="let preview of selectedFilePreviews['police_verifications']; let i = index"
+                                class="position-relative">
+                                <img *ngIf="!preview.isPdf" [src]="preview.url" alt="Aadhaar preview"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                                <iframe *ngIf="preview.isPdf" [src]="getSafePdfUrl(preview.url)"
+                                    class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                                <button type="button"
+                                    class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                    style="width:20px;height:20px;line-height:1"
+                                    (click)="removeSelectedFile('police_verifications', i)"><i
+                                        class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="existingDocs['police_verifications']?.length" class="d-flex flex-wrap gap-2 mt-2">
+                        <div *ngFor="let doc of existingDocs['police_verifications']; let i = index"
+                            class="position-relative">
+                            <img *ngIf="!isPdfUrl(doc.url)" [src]="doc.url" alt="Aadhar Card"
+                                class="img-fluid rounded border" style="width:90px;height:90px;object-fit:cover" />
+                            <iframe *ngIf="isPdfUrl(doc.url)" [src]="getSafePdfUrl(doc.url)"
+                                class="img-fluid rounded border" style="width:90px;height:90px;"></iframe>
+                            <button *ngIf="employeeId" type="button"
+                                class="btn btn-danger btn-sm position-absolute btn-close-upload rounded-circle p-0"
+                                style="width:20px;height:20px;line-height:1"
+                                (click)="removeExistingDoc('police_verifications', i)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
                     <label class="mb-1">Job Role / Designation</label>
                     <input type="text" class="form-control ct_input" placeholder="Enter job role or designation"
                         formControlName="designation" />

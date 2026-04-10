@@ -32,7 +32,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-2 filter-box" *ngIf="userRole !== 'sub_admin'">
+                <!-- <div class="d-flex align-items-center gap-2 filter-box" *ngIf="userRole !== 'sub_admin'">
                     <div class="d-flex">
                         <div class="ct_w_100_767">
                             <select class="form-control ct_input" [(ngModel)]="selectedClientId">
@@ -51,46 +51,31 @@
                     <button class="ct_black_btn px-4" (click)="onAssignDevicesClick($event)">
                         Assign Systems
                     </button>
-                            }
-                </div>
+                    }
+                </div> -->
             </div>
             <div class="table-responsive mt-4 ct_custom_table">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th *ngIf="userRole !== 'sub_admin'">
-                                <!-- <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll($event)" /> -->
+                            <!-- <th *ngIf="userRole !== 'sub_admin'">
                                 Select
-                            </th>
+                            </th> -->
                             <th>S.No</th>
                             <th>
                                 <div class="d-flex flex-column">
                                     <span>System Id</span>
-                                    <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.system_uid"
-                                        (change)="applyFilter()">
-                                        <option value="">All</option>
-                                        <option *ngFor="let id of systemUidList" [value]="id">
-                                            {{ id }}
-                                        </option>
-                                    </select> -->
                                 </div>
                             </th>
-                            <th>Config</th>
+                            <th>Processor</th>
+                            <th>RAM</th>
+                            <th>SSD/HDD</th>
                             <th>
                                 <div class="d-flex flex-column">
                                     <span>System Type</span>
-                                    <!-- <select class="form-select form-select-sm mt-1" [(ngModel)]="filters.deviceType"
-                                        (change)="applyFilter()">
-                                        <option value="">All</option>
-                                        <option *ngFor="let type of deviceTypeList" [value]="type">
-                                            {{ type }}
-                                        </option>
-                                    </select> -->
                                 </div>
                             </th>
-                            <th>Mac Address</th>
-                            <!-- <th>Client ID</th> -->
-                            <!-- <th>Client Name</th> -->
+                            <!-- <th>Mac Address</th> -->
                             <th>Installed On</th>
                             <th>System Status</th>
                             <th>Approve Status</th>
@@ -100,19 +85,17 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
-                            <td *ngIf="userRole !== 'sub_admin'">
+                            <!-- <td *ngIf="userRole !== 'sub_admin'">
                                 <input type="checkbox" [checked]="selectedDeviceIds.has(item.id)"
                                     (change)="toggleRowSelection($event, item.id)" />
-                            </td>
+                            </td> -->
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.system_uid}}</td>
                             <td><span class="ct_overlay_text d-inline-block">{{item.system_info.cpu_model}}</span></td>
+                            <td>{{item.system_info.total_ram_gb}}</td>
+                            <td>{{item.system_info.ssd_and_hdd.ssd_size || '-'}}/{{item.system_info.ssd_and_hdd.hdd_size || '-'}}</td>
                             <td>{{item.device_type}}</td>
-                            <td>{{item.system_info.mac_address}}</td>
-                            <!-- <td>{{item.client_unique_id}}</td> -->
-                            <!-- <td style="cursor: pointer;" [routerLink]="['/home/view-client']"
-                                [queryParams]="{clientId: item.client_id}"><a
-                                    class="ct_hover_underline">{{item.client_name}}</a></td> -->
+                            <!-- <td>{{item.system_info.mac_address}}</td> -->
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>
                             <td class="">
                                 @if(item.status == "active"){

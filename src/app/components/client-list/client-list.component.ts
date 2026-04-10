@@ -81,6 +81,7 @@ export class ClientListComponent {
   nextStatus!: number;
   selectedUser: any;
   @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+  @ViewChild('closeModalLocate') closeModalLocate!: ElementRef;
 
   get modalTitle(): string {
     return this.nextStatus === 1 ? 'Block Client' : 'Unblock Client';
@@ -133,6 +134,35 @@ export class ClientListComponent {
 
     modalEl.addEventListener('hidden.bs.modal', () => {
       this.getClientList();
+    });
+  }
+
+  getClientId(item: any) {
+    this.clientId = item.id;
+  }
+
+  relocate() {
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+    // if (this.is_relocated == 0) {
+    //   formURlData.set('is_relocated', 'true');
+    // }
+
+    // if (this.is_relocated == 1) {
+    //   formURlData.set('is_relocated', 'false');
+    // }
+    formURlData.set('is_relocated', 'true');
+
+    this.apiService.patch(`admin/clients/${this.clientId}/relocation`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.selectedUser.is_disabled = this.nextStatus;
+        this.closeModalLocate.nativeElement.click();
+        this.loading = false;
+        this.toastr.success(resp.message);
+      },
+      error: (err) => {
+        this.loading = false;
+      }
     });
   }
 
