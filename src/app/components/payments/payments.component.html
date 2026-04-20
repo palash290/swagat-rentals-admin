@@ -133,24 +133,32 @@
                             <th>Client Name</th>
                             <th>Amount (₹)</th>
                             <th>Due Date</th>
-                            <th>Days Pending</th>
-                            <th>Status</th>
-                            <th>Urgent</th>
+                            <!-- <th>Days Pending</th> -->
+                            <th>Payment Status</th>
+                            <!-- <th>Urgent</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>#CID238976</td>
-                            <td>John Doe</td>
-                            <td>24,000</td>
-                            <td>12 Aug 2026</td>
-                            <td class="">6 Days</td>
+                        <tr *ngFor="let item of paymentData; let i = index">
+                            <td>{{ (page - 1) * limit + i + 1 }}</td>
+                            <td>{{item.u_unique_id}}</td>
+                            <td>{{item.full_name}}</td>
+                            <td>{{item.total_amount}}</td>
+                            <td>{{item.due_date | date:'dd MMM yyyy'}}</td>
+                            <!-- <td class="">6 Days</td> -->
                             <td class="">
-                                <span class="ct_red_text">! Overdue</span>
+                                @if(item.payment_status === 'pending'){
+                                <span class="ct_dark_yellow_text">Pending</span>
+                                }
+                                @if(item.payment_status === 'rejected'){
+                                <span class="ct_red_text">Rejected</span>
+                                }
+                                @if(item.payment_status === 'approved'){
+                                <span class="ct_green_text">Approved</span>
+                                }
                             </td>
-                            <td class="">
+                            <!-- <td class="">
                                 <span class=" ct_dark_grey_text d-flex align-items-center  gap-2 ">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -159,77 +167,9 @@
                                             fill="#475569" />
                                     </svg>
                                     Urgent</span>
-                            </td>
+                            </td> -->
                             <td>
                                 <a routerLink="/home/payment-details"><i class="fa-regular fa-eye"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>#CID238976</td>
-                            <td>John Doe</td>
-                            <td>24,000</td>
-                            <td>12 Aug 2026</td>
-                            <td class="">6 Days</td>
-                            <td class="">
-                                <span class="ct_green_text">Paid</span>
-                            </td>
-                            <td class="">
-                                <span class="ct_dark_grey_text">--</span>
-                            </td>
-                            <td>
-                                <a><i class="fa-regular fa-eye"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>#CID238976</td>
-                            <td>John Doe</td>
-                            <td>24,000</td>
-                            <td>12 Aug 2026</td>
-                            <td class="">6 Days</td>
-                            <td class="">
-                                <span class="ct_green_text">Paid</span>
-                            </td>
-                            <td class="">
-                                <span class="ct_dark_grey_text">--</span>
-                            </td>
-                            <td>
-                                <a><i class="fa-regular fa-eye"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>#CID238976</td>
-                            <td>John Doe</td>
-                            <td>24,000</td>
-                            <td>12 Aug 2026</td>
-                            <td class="">6 Days</td>
-                            <td class="">
-                                <span class="ct_red_text">! Overdue</span>
-                            </td>
-                            <td class="">
-                                <span class="ct_blue_text text-decoration-underline">Mark As Urgent</span>
-                            </td>
-                            <td>
-                                <a><i class="fa-regular fa-eye"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>#CID238976</td>
-                            <td>John Doe</td>
-                            <td>24,000</td>
-                            <td>12 Aug 2026</td>
-                            <td class="">6 Days</td>
-                            <td class="">
-                                <span class="ct_dark_yellow_text">Pending</span>
-                            </td>
-                            <td class="">
-                                <span class="ct_blue_text text-decoration-underline">Mark As Urgent</span>
-                            </td>
-                            <td>
-                                <a><i class="fa-regular fa-eye"></i></a>
                             </td>
                         </tr>
                     </tbody>

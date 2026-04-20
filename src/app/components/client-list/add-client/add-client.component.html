@@ -147,10 +147,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="Form.controls['server_ids'].invalid && Form.controls['server_ids'].touched"
+                        <!-- <div *ngIf="Form.controls['server_ids'].invalid && Form.controls['server_ids'].touched"
                             class="err_msg">
                             <div *ngIf="Form.controls['server_ids'].errors?.['required']">Please select server.</div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-12 mb-3" *ngIf="serverAllocations?.length">
                         <label class="mb-1">Selected Servers</label>
@@ -186,10 +186,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="Form.controls['gateway_ids'].invalid && Form.controls['gateway_ids'].touched"
+                        <!-- <div *ngIf="Form.controls['gateway_ids'].invalid && Form.controls['gateway_ids'].touched"
                             class="err_msg">
                             <div *ngIf="Form.controls['gateway_ids'].errors?.['required']">Please select gateway.</div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-12 mb-3" *ngIf="gatewayAllocations?.length">
                         <label class="mb-1">Selected Gateways</label>
@@ -197,7 +197,8 @@
                             <div class="col-6 mb-2" *ngFor="let alloc of gatewayAllocations">
                                 <div class="mb-1">
                                     {{ getGatewayName(alloc.gateway_id) }}
-                                    <span class="ct_dark_grey_text"> (Total: {{ getGatewayTotalQuantity(alloc.gateway_id) }})</span>
+                                    <span class="ct_dark_grey_text"> (Total: {{
+                                        getGatewayTotalQuantity(alloc.gateway_id) }})</span>
                                 </div>
                                 <input type="number" class="form-control ct_input" placeholder="Enter Quantity"
                                     [(ngModel)]="alloc.allocated_quantity" [ngModelOptions]="{ standalone: true }"
@@ -208,15 +209,26 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <!-- ── Section: Agreement Dates ── -->
                 <!-- <div class="ct_section_label">Agreement Details</div> -->
 
-                <div class="mb-3">
-                    <label class="mb-1">Billing Date </label>
+                <!-- <div class="mb-3">
+                    <label class="mb-1">Billing Day </label>
                     <input type="date" class="form-control ct_input" formControlName="billing_date" />
+                </div> -->
+
+                <div class="mb-3">
+                    <label class="mb-1">Billing Day</label>
+
+                    <select class="form-control ct_input" formControlName="billing_day">
+                        <option value="" disabled selected>Select Billing Day</option>
+                        <option *ngFor="let day of billingDays" [value]="day">
+                            {{ day }}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="mb-3">

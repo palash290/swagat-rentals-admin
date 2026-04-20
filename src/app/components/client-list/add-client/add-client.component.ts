@@ -26,6 +26,7 @@ export class AddClientComponent implements OnDestroy {
   loading: boolean = false;
   Form!: FormGroup;
   clientId: any;
+  billingDays: any;
 
   private readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
   private readonly MAX_SIZE_MB = 30;
@@ -53,10 +54,12 @@ export class AddClientComponent implements OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.billingDays = Array.from({ length: 25 }, (_, i) => i + 1);
     this.route.queryParams.subscribe(params => {
       this.clientId = params['clientId'];
     });
     this.initForm();
+    this.watchAgreementStartDate();
     this.getClientDetails();
     this.getServerList();
     this.getGatewayList();
@@ -123,11 +126,11 @@ export class AddClientComponent implements OnDestroy {
           // total_laptops: Number(client?.total_laptops ?? 0),
           total_servers: Number(client?.total_servers ?? 0),
           total_gsm_gateway: Number(client?.total_gsm_gateways ?? client?.total_gsm_gateway ?? 0),
-          billing_date: client?.billing_date ? String(client.billing_date).slice(0, 10) : '',
+          billing_day: client?.billing_day ? String(client.billing_day).slice(0, 10) : '',
           agreement_start_date: client?.agreement_start_date ? String(client.agreement_start_date).slice(0, 10) : '',
-          agreement_end_date: client?.agreement_end_date ? String(client.agreement_end_date).slice(0, 10) : '',
           // security_cheque_number: client?.security_cheque_number ?? ''
         });
+        this.syncAgreementEndDate(this.Form.get('agreement_start_date')?.value);
 
         const allocations = (client?.server_allocations ?? client?.server_allocation ?? []) as Array<any>;
         if (Array.isArray(allocations) && allocations.length) {
@@ -224,14 +227,14 @@ export class AddClientComponent implements OnDestroy {
         // total_computers: new FormControl(0, [Validators.min(0)]),
         // total_laptops: new FormControl(0, [Validators.min(0)]),
         total_servers: new FormControl(''),
-        server_ids: new FormControl([], Validators.required),
-        total_gsm_gateway: new FormControl(0, [Validators.min(0)]),
-        gateway_ids: new FormControl([], Validators.required),
+        server_ids: new FormControl([]),
+        total_gsm_gateway: new FormControl(''),
+        gateway_ids: new FormControl([]),
 
         // ── Agreement Details ───────────────────────────────────────────────
-        billing_date: new FormControl(''),
+        billing_day: new FormControl(''),
         agreement_start_date: new FormControl(''),
-        agreement_end_date: new FormControl(''),
+        agreement_end_date: new FormControl({ value: '', disabled: true }),
         // security_cheque_number: new FormControl(''),
       },
       { validators: endDateAfterStart }
@@ -239,6 +242,45 @@ export class AddClientComponent implements OnDestroy {
   }
 
   // ── File upload handler ─────────────────────────────────────────────────────
+  private watchAgreementStartDate(): void {
+    this.Form.get('agreement_start_date')?.valueChanges.subscribe((startDate: string) => {
+      this.syncAgreementEndDate(startDate);
+    });
+  }
+
+  private syncAgreementEndDate(startDate: string): void {
+    const agreementEndDateControl = this.Form.get('agreement_end_date');
+    if (!agreementEndDateControl) return;
+
+    if (!startDate) {
+      agreementEndDateControl.setValue('', { emitEvent: false });
+      agreementEndDateControl.markAsUntouched();
+      return;
+    }
+
+    agreementEndDateControl.setValue(this.calculateAgreementEndDate(startDate), { emitEvent: false });
+  }
+
+  private calculateAgreementEndDate(startDate: string): string {
+    const parsedDate = new Date(startDate);
+    if (Number.isNaN(parsedDate.getTime())) return '';
+
+    const targetYear = parsedDate.getFullYear();
+    const targetMonth = parsedDate.getMonth() + 11;
+    const targetDay = parsedDate.getDate();
+    const lastDayOfTargetMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+    const agreementEndDate = new Date(targetYear, targetMonth, Math.min(targetDay, lastDayOfTargetMonth));
+
+    return this.formatDateForInput(agreementEndDate);
+  }
+
+  private formatDateForInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   onFileChange(event: Event, fieldName: string): void {
     const input = event.target as HTMLInputElement;
     const selectedFiles = Array.from(input.files ?? []);
@@ -335,19 +377,19 @@ export class AddClientComponent implements OnDestroy {
   onSubmit() {
     this.Form.markAllAsTouched();
 
-    const full_name = (this.Form.value.full_name ?? '').trim();
+    const formValue = this.Form.getRawValue();
+    const full_name = (formValue.full_name ?? '').trim();
 
     if (this.Form.invalid) {
       this.loading = false;
       this.toastr.warning('Please check all the fields!');
       return;
     }
-
-    if (!this.serverAllocations.length) {
-      this.loading = false;
-      this.toastr.warning('Please select at least one server.');
-      return;
-    }
+// debugger
+    if (this.serverAllocations.length > 0) {
+      // this.loading = false;
+      // this.toastr.warning('Please select at least one server.');
+      // return;
 
     const invalidAllocation = this.serverAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
     if (invalidAllocation) {
@@ -365,12 +407,13 @@ export class AddClientComponent implements OnDestroy {
       this.toastr.warning('Allocated quantity cannot exceed server total quantity.');
       return;
     }
-
-    if (!this.gatewayAllocations.length) {
-      this.loading = false;
-      this.toastr.warning('Please select at least one gateway.');
-      return;
     }
+
+
+    if (this.gatewayAllocations.length > 0) {
+      // this.loading = false;
+      // this.toastr.warning('Please select at least one gateway.');
+      // return;
 
     const invalidGatewayAllocation = this.gatewayAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
     if (invalidGatewayAllocation) {
@@ -388,6 +431,8 @@ export class AddClientComponent implements OnDestroy {
       this.toastr.warning('Allocated gateway quantity cannot exceed gateway total quantity.');
       return;
     }
+    }
+
 
     this.loading = true;
 
@@ -395,7 +440,7 @@ export class AddClientComponent implements OnDestroy {
     // const formData = new URLSearchParams();
 
     // Append all reactive-form values
-    const v = this.Form.value;
+    const v = formValue;
     formData.append('full_name', full_name);
     formData.append('company_name', v.company_name ?? '');
     formData.append('company_address', v.company_address ?? '');
@@ -413,9 +458,9 @@ export class AddClientComponent implements OnDestroy {
     formData.append('total_servers', totalServersAllocated ?? 0);
     const totalGatewaysAllocated: any = this.gatewayAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
     formData.append('total_gsm_gateways', totalGatewaysAllocated ?? 0);
-    formData.append('billing_date', v.billing_date ?? '');
+    formData.append('billing_day', v.billing_day ?? '');
     formData.append('agreement_start_date', v.agreement_start_date ?? '');
-    formData.append('agreement_end_date', v.agreement_end_date ?? '');
+    // formData.append('agreement_end_date', v.agreement_end_date ?? '');
     // if (v.security_cheque_number) formData.append('security_cheque_number', v.security_cheque_number);
 
     // Append document files (if uploaded)

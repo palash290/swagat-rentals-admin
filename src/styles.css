@@ -208,3 +208,8 @@ ul.iti__country-list {
 .iti input#country-search-box {
       height: 30px;
 }
+
+.ct_required {
+      color: rgb(180, 0, 0);
+      /* margin-left: 2px; */
+}
