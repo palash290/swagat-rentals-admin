@@ -204,7 +204,7 @@
 </div>
 
 <!-- Action Complete Popup -->
-<div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1">
+<div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1" (hidden.bs.modal)="pauseResolvedVideo()">
     <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px;">
         <div class="modal-content">
             <!-- Header -->
@@ -268,6 +268,13 @@
                 <div class="input-group position-relative">
                     <input type="text" class="form-control ct_input" placeholder="--"
                         [value]="singleRequest?.employee_name" disabled />
+                </div>
+                <div class="mt-3" *ngIf="singleRequest?.resolved_video_proof_url">
+                    <h6 class="ct_fs_16 ct_fw_400 mb-2">Resolved Video Proof</h6>
+                    <video #resolvedProofVideo class="w-100 rounded service-request-video" controls>
+                        <source [src]="singleRequest?.resolved_video_proof_url" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
                 <!-- Checkbox -->
                 <div class="form-check my-4">

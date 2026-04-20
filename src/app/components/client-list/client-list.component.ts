@@ -25,6 +25,10 @@ export class ClientListComponent {
   limit: number = 10;
   loading: boolean = false;
   clientId: any;
+  nextStatus!: number;
+  selectedUser: any;
+  @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+  @ViewChild('closeModalLocate') closeModalLocate!: ElementRef;
 
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
@@ -77,11 +81,6 @@ export class ClientListComponent {
       this.getClientList();
     }, 500);
   }
-
-  nextStatus!: number;
-  selectedUser: any;
-  @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
-  @ViewChild('closeModalLocate') closeModalLocate!: ElementRef;
 
   get modalTitle(): string {
     return this.nextStatus === 1 ? 'Block Client' : 'Unblock Client';

@@ -42,7 +42,7 @@ export class EmployeesComponent {
     }
 
     if (this.status) {
-      params.append('status', this.status);
+      params.append('document_status', this.status);
     }
 
     params.append('page', this.page.toString());
@@ -89,7 +89,7 @@ export class EmployeesComponent {
   }
 
   onStatusChange() {
-    this.page = 1;   // reset page
+    this.page = 1;
     this.getAllEmployee();
   }
 
@@ -178,5 +178,37 @@ export class EmployeesComponent {
       }
     });
   }
+
+  onEmfStatusChange(id: any, overrideStatus: any): void {
+    const statusToUse = overrideStatus;
+
+    if (!statusToUse) {
+      this.toastr.warning('Please select a valid status');
+      return;
+    }
+
+    const statusLabels: any = {
+      APPROVED: 'Approve',
+      REJECTED: 'Reject',
+    };
+
+    const formURlData = new URLSearchParams();
+    formURlData.set('employee_id', id);
+    formURlData.set('document_status', statusToUse);
+
+    this.apiService.post(`admin/employee/document-approvals`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.toastr.success(resp.message || 'Status updated successfully!');
+        this.getAllEmployee();
+      },
+      error: (err) => {
+        this.toastr.warning('Failed to update Status');
+        this.getAllEmployee();
+      }
+    });
+
+
+  }
+
 
 }

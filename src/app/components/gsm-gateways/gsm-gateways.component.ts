@@ -103,7 +103,7 @@ export class GsmGatewaysComponent {
     }
 
     if (this.form.number_of_port === null || this.form.number_of_port === undefined || this.form.number_of_port === '') {
-      this.toastr.warning('Please enter gateway code.');
+      this.toastr.warning('Please enter number of port.');
       return;
     }
 

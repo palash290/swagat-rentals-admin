@@ -30,6 +30,7 @@ export class ServiceRequestsComponent {
   // showAssignErrors: boolean = false;
 
   @ViewChild('closeAssignModal') closeAssignModal!: ElementRef;
+  @ViewChild('resolvedProofVideo') resolvedProofVideo?: ElementRef<HTMLVideoElement>;
 
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
@@ -107,6 +108,14 @@ export class ServiceRequestsComponent {
     this.minServiceDate = this.assignedDate;
     this.isUrgent = false;
     // this.showAssignErrors = false;
+  }
+
+  pauseResolvedVideo() {
+    const videoElement = this.resolvedProofVideo?.nativeElement;
+    if (videoElement) {
+      videoElement.pause();
+      videoElement.currentTime = 0;
+    }
   }
 
   assignServiceRequest() {

@@ -29,14 +29,14 @@
                         </div>
                         <!-- Filters -->
                         <div class="d-flex align-items-center gap-2 filter-box">
-                            <!-- <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
+                            <div class="d-flex align-items-center gap-2 filter-box w-100 mb-2">
                                 <select class="form-select ct_input" [(ngModel)]="status" (change)="onStatusChange()">
                                     <option value="">Status</option>
-                                    <option value="accepted">Accepted</option>
+                                    <option value="approved">Approved</option>
                                     <option value="pending">Pending</option>
                                     <option value="rejected">Rejected</option>
                                 </select>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive mt-4 ct_custom_table">
@@ -51,6 +51,7 @@
                                     <th>Password</th>
                                     <th>Assigned Systems</th>
                                     <th>Block</th>
+                                    <th>Status</th>
                                     <th>Make Subadmin</th>
                                     <th>Action</th>
                                 </tr>
@@ -74,6 +75,19 @@
                                                 data-bs-target="#blockAssignDeviceModal" />
                                         </div>
                                     </td>
+
+                                    <td>
+                                        <select [(ngModel)]="item.document_status" class="form-select w-auto"
+                                            (change)="onEmfStatusChange(item.id, item.document_status)">
+                                            <option [ngValue]="null" disabled>Select</option>
+                                            <ng-container>
+                                                <option value="approved">Approve</option>
+                                                <option value="rejected">Reject</option>
+                                                <option value="pending">Pending</option>
+                                            </ng-container>
+                                        </select>
+                                    </td>
+
                                     <td>
                                         <button type="button" class="btn btn-sm ct_black_btn" data-bs-toggle="modal"
                                             data-bs-target="#makeSubAdminModal" (click)="openSubAdminModal(item)">
