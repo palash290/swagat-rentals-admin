@@ -116,6 +116,7 @@ export class AddClientComponent implements OnDestroy {
           company_name: client?.company_name ?? '',
           company_address: client?.company_address ?? '',
           gst_no: client?.gst_number ?? client?.gst_no ?? '',
+          rent_amount: client?.rent_amount ?? '',
           mobile_no: client?.mobile_no ?? client?.phone_number ?? '',
           email: client?.email ?? '',
           it_person_name: client?.it_person_name ?? '',
@@ -214,6 +215,7 @@ export class AddClientComponent implements OnDestroy {
         company_name: new FormControl(''),
         company_address: new FormControl(''),
         gst_no: new FormControl(''),
+        rent_amount: new FormControl(''),
         mobile_no: new FormControl('', [Validators.required, Validators.pattern(this.PHONE_PATTERN)]),
         email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -385,28 +387,28 @@ export class AddClientComponent implements OnDestroy {
       this.toastr.warning('Please check all the fields!');
       return;
     }
-// debugger
+    // debugger
     if (this.serverAllocations.length > 0) {
       // this.loading = false;
       // this.toastr.warning('Please select at least one server.');
       // return;
 
-    const invalidAllocation = this.serverAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
-    if (invalidAllocation) {
-      this.loading = false;
-      this.toastr.warning('Please enter quantity for selected servers.');
-      return;
-    }
+      const invalidAllocation = this.serverAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
+      if (invalidAllocation) {
+        this.loading = false;
+        this.toastr.warning('Please enter quantity for selected servers.');
+        return;
+      }
 
-    const overAllocated = this.serverAllocations.find(a => {
-      const maxQty = this.getServerTotalQuantity(a.server_id);
-      return maxQty && Number(a.allocated_quantity || 0) > maxQty;
-    });
-    if (overAllocated) {
-      this.loading = false;
-      this.toastr.warning('Allocated quantity cannot exceed server total quantity.');
-      return;
-    }
+      const overAllocated = this.serverAllocations.find(a => {
+        const maxQty = this.getServerTotalQuantity(a.server_id);
+        return maxQty && Number(a.allocated_quantity || 0) > maxQty;
+      });
+      if (overAllocated) {
+        this.loading = false;
+        this.toastr.warning('Allocated quantity cannot exceed server total quantity.');
+        return;
+      }
     }
 
 
@@ -415,22 +417,22 @@ export class AddClientComponent implements OnDestroy {
       // this.toastr.warning('Please select at least one gateway.');
       // return;
 
-    const invalidGatewayAllocation = this.gatewayAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
-    if (invalidGatewayAllocation) {
-      this.loading = false;
-      this.toastr.warning('Please enter quantity for selected gateways.');
-      return;
-    }
+      const invalidGatewayAllocation = this.gatewayAllocations.find(a => a.allocated_quantity === null || a.allocated_quantity === undefined || a.allocated_quantity === 0);
+      if (invalidGatewayAllocation) {
+        this.loading = false;
+        this.toastr.warning('Please enter quantity for selected gateways.');
+        return;
+      }
 
-    const overGatewayAllocated = this.gatewayAllocations.find(a => {
-      const maxQty = this.getGatewayTotalQuantity(a.gateway_id);
-      return maxQty && Number(a.allocated_quantity || 0) > maxQty;
-    });
-    if (overGatewayAllocated) {
-      this.loading = false;
-      this.toastr.warning('Allocated gateway quantity cannot exceed gateway total quantity.');
-      return;
-    }
+      const overGatewayAllocated = this.gatewayAllocations.find(a => {
+        const maxQty = this.getGatewayTotalQuantity(a.gateway_id);
+        return maxQty && Number(a.allocated_quantity || 0) > maxQty;
+      });
+      if (overGatewayAllocated) {
+        this.loading = false;
+        this.toastr.warning('Allocated gateway quantity cannot exceed gateway total quantity.');
+        return;
+      }
     }
 
 
@@ -445,6 +447,7 @@ export class AddClientComponent implements OnDestroy {
     formData.append('company_name', v.company_name ?? '');
     formData.append('company_address', v.company_address ?? '');
     formData.append('gst_number', (v.gst_no ?? '').toUpperCase());
+    formData.append('rent_amount', v.rent_amount ?? '');
     formData.append('mobile_no', v.mobile_no ?? '');
     formData.append('email', v.email ?? '');
     formData.append('it_person_name', v.it_person_name ?? '');
@@ -458,6 +461,7 @@ export class AddClientComponent implements OnDestroy {
     formData.append('total_servers', totalServersAllocated ?? 0);
     const totalGatewaysAllocated: any = this.gatewayAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
     formData.append('total_gsm_gateways', totalGatewaysAllocated ?? 0);
+    
     formData.append('billing_day', v.billing_day ?? '');
     formData.append('agreement_start_date', v.agreement_start_date ?? '');
     // formData.append('agreement_end_date', v.agreement_end_date ?? '');

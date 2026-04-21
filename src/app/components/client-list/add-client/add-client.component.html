@@ -222,13 +222,18 @@
 
                 <div class="mb-3">
                     <label class="mb-1">Billing Day</label>
-
                     <select class="form-control ct_input" formControlName="billing_day">
                         <option value="" disabled selected>Select Billing Day</option>
                         <option *ngFor="let day of billingDays" [value]="day">
                             {{ day }}
                         </option>
                     </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Rent Amount </label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter rent amount"
+                        formControlName="rent_amount" />
                 </div>
 
                 <div class="mb-3">
