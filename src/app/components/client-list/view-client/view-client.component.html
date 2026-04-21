@@ -224,10 +224,15 @@
                     <p class="mb-0 ct_fw_600">{{clientData?.total_gsm_gateways ?? '-'}}</p>
                 </div>
                 <div class="col-md-4">
-                    <p class="mb-1 ct_dark_grey_text">Billing Date</p>
-                    <p class="mb-0 ct_fw_600">{{clientData?.billing_date ? (clientData?.billing_date |
-                        date:'dd-MMM-yyyy') : '-'}}</p>
+                    <p class="mb-1 ct_dark_grey_text">Billing Day</p>
+                    <p class="mb-0 ct_fw_600">Every {{clientData?.agreement_billing_cycle_day}} of the month</p>
                 </div>
+
+                <div class="col-md-4">
+                    <p class="mb-1 ct_dark_grey_text">Rent Amount</p>
+                    <p class="mb-0 ct_fw_600">{{clientData?.rent_amount}}</p>
+                </div>
+
                 <div class="col-md-4">
                     <p class="mb-1 ct_dark_grey_text">Agreement Start Date</p>
                     <p class="mb-0 ct_fw_600">{{clientData?.agreement_start_date ? (clientData?.agreement_start_date |

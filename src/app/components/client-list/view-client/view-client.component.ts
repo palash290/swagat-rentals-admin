@@ -50,6 +50,7 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
       this.clientId = params['clientId'];
     });
     this.getClientDetails();
+    this.getClientLedger();
   }
 
   ngAfterViewInit(): void {
@@ -76,6 +77,18 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
 
   getClientDetails() {
     this.service.get(`admin/clients/${this.clientId}`).subscribe({
+      next: (resp: any) => {
+        this.clientData = resp.data;
+        this.documentsByType = this.groupDocumentsByType(this.clientData?.documents ?? []);
+      },
+      error: (error) => {
+        console.log(error.message);
+      }
+    });
+  }
+
+  getClientLedger() {
+    this.service.get(`admin/clients/${this.clientId}/ledger`).subscribe({
       next: (resp: any) => {
         this.clientData = resp.data;
         this.documentsByType = this.groupDocumentsByType(this.clientData?.documents ?? []);

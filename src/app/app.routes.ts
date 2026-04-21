@@ -159,6 +159,14 @@ export const routes: Routes = [
                         path: 'servers',
                         loadComponent: () => import('./components/servers/servers.component').then(m => m.ServersComponent)
                   },
+                  {
+                        path: 'invoices',
+                        loadComponent: () => import('./components/invoices/invoices.component').then(m => m.InvoicesComponent)
+                  },
+                                    {
+                        path: 'invoice-detail',
+                        loadComponent: () => import('./components/invoices/invoice-detail/invoice-detail.component').then(m => m.InvoiceDetailComponent)
+                  },
             ]
       }
 ];

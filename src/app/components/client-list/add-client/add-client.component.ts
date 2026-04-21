@@ -27,6 +27,7 @@ export class AddClientComponent implements OnDestroy {
   Form!: FormGroup;
   clientId: any;
   billingDays: any;
+  agreementStatus: string = '';
 
   private readonly ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp', 'application/pdf'];
   private readonly MAX_SIZE_MB = 30;
@@ -110,6 +111,7 @@ export class AddClientComponent implements OnDestroy {
     this.apiService.get(`admin/clients/${this.clientId}`).subscribe({
       next: (resp: any) => {
         const client = resp?.data ?? resp;
+        this.agreementStatus = String(client?.agreement_status ?? '').toLowerCase();
 
         this.Form.patchValue({
           full_name: client?.full_name ?? '',
@@ -131,6 +133,7 @@ export class AddClientComponent implements OnDestroy {
           agreement_start_date: client?.agreement_start_date ? String(client.agreement_start_date).slice(0, 10) : '',
           // security_cheque_number: client?.security_cheque_number ?? ''
         });
+        this.updateAgreementLockedFields();
         this.syncAgreementEndDate(this.Form.get('agreement_start_date')?.value);
 
         const allocations = (client?.server_allocations ?? client?.server_allocation ?? []) as Array<any>;
@@ -241,6 +244,29 @@ export class AddClientComponent implements OnDestroy {
       },
       { validators: endDateAfterStart }
     );
+    this.updateAgreementLockedFields();
+  }
+
+  private shouldLockAgreementFields(): boolean {
+    return !!this.clientId && ['active', 'renewed'].includes(this.agreementStatus);
+  }
+
+  private updateAgreementLockedFields(): void {
+    if (!this.Form) return;
+
+    const controlNames = ['billing_day', 'agreement_start_date', 'rent_amount'];
+    const shouldDisable = this.shouldLockAgreementFields();
+
+    controlNames.forEach(controlName => {
+      const control = this.Form.get(controlName);
+      if (!control) return;
+
+      if (shouldDisable) {
+        control.disable({ emitEvent: false });
+      } else {
+        control.enable({ emitEvent: false });
+      }
+    });
   }
 
   // ── File upload handler ─────────────────────────────────────────────────────
@@ -447,7 +473,9 @@ export class AddClientComponent implements OnDestroy {
     formData.append('company_name', v.company_name ?? '');
     formData.append('company_address', v.company_address ?? '');
     formData.append('gst_number', (v.gst_no ?? '').toUpperCase());
-    formData.append('rent_amount', v.rent_amount ?? '');
+    if (!this.shouldLockAgreementFields()) {
+      formData.append('rent_amount', v.rent_amount ?? '');
+    }
     formData.append('mobile_no', v.mobile_no ?? '');
     formData.append('email', v.email ?? '');
     formData.append('it_person_name', v.it_person_name ?? '');
@@ -462,8 +490,10 @@ export class AddClientComponent implements OnDestroy {
     const totalGatewaysAllocated: any = this.gatewayAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
     formData.append('total_gsm_gateways', totalGatewaysAllocated ?? 0);
     
-    formData.append('billing_day', v.billing_day ?? '');
-    formData.append('agreement_start_date', v.agreement_start_date ?? '');
+    if (!this.shouldLockAgreementFields()) {
+      formData.append('billing_day', v.billing_day ?? '');
+      formData.append('agreement_start_date', v.agreement_start_date ?? '');
+    }
     // formData.append('agreement_end_date', v.agreement_end_date ?? '');
     // if (v.security_cheque_number) formData.append('security_cheque_number', v.security_cheque_number);
 

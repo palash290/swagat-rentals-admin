@@ -1,0 +1,159 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/invoices" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Invoice Details
+            </h4>
+        </div>
+
+        <div class="container">
+            <div class="invoice_card" *ngIf="invoiceData as invoice; else noInvoice">
+                <div class="text-center mb-4 invoice_logo">
+                    <img src="img/logo.svg" alt="">
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-3 ct_fs_14 ct_fw_600">Invoice To</p>
+                        <p class="ct_dark_grey_text mb-1">Client ID: {{ invoice.client_id || '-' }}</p>
+                        <p class="ct_dark_grey_text mb-1">Agreement ID: {{ invoice.agreement_id || '-' }}</p>
+                        <p class="mb-0 ct_dark_grey_text">Invoice ID: {{ invoice.invoice_id || '-' }}</p>
+                    </div>
+
+                    <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                        <h4 class="ct_fs_27 mb-1 ct_fw_700">INVOICE</h4>
+                        <p class="mb-1 ct_fw_700 ct_fs_14">INV - {{ invoice.invoice_id }}</p>
+                        <p class="mb-1 ct_dark_grey_text ct_fs_14">
+                            {{ invoice.invoice_month | date:'MMMM yyyy' }}
+                        </p>
+                        <p class="mb-0 ct_dark_grey_text ct_fs_14">
+                            Due Date: {{ invoice.due_date | date:'dd MMM yyyy' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-responsive mb-4">
+                    <table class="table invoice_table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Invoice Month</th>
+                                <th>Due Date</th>
+                                <th class="text-end">Amount (Rs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monthly rent invoice</td>
+                                <td>{{ invoice.invoice_month | date:'dd MMM yyyy' }}</td>
+                                <td>{{ invoice.due_date | date:'dd MMM yyyy' }}</td>
+                                <td class="text-end">{{ invoice.rent_amount || 0 }}</td>
+                            </tr>
+                            <tr *ngIf="invoice.carried_forward_amount && +invoice.carried_forward_amount > 0">
+                                <td>Carried forward amount</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="text-end">{{ invoice.carried_forward_amount }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="invoice_total row align-items-center mt-4">
+                    <div class="d-flex align-items-center gap-2 justify-content-between gap-3 pb-3 mb-3"
+                        style="border-bottom: 1px solid #E3EDF9;">
+                        <div>
+                            <p class="mb-1 ct_fs_14 ct_dark_grey_text">Total Amount</p>
+                            <p class="mb-0 ct_fs_14 ct_dark_grey_text">
+                                Carried Forward: Rs {{ invoice.carried_forward_amount || 0 }}
+                            </p>
+                        </div>
+                        <h4 class="fw-bold mb-0 ct_fs_18 text-nowrap">Rs {{ invoice.total_amount || 0 }}</h4>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 justify-content-between gap-3">
+                        <p class="mb-0 ct_dark_grey_text ct_fs_14">Paid Amount: Rs {{ getPaidAmount() }}</p>
+                        <span class="text-nowrap" [ngClass]="getStatusClass(invoice.status)">
+                            Status: {{ invoice.status | titlecase }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h5 class="ct_fs_18 ct_fw_600 mb-3">Payments</h5>
+                    <div class="table-responsive">
+                        <table class="table invoice_table align-middle" *ngIf="invoice.payments?.length; else noPayments">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Payment ID</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th class="text-end">Amount (Rs)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let payment of invoice.payments; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ payment.payment_id || payment.id || '-' }}</td>
+                                    <td>{{ (payment.payment_date || payment.created_at) | date:'dd MMM yyyy' }}</td>
+                                    <td>
+                                        <span [ngClass]="getStatusClass(payment.status || payment.payment_status)">
+                                            {{ (payment.status || payment.payment_status || '-') | titlecase }}
+                                        </span>
+                                    </td>
+                                    <td class="text-end">{{ payment.amount || 0 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ng-template #noPayments>
+                        <p class="ct_dark_grey_text mb-0">No payments available for this invoice.</p>
+                    </ng-template>
+                </div>
+
+                <div class="mt-5">
+                    <h5 class="ct_fs_18 ct_fw_600 mb-3">Ledger</h5>
+                    <div class="table-responsive">
+                        <table class="table invoice_table align-middle" *ngIf="invoice.ledger?.length; else noLedger">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Entry Type</th>
+                                    <th>Description</th>
+                                    <th>Reference</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Amount (Rs)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of invoice.ledger; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ item.entry_type | titlecase }}</td>
+                                    <td>{{ item.description || '-' }}</td>
+                                    <td>{{ item.reference_type || '-' }} #{{ item.reference_id || '-' }}</td>
+                                    <td>{{ item.created_at | date:'dd MMM yyyy' }}</td>
+                                    <td class="text-end">{{ item.amount || 0 }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ng-template #noLedger>
+                        <p class="ct_dark_grey_text mb-0">No ledger entries available for this invoice.</p>
+                    </ng-template>
+                </div>
+            </div>
+
+            <ng-template #noInvoice>
+                <div class="invoice_card text-center">
+                    <p class="mb-0 ct_dark_grey_text">Invoice details not available.</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

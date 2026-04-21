@@ -15,6 +15,7 @@ export class DashboardComponent {
   dashboardData: any;
   requestsList: any;
   employeeList: any;
+  paymentsList: any;
   singleRequest: any;
   employeeId: any = null;
   assignedDate: string = '';
@@ -35,6 +36,7 @@ export class DashboardComponent {
     this.userRole = localStorage.getItem('role');
     this.getProfile();
     this.getRecentRequests();
+    this.getRecentPayments();
     this.getAllEmployee();
     this.assignedDate = this.getTodayDate();
     this.minServiceDate = this.assignedDate;
@@ -62,6 +64,21 @@ export class DashboardComponent {
       },
       error: () => {
         this.requestsList = [];
+      }
+    });
+  }
+
+  getRecentPayments() {
+    const params = new URLSearchParams();
+    params.append('page', '1');
+    params.append('limit', '5');
+
+    this.apiService.get(`admin/payments?${params.toString()}`).subscribe({
+      next: (resp: any) => {
+        this.paymentsList = resp.data.data;
+      },
+      error: () => {
+        this.paymentsList = [];
       }
     });
   }
@@ -153,5 +170,34 @@ export class DashboardComponent {
     const seconds = String(now.getSeconds()).padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
+
+  onEmfStatusChange(id: any, overrideStatus: any): void {
+    const statusToUse = overrideStatus;
+
+    if (!statusToUse) {
+      this.toastr.warning('Please select a valid status');
+      return;
+    }
+
+    const statusLabels: any = {
+      APPROVED: 'Approve',
+      REJECTED: 'Reject',
+    };
+
+    const formURlData = new URLSearchParams();
+    formURlData.set('status', statusToUse);
+
+    this.apiService.patch(`admin/payments/${id}/status`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.toastr.success(resp.message || 'Status updated successfully!');
+        this.getRecentPayments();
+      },
+      error: (err) => {
+        this.toastr.warning('Failed to update Status');
+        this.getRecentPayments();
+      }
+    });
+  }
+
 
 }
