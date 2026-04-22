@@ -2,15 +2,25 @@
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
             <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">Invoices</h4>
+            <div>
+                <a data-bs-toggle="modal" data-bs-target="#addClientModal" (click)="openAddModal()"
+                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add Invoice
+                </a>
+            </div>
         </div>
         <div class="ct_wrapper_white_box">
             <div class="d-flex justify-content-between align-items-center ct_flex_col_575 gap-3">
                 <!-- Search -->
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search by ID, Name or others..." />
-
+                        <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                            [(ngModel)]="search" (input)="onSearchChange()" />
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
                 </div>
@@ -80,7 +90,7 @@
                     </tbody>
                 </table>
                 <div *ngIf="invoiceData?.length == 0" class="text-center">
-                    <p class="ct_fs_15 mt-5">No payment found</p>
+                    <p class="ct_fs_15 mt-5">No invoices found</p>
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3 gap-2">
@@ -94,5 +104,67 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+
+
+<!-- Add Client Modal -->
+<div class="modal fade ct_addclient_modal" id="addClientModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0 pt-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">{{ 'Add Invoice' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Select Client</label>
+                    <select class="form-control ct_input" [(ngModel)]="form.client_id" name="client_id">
+                        <option value="" disabled>Select Client</option>
+                        <option *ngFor="let client of clientList" [value]="client.id">
+                            {{ client.full_name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">Select Agreement</label>
+                    <select class="form-control ct_input" [(ngModel)]="form.agreement_id" name="agreement_id">
+                        <option value="" disabled>Select Agreement</option>
+                        <option *ngFor="let agreement of agreementList" [value]="agreement.agreement_id">
+                            {{ agreement.agreement_id }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">Rent Amount</label>
+                    <input type="number" class="form-control ct_input" placeholder="Enter rent amount"
+                        [(ngModel)]="form.rent_amount" name="rent_amount" />
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">Due Date</label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.due_date" name="due_date" />
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">Invoice Month</label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.invoice_month"
+                        name="invoice_month" />
+                </div>
+
+                <button type="button" class="ct_black_btn w-100" (click)="submitInvoice()" [disabled]="isSubmitting">
+                    Add
+                </button>
+                <button type="button" hidden class="btn btn-link w-100 mt-2" data-bs-dismiss="modal"
+                    #closeModalGateway>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

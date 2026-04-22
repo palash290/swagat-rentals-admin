@@ -87,11 +87,12 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  ledgerData: any;
+
   getClientLedger() {
     this.service.get(`admin/clients/${this.clientId}/ledger`).subscribe({
       next: (resp: any) => {
-        this.clientData = resp.data;
-        this.documentsByType = this.groupDocumentsByType(this.clientData?.documents ?? []);
+        this.ledgerData = resp.data;
       },
       error: (error) => {
         console.log(error.message);

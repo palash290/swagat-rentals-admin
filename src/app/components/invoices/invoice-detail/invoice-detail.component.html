@@ -18,7 +18,7 @@
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <p class="mb-3 ct_fs_14 ct_fw_600">Invoice To</p>
-                        <p class="ct_dark_grey_text mb-1">Client ID: {{ invoice.client_id || '-' }}</p>
+                        <p class="ct_dark_grey_text mb-1">Client ID: {{ invoice.u_unique_id || '-' }}</p>
                         <p class="ct_dark_grey_text mb-1">Agreement ID: {{ invoice.agreement_id || '-' }}</p>
                         <p class="mb-0 ct_dark_grey_text">Invoice ID: {{ invoice.invoice_id || '-' }}</p>
                     </div>
@@ -39,7 +39,7 @@
                     <table class="table invoice_table align-middle">
                         <thead>
                             <tr>
-                                <th>Description</th>
+                                <!-- <th>Description</th> -->
                                 <th>Invoice Month</th>
                                 <th>Due Date</th>
                                 <th class="text-end">Amount (Rs)</th>
@@ -47,7 +47,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Monthly rent invoice</td>
+                                <!-- <td>Monthly rent invoice</td> -->
                                 <td>{{ invoice.invoice_month | date:'dd MMM yyyy' }}</td>
                                 <td>{{ invoice.due_date | date:'dd MMM yyyy' }}</td>
                                 <td class="text-end">{{ invoice.rent_amount || 0 }}</td>
@@ -85,7 +85,8 @@
                 <div class="mt-5">
                     <h5 class="ct_fs_18 ct_fw_600 mb-3">Payments</h5>
                     <div class="table-responsive">
-                        <table class="table invoice_table align-middle" *ngIf="invoice.payments?.length; else noPayments">
+                        <table class="table invoice_table align-middle"
+                            *ngIf="invoice.payments?.length; else noPayments">
                             <thead>
                                 <tr>
                                     <th>S.No</th>
@@ -135,7 +136,7 @@
                                     <td>{{ i + 1 }}</td>
                                     <td>{{ item.entry_type | titlecase }}</td>
                                     <td>{{ item.description || '-' }}</td>
-                                    <td>{{ item.reference_type || '-' }} #{{ item.reference_id || '-' }}</td>
+                                    <td>{{ item.reference_type || '-' }}</td>
                                     <td>{{ item.created_at | date:'dd MMM yyyy' }}</td>
                                     <td class="text-end">{{ item.amount || 0 }}</td>
                                 </tr>
