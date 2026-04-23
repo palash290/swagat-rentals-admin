@@ -119,6 +119,7 @@ export class AddClientComponent implements OnDestroy {
           company_address: client?.company_address ?? '',
           gst_no: client?.gst_number ?? client?.gst_no ?? '',
           rent_amount: client?.rent_amount ?? '',
+          payment_type: client?.payment_type ?? '',
           mobile_no: client?.mobile_no ?? client?.phone_number ?? '',
           email: client?.email ?? '',
           it_person_name: client?.it_person_name ?? '',
@@ -219,6 +220,7 @@ export class AddClientComponent implements OnDestroy {
         company_address: new FormControl(''),
         gst_no: new FormControl(''),
         rent_amount: new FormControl(''),
+        payment_type: new FormControl(''),
         mobile_no: new FormControl('', [Validators.required, Validators.pattern(this.PHONE_PATTERN)]),
         email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -254,7 +256,7 @@ export class AddClientComponent implements OnDestroy {
   private updateAgreementLockedFields(): void {
     if (!this.Form) return;
 
-    const controlNames = ['billing_day', 'agreement_start_date', 'rent_amount'];
+    const controlNames = ['billing_day', 'agreement_start_date', 'rent_amount', 'payment_type'];
     const shouldDisable = this.shouldLockAgreementFields();
 
     controlNames.forEach(controlName => {
@@ -476,6 +478,7 @@ export class AddClientComponent implements OnDestroy {
     if (!this.shouldLockAgreementFields()) {
       formData.append('rent_amount', v.rent_amount ?? '');
     }
+    formData.append('payment_type', v.payment_type ?? '');
     formData.append('mobile_no', v.mobile_no ?? '');
     formData.append('email', v.email ?? '');
     formData.append('it_person_name', v.it_person_name ?? '');

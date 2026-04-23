@@ -2,6 +2,17 @@
     <div class="container-fluid">
         <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
             <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">Agreements</h4>
+            <div>
+                <a data-bs-toggle="modal" data-bs-target="#addClientModal12" (click)="openAddModal()"
+                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add Agreement
+                </a>
+            </div>
         </div>
         <div class="ct_wrapper_white_box">
             <div class="d-flex justify-content-between align-items-center ct_flex_col_575 gap-3">
@@ -9,7 +20,7 @@
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
                         <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
-                            [(ngModel)]="search" (input)="getAgreements()" />
+                            [(ngModel)]="search" (input)="onSearchChange()" />
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
                 </div>
@@ -31,13 +42,13 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of invoiceData; let i = index">
-                            <td>{{ i + 1 }}</td>
+                            <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{ item.u_unique_id }}</td>
                             <td>{{ item.full_name }}</td>
                             <td>{{ item.rent_amount }}</td>
                             <td>{{ item.agreement_start_date | date:'dd MMM yyyy' }}</td>
                             <td>{{ item.agreement_end_date | date:'dd MMM yyyy' }}</td>
-                            <td class="">
+                            <!-- <td class="">
                                 <span [ngClass]="{
                                 'ct_green_text': item.status === 'active',
                                 'ct_red_text': item.status === 'expired' || item.status === 'terminated',
@@ -45,11 +56,37 @@
                                 }">
                                     {{ item.status | titlecase }}
                                 </span>
+                            </td> -->
+                            <td>
+                                <select [(ngModel)]="item.status" class="form-select w-auto"
+                                    (change)="onEmfStatusChange(item.agreement_id, item.status)"
+                                    [disabled]="item.status === 'expired'">
+                                    <!-- [disabled]="item.status === 'rejected' || item.status === 'approved'" -->
+                                    <option [ngValue]="null" disabled>Select</option>
+
+                                    <!-- <option *ngIf="item.status == 'approved'" value="approved">Approved</option>
+
+                                    <option *ngIf="item.status == 'rejected'" value="rejected">Rejected</option> -->
+                                    <!-- *ngIf="item.status !== 'approved' && item.status !== 'rejected'" -->
+                                    <ng-container>
+                                        <option value="active">Active</option>
+                                        <option value="expired">Expired</option>
+                                        <option value="terminated">Terminated</option>
+                                        <option value="renewed">Renewed</option>
+                                    </ng-container>
+                                </select>
                             </td>
                             <td>
-                                <a [routerLink]="['/home/agreements-details']"
-                                    [queryParams]="{agreement_id: item.agreement_id}"><i
-                                        class="fa-regular fa-eye"></i></a>
+                                <div class="d-flex align-items-center gap-3">
+                                    <a data-bs-toggle="modal" data-bs-target="#addClientModal12"
+                                        (click)="openEditModal(item)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a [routerLink]="['/home/agreements-details']"
+                                        [queryParams]="{agreement_id: item.agreement_id}">
+                                        <i class="fa-regular fa-eye"></i>
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -69,5 +106,88 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+
+
+<!-- Add Agreement Modal -->
+<div class="modal fade ct_addclient_modal" id="addClientModal12" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0 pt-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">{{ isEditMode ? 'Edit Agreement' : 'Add Agreement' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Select Client <span class="ct_required">*</span></label>
+                    <select class="form-control ct_input" [(ngModel)]="form.client_id" name="client_id">
+                        <option value="" disabled>Select Client</option>
+                        <option *ngFor="let client of clientList" [value]="client.id">
+                            {{ client.full_name }}
+                        </option>
+                    </select>
+                    <div *ngIf="isSubmitted && isFieldInvalid('client_id')" class="err_msg">
+                        Please select client.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Rent Amount <span class="ct_required">*</span></label>
+                    <input type="number" class="form-control ct_input" placeholder="Enter rent amount"
+                        [(ngModel)]="form.rent_amount" name="rent_amount" min="1" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('rent_amount')" class="err_msg">
+                        {{ getRentAmountError() }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Billing Day <span class="ct_required">*</span></label>
+                    <select class="form-control ct_input" [(ngModel)]="form.billing_cycle_day"
+                        name="billing_cycle_day">
+                        <option value="" disabled>Select Billing Day</option>
+                        <option *ngFor="let day of billingDays" [value]="day">
+                            {{ day }}
+                        </option>
+                    </select>
+                    <div *ngIf="isSubmitted && isFieldInvalid('billing_cycle_day')" class="err_msg">
+                        Please select billing day.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Start Date <span class="ct_required">*</span></label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.start_date" name="start_date"
+                        (ngModelChange)="onStartDateChange()" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('start_date')" class="err_msg">
+                        Please select start date.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="mb-1">End Date <span class="ct_required">*</span></label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.end_date" name="end_date"
+                        [disabled]="true" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('end_date')" class="err_msg">
+                        End date will be auto-calculated after selecting start date.
+                    </div>
+                </div>
+
+                <button type="button" class="ct_black_btn w-100" (click)="submitAgreement()"
+                    [disabled]="isSubmitting">
+                    {{ isEditMode ? 'Update' : 'Add' }}
+                </button>
+                <button type="button" hidden class="btn btn-link w-100 mt-2" data-bs-dismiss="modal"
+                    #closeModalGateway>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

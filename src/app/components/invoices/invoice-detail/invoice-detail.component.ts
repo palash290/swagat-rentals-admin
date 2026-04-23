@@ -58,4 +58,8 @@ export class InvoiceDetailComponent {
     return 'ct_dark_grey_text';
   }
 
+  downLoadPdf() {
+    this.invoiceData?.invoice_pdf && window.open(this.invoiceData.invoice_pdf, '_blank');
+  }
+
 }

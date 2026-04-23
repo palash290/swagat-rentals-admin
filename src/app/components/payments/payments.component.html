@@ -5,7 +5,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            452
+                            {{dashboardData?.total_receivable || 0}}
                         </h3>
                         <p class="mb-0">Total Receivable</p>
                     </div>
@@ -22,7 +22,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            2167
+                            {{dashboardData?.total_received || 0}}
                         </h3>
                         <p class="mb-0">Received</p>
                     </div>
@@ -39,7 +39,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            152
+                            {{dashboardData?.total_overdue || 0}}
                         </h3>
                         <p class="mb-0">Overdue</p>
                     </div>
@@ -63,7 +63,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            200
+                            {{dashboardData?.total_pending || 0}}
                         </h3>
                         <p class="mb-0">Pending</p>
                     </div>
@@ -87,9 +87,8 @@
                 <!-- Search -->
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search by ID, Name or others..." />
-
+                        <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                            [(ngModel)]="search" (input)="getAllPayments()" />
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
                 </div>
@@ -113,12 +112,15 @@
                             <th>Client ID</th>
                             <th>Client Name</th>
                             <th>Amount (₹)</th>
+                            <th>Payment Type</th>
+                            <th>Payment Mode</th>
                             <th>Due Date</th>
                             <!-- <th>Days Pending</th> -->
                             <th>Payment Status</th>
+                            <th>View Invoice</th>
                             <!-- <th>Update Status</th> -->
                             <!-- <th>Urgent</th> -->
-                            <th>Action</th>
+                            <!-- <th>Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -127,6 +129,24 @@
                             <td>{{item.u_unique_id}}</td>
                             <td>{{item.full_name}}</td>
                             <td>{{item.total_amount}}</td>
+                            <td>
+                                @if(item.payment_type === 'prepaid'){
+                                Prepaid
+                                } @else if(item.payment_type === 'postpaid'){
+                                Postpaid
+                                }
+                            </td>
+                            <td>
+                                @if(item.payment_mode === 'cash'){
+                                Cash
+                                } @else if (item.payment_mode === 'cheque') {
+                                Cheque
+                                } @else if (item.payment_mode === 'online') {
+                                Online
+                                } @else if (item.payment_mode === 'upi') {
+                                UPI
+                                }
+                            </td>
                             <td>{{item.due_date | date:'dd MMM yyyy'}}</td>
                             <!-- <td class="">6 Days</td> -->
                             <!-- <td class="">
@@ -152,14 +172,17 @@
 
                                     <option *ngIf="item.payment_status == 'rejected'" value="rejected">Rejected</option>
 
-                                    <ng-container *ngIf="item.payment_status !== 'approved' && item.payment_status !== 'rejected'">
+                                    <ng-container
+                                        *ngIf="item.payment_status !== 'approved' && item.payment_status !== 'rejected'">
                                         <option value="approved">Approve</option>
                                         <option value="rejected">Reject</option>
                                         <option value="pending">Pending</option>
                                     </ng-container>
                                 </select>
                             </td>
-
+                            <td>
+                                <a href="{{item.invoice_pdf}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
+                            </td>
                             <!-- <td class="">
                                 <span class=" ct_dark_grey_text d-flex align-items-center  gap-2 ">
                                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -170,9 +193,9 @@
                                     </svg>
                                     Urgent</span>
                             </td> -->
-                            <td>
+                            <!-- <td>
                                 <a routerLink="/home/payment-details"><i class="fa-regular fa-eye"></i></a>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>

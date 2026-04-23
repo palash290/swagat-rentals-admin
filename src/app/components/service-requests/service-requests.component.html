@@ -18,7 +18,7 @@
                         <div class="search-box w-100 ">
                             <div class="input-group position-relative">
                                 <input type="text" class="form-control ct_input ps-5"
-                                    placeholder="Search by ID, Name or others..." [(ngModel)]="searchText"
+                                    placeholder="Search..." [(ngModel)]="searchText"
                                     (input)="getAllRequests()" />
 
                                 <i class="fas fa-search ct_show_search"></i>
@@ -163,7 +163,7 @@
                 <div class="search-box w-100">
                     <div class="input-group position-relative">
                         <!-- <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search by ID, Name or others..." /> -->
+                            placeholder="Search..." /> -->
                         <select class="form-select" [(ngModel)]="employeeId" required
                             (change)="onClientChange($any($event.target).value)">
                             <option [ngValue]="null" selected disabled>Select Employee</option>

@@ -4,20 +4,28 @@
             <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
                 Assets Categories
             </h4>
+            <div>
+                <a data-bs-toggle="modal" data-bs-target="#addClientModal12" (click)="openAddModal()"
+                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add Category
+                </a>
+            </div>
         </div>
         <div class="ct_wrapper_white_box">
             <!-- Search -->
             <div class="d-md-flex justify-content-between align-items-center ct_flex_col_767 gap-5">
-                <!-- Search -->
-                <!-- <div class="search-box  ">
+                <div class="search-box">
                     <div class="input-group position-relative">
-                        <input type="text" class="form-control ct_input ps-5"
-                            placeholder="Search..." [(ngModel)]="searchText"
-                            (input)="getAllTasks()" />
-
+                        <input type="text" class="form-control ct_input ps-5" placeholder="Search..."
+                            [(ngModel)]="searchText" (input)="onSearchChange()" />
                         <i class="fas fa-search ct_show_search"></i>
                     </div>
-                </div> -->
+                </div>
                 <!-- Filters -->
                 <div class="d-flex align-items-center gap-2 filter-box">
                     <div class="d-flex">
@@ -39,15 +47,17 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
+                            <th>Name</th>
                             <th>Display Name</th>
                             <th>System Status</th>
-                            <!-- <th>Installed On</th> -->
-                            <!-- <th>Action</th> -->
+                            <th>Created At</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
+                            <td>{{item.name}}</td>
                             <td>{{item.display_name}}</td>
                             <td class="">
                                 @if(item.is_active == "1"){
@@ -57,31 +67,127 @@
                                 <span class="ct_rejected_badge">Inactive</span>
                                 }
                             </td>
-                            <!-- <td>{{item.installation_date | date:'dd-MMM-yyyy'}}</td> -->
-                            <!-- <td>
+                            <td>{{item.created_at | date:'dd-MMM-yyyy'}}</td>
+                            <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <a [routerLink]="['/home/view-assets']" [queryParams]="{deviceId: item.id}"><i
-                                            class="fa-regular fa-eye"></i></a>
+                                    <a data-bs-toggle="modal" data-bs-target="#addClientModal12"
+                                        (click)="openEditModal(item)">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <div data-bs-target="#ct_remove_modal_post" data-bs-toggle="modal"
+                                        (click)="openDeleteModal(item)">
+                                        <svg width="16" height="16" viewBox="0 0 22 22" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M7 10C6.73478 10 6.48043 10.1054 6.29289 10.2929C6.10536 10.4804 6 10.7348 6 11C6 11.2652 6.10536 11.5196 6.29289 11.7071C6.48043 11.8946 6.73478 12 7 12H15C15.2652 12 15.5196 11.8946 15.7071 11.7071C15.8946 11.5196 16 11.2652 16 11C16 10.7348 15.8946 10.4804 15.7071 10.2929C15.5196 10.1054 15.2652 10 15 10H7Z"
+                                                fill="#F51B0B" />
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M22 11C22 17.075 17.075 22 11 22C4.925 22 0 17.075 0 11C0 4.925 4.925 0 11 0C17.075 0 22 4.925 22 11ZM20 11C20 12.1819 19.7672 13.3522 19.3149 14.4442C18.8626 15.5361 18.1997 16.5282 17.364 17.364C16.5282 18.1997 15.5361 18.8626 14.4442 19.3149C13.3522 19.7672 12.1819 20 11 20C9.8181 20 8.64778 19.7672 7.55585 19.3149C6.46392 18.8626 5.47177 18.1997 4.63604 17.364C3.80031 16.5282 3.13738 15.5361 2.68508 14.4442C2.23279 13.3522 2 12.1819 2 11C2 8.61305 2.94821 6.32387 4.63604 4.63604C6.32387 2.94821 8.61305 2 11 2C13.3869 2 15.6761 2.94821 17.364 4.63604C19.0518 6.32387 20 8.61305 20 11Z"
+                                                fill="#F51B0B" />
+                                        </svg>
+                                    </div>
                                 </div>
-                            </td> -->
+                            </td>
                         </tr>
                     </tbody>
                 </table>
                 <div *ngIf="deviceList?.length == 0" class="text-center">
-                    <p class="ct_fs_15 mt-5">No system found</p>
+                    <p class="ct_fs_15 mt-5">No category found</p>
                 </div>
             </div>
-
-            <!-- <div class="d-flex justify-content-end mt-3 gap-2">
+            <div class="d-flex justify-content-end mt-3 gap-2">
                 <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
                     Prev
                 </button>
-                {{pagination.page}}
+                {{pagination?.page}}
                 <button class="btn btn-sm btn-secondary" [disabled]="page >= pagination?.total / pagination?.limit"
                     (click)="changePage(page + 1)">
                     Next
                 </button>
-            </div> -->
+            </div>
         </div>
+    </div>
+</div>
+
+<!-- Add Agreement Modal -->
+<div class="modal fade ct_addclient_modal" id="addClientModal12" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0 pt-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">{{ isEditMode ? 'Edit Category' : 'Add Category' }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+
+                <div class="mb-3">
+                    <label class="mb-1">Name <span class="ct_required">*</span></label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter name" [(ngModel)]="form.name"
+                        name="name" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('name')" class="err_msg">
+                        {{ getNameError() }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Display Name <span class="ct_required">*</span></label>
+                    <input type="text" class="form-control ct_input" placeholder="Enter display name"
+                        [(ngModel)]="form.display_name" name="display_name" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('display_name')" class="err_msg">
+                        {{ getDisplayNameError() }}
+                    </div>
+                </div>
+
+                <button type="button" class="ct_black_btn w-100" (click)="submitAgreement()" [disabled]="isSubmitting">
+                    {{ isEditMode ? 'Update' : 'Add' }}
+                </button>
+                <button type="button" hidden class="btn btn-link w-100 mt-2" data-bs-dismiss="modal"
+                    #closeModalGateway>Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ct_remove_modal_post" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header pb-0 border-0">
+                <button type="button" class="btn-close ct_close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="ct_delete_post_modal">
+                    <figure>
+                        <figcaption class="mt-4">
+                            <div class="text-center">
+                                <h4 class="ct_fs_22 ct_fw_600 ct_blue_text my-3">
+                                    Remove Category
+                                </h4>
+                                <p class="mb-0">
+                                    Are you sure you want to remove this asset category?
+                                </p>
+                            </div>
+                        </figcaption>
+                    </figure>
+                    <div class="d-flex justify-content-center border-0 gap-3 ct_modal_footer mt-4">
+                        <button type="button" class="ct_bule_transparent_btn ct_h_40 w-100 ct_fw_500"
+                            data-bs-dismiss="modal" #closeModalDelete>
+                            Cancel
+                        </button>
+                        <button type="button" class="ct_border_radius_5 ct_h_40 ct_black_btn w-100 ct_fw_500"
+                            (click)="deleteCategory()">Yes, Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

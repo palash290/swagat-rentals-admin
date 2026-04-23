@@ -42,7 +42,7 @@ export class AssetsComponent {
     params.append('page', this.page.toString());
     params.append('limit', this.limit.toString());
 
-    this.apiService.get(`assest/types?${params.toString()}`).subscribe({
+    this.apiService.get(`assets/asset-categories?${params.toString()}`).subscribe({
       next: (resp: any) => {
         this.deviceList = resp.data;
         // this.pagination = resp.data.pagination;

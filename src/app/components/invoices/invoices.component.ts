@@ -75,7 +75,6 @@ export class InvoicesComponent {
   }
 
   getAgreements() {
-
     this.apiService.get(`admin/agreements`).subscribe({
       next: (resp: any) => {
         this.agreementList = resp.data.data;
@@ -167,6 +166,24 @@ export class InvoicesComponent {
   onStatusChange() {
     this.page = 1;
     this.getAllInvoices();
+  }
+
+  onToggleUser(item: any) {
+    const payload = {
+      is_urgent: !item.is_urgent
+    };
+
+    this.apiService.put(`admin/invoices/${item.invoice_id}/urgent`, payload).subscribe({
+      next: (resp: any) => {
+        this.toastr.success(resp.message || 'Invoice updated.');
+        this.getAllInvoices();
+      },
+      error: (error) => {
+        const msg = error.error?.message || error.message || 'Something went wrong.';
+        this.toastr.error(msg);
+        this.getAllInvoices();
+      }
+    });
   }
 
 

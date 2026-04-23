@@ -25,10 +25,11 @@ export class PaymentsComponent {
   constructor(private apiService: CommonService, private toastr: NzMessageService) { }
 
   ngOnInit() {
-    this.getClientList();
+    this.getAllPayments();
+    this.getDashboard();
   }
 
-  getClientList() {
+  getAllPayments() {
     const params = new URLSearchParams({
       search: this.search || '',
       status: this.status || '',
@@ -47,14 +48,27 @@ export class PaymentsComponent {
     });
   }
 
+  dashboardData: any;
+
+  getDashboard() {
+    this.apiService.get(`admin/payments/dashboard`).subscribe({
+      next: (resp: any) => {
+        this.dashboardData = resp.data;
+      },
+      error: (error) => {
+        console.log(error.message);
+      }
+    });
+  }
+
   changePage(page: number) {
     this.page = page;
-    this.getClientList();
+    this.getAllPayments();
   }
 
   onStatusChange() {
     this.page = 1;
-    this.getClientList();
+    this.getAllPayments();
   }
 
   onEmfStatusChange(id: any, overrideStatus: any): void {
@@ -76,13 +90,17 @@ export class PaymentsComponent {
     this.apiService.patch(`admin/payments/${id}/status`, formURlData.toString()).subscribe({
       next: (resp: any) => {
         this.toastr.success(resp.message || 'Status updated successfully!');
-        this.getClientList();
+        this.getAllPayments();
       },
       error: (err) => {
         this.toastr.warning('Failed to update Status');
-        this.getClientList();
+        this.getAllPayments();
       }
     });
+  }
+
+  downLoadPdf(pdfUrl: any) {
+    pdfUrl?.invoice_pdf && window.open(pdfUrl.invoice_pdf, '_blank');
   }
 
 
