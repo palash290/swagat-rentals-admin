@@ -14,12 +14,13 @@ export class AssetsComponent {
 
   page: number = 1;
   limit: number = 10;
-
+  search: string = '';
   deviceList: any;
   selectedClientId: string = '';
   searchText: string = '';
   clientList: any;
   pagination: any;
+  searchTimeout: any;
 
   constructor(private apiService: CommonService) { }
 
@@ -36,16 +37,16 @@ export class AssetsComponent {
     }
 
     if (this.selectedClientId) {
-      params.append('client_id', this.selectedClientId);
+      params.append('asset_category_id', this.selectedClientId);
     }
 
     params.append('page', this.page.toString());
     params.append('limit', this.limit.toString());
-
-    this.apiService.get(`assets/asset-categories?${params.toString()}`).subscribe({
+    //assets?asset_category_id=3&status=rented&page=1&limit=20'
+    this.apiService.get(`assets?${params.toString()}`).subscribe({
       next: (resp: any) => {
-        this.deviceList = resp.data;
-        // this.pagination = resp.data.pagination;
+        this.deviceList = resp.data.items;
+        this.pagination = resp.data.pagination;
       },
       error: (error) => {
         console.log(error.message);
@@ -57,6 +58,14 @@ export class AssetsComponent {
   changePage(page: number) {
     this.page = page;
     this.getAllTasks();
+  }
+
+  onSearchChange() {
+    clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.page = 1;
+      this.getAllTasks();
+    }, 500);
   }
 
 

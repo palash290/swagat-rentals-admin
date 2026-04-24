@@ -34,6 +34,7 @@
                             <th>Client ID</th>
                             <th>Client Name</th>
                             <th>Amount (₹)</th>
+                            <th>Payment Type</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Status</th>
@@ -46,6 +47,13 @@
                             <td>{{ item.u_unique_id }}</td>
                             <td>{{ item.full_name }}</td>
                             <td>{{ item.rent_amount }}</td>
+                            <td>
+                                @if(item.payment_type == 'prepaid'){
+                                <span class="">Prepaid</span>
+                                } @else if(item.payment_type == 'postpaid'){
+                                <span class="">Postpaid</span>
+                                }
+                            </td>
                             <td>{{ item.agreement_start_date | date:'dd MMM yyyy' }}</td>
                             <td>{{ item.agreement_end_date | date:'dd MMM yyyy' }}</td>
                             <!-- <td class="">
@@ -143,8 +151,7 @@
 
                 <div class="mb-3">
                     <label class="mb-1">Billing Day <span class="ct_required">*</span></label>
-                    <select class="form-control ct_input" [(ngModel)]="form.billing_cycle_day"
-                        name="billing_cycle_day">
+                    <select class="form-control ct_input" [(ngModel)]="form.billing_cycle_day" name="billing_cycle_day">
                         <option value="" disabled>Select Billing Day</option>
                         <option *ngFor="let day of billingDays" [value]="day">
                             {{ day }}
@@ -172,8 +179,7 @@
                     </div>
                 </div>
 
-                <button type="button" class="ct_black_btn w-100" (click)="submitAgreement()"
-                    [disabled]="isSubmitting">
+                <button type="button" class="ct_black_btn w-100" (click)="submitAgreement()" [disabled]="isSubmitting">
                     {{ isEditMode ? 'Update' : 'Add' }}
                 </button>
                 <button type="button" hidden class="btn btn-link w-100 mt-2" data-bs-dismiss="modal"

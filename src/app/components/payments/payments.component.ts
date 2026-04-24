@@ -87,7 +87,7 @@ export class PaymentsComponent {
     const formURlData = new URLSearchParams();
     formURlData.set('status', statusToUse);
 
-    this.apiService.patch(`admin/payments/${id}/status`, formURlData.toString()).subscribe({
+    this.apiService.put(`admin/payments/${id}/status`, formURlData.toString()).subscribe({
       next: (resp: any) => {
         this.toastr.success(resp.message || 'Status updated successfully!');
         this.getAllPayments();

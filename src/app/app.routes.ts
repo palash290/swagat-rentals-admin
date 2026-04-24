@@ -71,6 +71,10 @@ export const routes: Routes = [
                         path: 'assets',
                         loadComponent: () => import('./components/assets/assets.component').then(m => m.AssetsComponent)
                   },
+                    {
+                        path: 'add-asset',
+                        loadComponent: () => import('./components/assets/add-asset/add-asset.component').then(m => m.AddAssetComponent)
+                  },
                   {
                         path: 'view-assets',
                         loadComponent: () => import('./components/assets/view-assets/view-assets.component').then(m => m.ViewAssetsComponent)

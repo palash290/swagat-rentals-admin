@@ -111,7 +111,8 @@
                             <th>S.No</th>
                             <th>Client ID</th>
                             <th>Client Name</th>
-                            <th>Amount (₹)</th>
+                            <th>Paid (₹)</th>
+                            <th>Total (₹)</th>
                             <th>Payment Type</th>
                             <th>Payment Mode</th>
                             <th>Due Date</th>
@@ -128,6 +129,7 @@
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.u_unique_id}}</td>
                             <td>{{item.full_name}}</td>
+                            <td>{{item.amount_paid}}</td>
                             <td>{{item.total_amount}}</td>
                             <td>
                                 @if(item.payment_type === 'prepaid'){
@@ -163,7 +165,7 @@
 
                             <td>
                                 <select [(ngModel)]="item.payment_status" class="form-select w-auto"
-                                    (change)="onEmfStatusChange(item.property_id, item.payment_status)"
+                                    (change)="onEmfStatusChange(item.payment_id, item.payment_status)"
                                     [disabled]="item.payment_status === 'rejected' || item.payment_status === 'approved'">
 
                                     <option [ngValue]="null" disabled>Select</option>
