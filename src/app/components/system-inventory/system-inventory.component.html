@@ -1,15 +1,15 @@
 <div class="ct_inner_header_bg mt-4 ct_px_30">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Assets</h4>
+            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">System Inventory</h4>
             <div>
-                <a routerLink="/home/add-asset" class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
+                <a routerLink="/home/add-inventory" class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 mt-3">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
                             stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
-                    Add Asset
+                    Add Inventory
                 </a>
             </div>
         </div>
@@ -38,47 +38,29 @@
                             <thead>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>Asset Category</th>
-                                    <th>Brend</th>
-                                    <th>Model</th>
-                                    <!-- <th>Quantity</th>
-                                    <th>Available</th> -->
+                                    <th>System Id</th>
+                                    <th>Device Type</th>
+                                    <th>Mac Address</th>
                                     <th>Status</th>
-                                    <th>Created On</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let item of deviceList; let i = index">
                                     <td>{{ (page - 1) * limit + i + 1 }}</td>
-                                    <td>{{item.asset_category_name}}</td>
-                                    <td>{{item.brand}}</td>
-                                    <td>{{item.model}}</td>
-                                    <!-- <td>20</td>
-                                    <td>14</td> -->
+                                    <td>{{item.system_uid}}</td>
+                                    <td>{{item.device_type}}</td>
+                                    <td>{{item.mac_address}}</td>
                                     <td class="">
                                         <!-- @if(item.status == 'rented'){
                                         <span class="ct_accepted_badge">In Stock</span>
-                                        <span class="ct_pending_badge">Low Stock</span>
-                                        <span class="ct_rejected_badge">Out of Stock</span>
                                         } -->
-                                        @if(item.status == 'in_stock'){
-                                        <span class="">In Stock</span>
-                                        } @else if(item.status == 'rented'){
-                                        <span class="">Rented</span>
-                                        } @else if(item.status == 'damaged'){
-                                        <span class="">Damaged</span>
-                                        } @else if(item.status == 'retired'){
-                                        <span class="">Retired</span>
-                                        } @else if(item.status == 'used_in_system'){
-                                        <span class="">Used in System</span>
-                                        }
+                                        {{ item.status | titlecase }}
                                     </td>
-                                    <td>{{item.created_at | date:'dd-MMM-yyyy'}}</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-3">
-                                            <a [routerLink]="['/home/view-assets']"
-                                                [queryParams]="{asset_id: item.asset_id}"><i
+                                            <a [routerLink]="['/home/view-inventory']"
+                                                [queryParams]="{system_id: item.system_id}"><i
                                                     class="fa-regular fa-eye"></i></a>
                                         </div>
                                     </td>

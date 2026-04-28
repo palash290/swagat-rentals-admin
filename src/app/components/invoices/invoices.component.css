@@ -1,0 +1,5 @@
+.ct_green_text { color: #28a745; }   /* success */
+.ct_yellow_text { color: #ffc107; }  /* warning */
+.ct_blue_text { color: #007bff; }    /* info */
+.ct_red_text { color: #dc3545; }     /* danger */
+.ct_orange_text { color: #fd7e14; }  /* partial */

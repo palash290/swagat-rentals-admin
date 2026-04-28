@@ -151,7 +151,12 @@
                 </li>
                 <li routerLink="/home/assets">
                     <a [ngClass]="{ 'active': isActive('/home/assets')}">
-                        Assets
+                        Office Inventory
+                    </a>
+                </li>
+                <li routerLink="/home/system-inventory">
+                    <a [ngClass]="{ 'active': isActive('/home/system-inventory')}">
+                        System Inventory
                     </a>
                 </li>
                 <li routerLink="/home/gsm-gateways">
@@ -176,7 +181,28 @@
                         Asset purchase
                     </a>
                 </li> -->
+            </ul>
+        </li>
 
+        <li class="ct_has_sub_menu">
+            <a class="d-flex p-0 justify-content-between align-items-center" (click)="toggleNetworkSubMenu()">
+                <a class="">
+              <i class="fa-solid fa-network-wired flex-shrink-0"></i>
+                    Network & Server Management
+                </a>
+                <span><i class="fa-solid fa-chevron-down pe-2"></i></span>
+            </a>
+            <ul class="ct_sub_menu" [class.ct_sub_menu_open]="showNetworkSubMenu">
+                <li routerLink="/home/gsm-gateways">
+                    <a [ngClass]="{ 'active': isActive('/home/gsm-gateways')}">
+                        GSM Gateways
+                    </a>
+                </li>
+                <li routerLink="/home/servers">
+                    <a [ngClass]="{ 'active': isActive('/home/servers')}">
+                        Servers
+                    </a>
+                </li>
             </ul>
         </li>
 

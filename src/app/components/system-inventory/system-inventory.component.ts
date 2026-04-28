@@ -1,16 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
+import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-assets',
+  selector: 'app-system-inventory',
   imports: [RouterLink, CommonModule, FormsModule],
-  templateUrl: './assets.component.html',
-  styleUrl: './assets.component.css'
+  templateUrl: './system-inventory.component.html',
+  styleUrl: './system-inventory.component.css'
 })
-export class AssetsComponent {
+export class SystemInventoryComponent {
 
   page: number = 1;
   limit: number = 10;
@@ -43,7 +43,7 @@ export class AssetsComponent {
     params.append('page', this.page.toString());
     params.append('limit', this.limit.toString());
     //assets?asset_category_id=3&status=rented&page=1&limit=20'
-    this.apiService.get(`assets/inventory?${params.toString()}`).subscribe({
+    this.apiService.get(`assets/system-inventory-list?${params.toString()}`).subscribe({
       next: (resp: any) => {
         this.deviceList = resp.data.items;
         this.pagination = resp.data.pagination;

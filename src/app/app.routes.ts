@@ -171,6 +171,18 @@ export const routes: Routes = [
                         path: 'invoice-detail',
                         loadComponent: () => import('./components/invoices/invoice-detail/invoice-detail.component').then(m => m.InvoiceDetailComponent)
                   },
+                  {
+                        path: 'system-inventory',
+                        loadComponent: () => import('./components/system-inventory/system-inventory.component').then(m => m.SystemInventoryComponent)
+                  },
+                  {
+                        path: 'view-inventory',
+                        loadComponent: () => import('./components/system-inventory/view-inventory/view-inventory.component').then(m => m.ViewInventoryComponent)
+                  },
+                  {
+                        path: 'add-inventory',
+                        loadComponent: () => import('./components/system-inventory/add-inventory/add-inventory.component').then(m => m.AddInventoryComponent)
+                  }
             ]
       }
 ];

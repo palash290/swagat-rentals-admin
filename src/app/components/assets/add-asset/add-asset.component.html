@@ -1,6 +1,6 @@
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
-        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ">
             <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
                 <a routerLink="/home/assets" class="ct_text_black">
                     <i class="fa-solid fa-arrow-left me-2"></i>
@@ -8,88 +8,164 @@
                 Add New Asset
             </h4>
         </div>
-        <div class="ct_wrapper_white_box ct_mb_35">
-            <h2 class="ct_fs_18 ct_fw_600">Asset Information</h2>
-            <div class="row mt-4">
-                <div class="col-md-12 ct_mb_35">
-                    <label class="form-label ">Serial No</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter serial no." />
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label"> Asset Category</label>
-                    <select class="form-select ct_input_select">
-                        <option selected>Laptop</option>
-                    </select>
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Brand / Model</label>
-                    <select class="form-select ct_input_select">
-                        <option selected> Select Brand / Model</option>
-                    </select>
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> OS</label>
-                    <select class="form-select ct_input_select">
-                        <option selected>Select </option>
-                    </select>
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> CPU</label>
-                    <select class="form-select ct_input_select">
-                        <option selected> Select Brand / Model</option>
-                    </select>
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Display</label>
-                    <select class="form-select ct_input_select">
-                        <option selected> Select </option>
-                    </select>
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Quantity</label>
-                    <input type="number" class="form-control ct_input" placeholder="0" />
+
+        <form [formGroup]="Form" (ngSubmit)="onSubmit()">
+            <div class="ct_wrapper_white_box ">
+                <h2 class="ct_fs_18 ct_fw_600">Inventory Mode</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6 " *ngFor="let mode of inventoryModes">
+                        <label class="d-flex align-items-center gap-2">
+                            <input type="radio" [formControl]="inventoryModeControl" [value]="mode.value" />
+                            <span>{{ mode.label }}</span>
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="ct_wrapper_white_box ct_mb_35">
-            <h2 class="ct_fs_18 ct_fw_600">Purchase Details </h2>
-            <div class="row mt-4">
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Vendor Name</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter vendor name" />
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Purchase Date</label>
-                    <input type="date" class="form-control ct_input" placeholder="dd/mm/yyyy" />
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Warranty Start Date</label>
-                    <input type="date" class="form-control ct_input" placeholder="dd/mm/yyyy" />
-                </div>
-                <div class="col-md-6 ct_mb_35">
-                    <label class="form-label "> Warranty End Date </label>
-                    <input type="date" class="form-control ct_input" placeholder="dd/mm/yyyy" />
+
+            <div class="ct_wrapper_white_box ">
+                <h2 class="ct_fs_18 ct_fw_600">Asset Information</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6 ">
+                        <label class="form-label">Asset Category <span class="ct_required">*</span></label>
+                        <select class="form-select ct_input_select" formControlName="asset_category_id">
+                            <option value="" disabled>Select Asset Category</option>
+                            <option *ngFor="let category of categoryList"
+                                [value]="category.id || category.asset_category_id">
+                                {{ category.display_name || category.name }}
+                            </option>
+                        </select>
+                        <div *ngIf="Form.controls['asset_category_id'].invalid && Form.controls['asset_category_id'].touched"
+                            class="err_msg">
+                            Please select asset category.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 ct_mb_35" *ngIf="inventoryMode === 'without_serial_number'">
+                        <label class="form-label">Quantity <span class="ct_required">*</span></label>
+                        <input type="number" class="form-control ct_input" placeholder="Enter quantity"
+                            formControlName="quantity" min="1" />
+                        <div *ngIf="Form.controls['quantity'].invalid && Form.controls['quantity'].touched"
+                            class="err_msg">
+                            <div *ngIf="Form.controls['quantity'].errors?.['required']">Quantity is required.</div>
+                            <div *ngIf="Form.controls['quantity'].errors?.['min']">Quantity must be greater than 0.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 d-flex justify-content-between align-items-center ct_mb_35"
+                        *ngIf="inventoryMode === 'with_serial_number'">
+                        <div>
+                            <p class="mb-0 ct_fw_600">Add multiple assets with unique serial numbers.</p>
+                        </div>
+                        <button type="button" class="ct_black_btn px-4" (click)="addAssetRow()">
+                            Add More Asset
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="ct_wrapper_white_box ct_mb_35">
-            <h2 class="ct_fs_18 ct_fw_600"> Pricing Details </h2>
-            <div class="row mt-4">
-                <div class="col-md-6  ct_mb_35">
-                    <label class="form-label "> Cost per Unit</label>
-                    <input type="number" class="form-control ct_input" placeholder="0" />
-                </div>
-                <div class="col-md-6  ct_mb_35">
-                    <label class="form-label "> Total Cost</label>
-                    <input type="number" class="form-control ct_input" placeholder="0" />
+
+            <div formArrayName="assets_details">
+                <div class="ct_wrapper_white_box ct_mb_35"
+                    *ngFor="let item of assetsDetails.controls; let i = index"
+                    [formGroup]="$any(item)">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <h2 class="ct_fs_18 ct_fw_600 mb-0">
+                            {{ inventoryMode === 'with_serial_number' ? ('Asset ' + (i + 1)) : 'Asset Details' }}
+                        </h2>
+                        <button type="button" class="ct_bule_transparent_btn px-4"
+                            *ngIf="inventoryMode === 'with_serial_number' && assetsDetails.length > 1"
+                            (click)="removeAssetRow(i)">
+                            Remove
+                        </button>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="form-label">Brand <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter brand"
+                                formControlName="brand" />
+                            <div *ngIf="isAssetDetailFieldInvalid(i, 'brand') && hasAssetDetailRequiredError(i, 'brand')"
+                                class="err_msg">
+                                Please enter brand.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="form-label">Model <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter model"
+                                formControlName="model" />
+                            <div *ngIf="isAssetDetailFieldInvalid(i, 'model') && hasAssetDetailRequiredError(i, 'model')"
+                                class="err_msg">
+                                Please enter model.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="form-label">Manufacturer <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter manufacturer"
+                                formControlName="manufacturer" />
+                            <div *ngIf="isAssetDetailFieldInvalid(i, 'manufacturer') && hasAssetDetailRequiredError(i, 'manufacturer')"
+                                class="err_msg">
+                                Please enter manufacturer.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35" *ngIf="inventoryMode === 'with_serial_number'">
+                            <label class="form-label">Serial Number <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter serial number"
+                                formControlName="serial_number" />
+                            <div *ngIf="isAssetDetailFieldInvalid(i, 'serial_number') && hasAssetDetailRequiredError(i, 'serial_number')"
+                                class="err_msg">
+                                Please enter serial number.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="form-label">Size <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" placeholder="Enter size"
+                                formControlName="size" />
+                            <div *ngIf="isAssetDetailFieldInvalid(i, 'size') && hasAssetDetailRequiredError(i, 'size')"
+                                class="err_msg">
+                                Please enter size.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="form-label">Status <span class="ct_required">*</span></label>
+                            <select class="form-select ct_input_select" formControlName="status">
+                                <option *ngFor="let status of statusOptions" [value]="status.value">
+                                    {{ status.label }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 ct_mb_35">
+                            <label class="d-flex align-items-center gap-2 mt-2">
+                                <input type="checkbox" formControlName="is_available" />
+                                <span>Available</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="d-flex gap-3 mt-5 pt-3">
-            <button class="ct_black_btn px-4">Add Asset</button>
-            <button class="ct_bule_transparent_btn px-4">
-                Cancel
-            </button>
-        </div>
+
+            <div class="d-flex gap-3 mt-5 pt-3">
+                <button type="submit" class="ct_black_btn px-4" >
+                    Add Asset
+                </button>
+                <button type="button" routerLink="/home/assets" class="ct_bule_transparent_btn px-4">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
 </div>

@@ -219,7 +219,7 @@ export class AddClientComponent implements OnDestroy {
         company_name: new FormControl(''),
         company_address: new FormControl(''),
         gst_no: new FormControl(''),
-        rent_amount: new FormControl(''),
+        rent_amount: new FormControl('', [Validators.required, Validators.min(1)]),
         payment_type: new FormControl(''),
         mobile_no: new FormControl('', [Validators.required, Validators.pattern(this.PHONE_PATTERN)]),
         email: new FormControl('', [Validators.required, Validators.email]),
@@ -239,8 +239,8 @@ export class AddClientComponent implements OnDestroy {
         gateway_ids: new FormControl([]),
 
         // ── Agreement Details ───────────────────────────────────────────────
-        billing_day: new FormControl(''),
-        agreement_start_date: new FormControl(''),
+        billing_day: new FormControl('', Validators.required),
+        agreement_start_date: new FormControl('', Validators.required),
         agreement_end_date: new FormControl({ value: '', disabled: true }),
         // security_cheque_number: new FormControl(''),
       },
@@ -402,6 +402,20 @@ export class AddClientComponent implements OnDestroy {
 
   getSafePdfUrl(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  getRentAmountError(): string {
+    const control = this.Form.get('rent_amount');
+
+    if (control?.errors?.['required']) {
+      return 'Rent amount is required.';
+    }
+
+    if (control?.errors?.['min']) {
+      return 'Rent amount must be greater than 0.';
+    }
+
+    return '';
   }
 
   onSubmit() {

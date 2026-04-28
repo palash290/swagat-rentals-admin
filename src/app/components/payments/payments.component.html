@@ -183,7 +183,11 @@
                                 </select>
                             </td>
                             <td>
+                                @if(item.invoice_pdf){
                                 <a href="{{item.invoice_pdf}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
+                                } @else {
+                                <i class="fa-regular fa-eye"></i>
+                                }
                             </td>
                             <!-- <td class="">
                                 <span class=" ct_dark_grey_text d-flex align-items-center  gap-2 ">

@@ -15,6 +15,7 @@ export class SidebarComponent {
   showClientSubMenu = false;
   showAssetsSubMenu = false;
   showPaymentsSubMenu = false;
+  showNetworkSubMenu = false;
 
   constructor(private router: Router) { }
 
@@ -43,6 +44,10 @@ export class SidebarComponent {
 
   togglePaymentsSubMenu() {
     this.showPaymentsSubMenu = !this.showPaymentsSubMenu;
+  }
+
+    toggleNetworkSubMenu() {
+    this.showNetworkSubMenu = !this.showNetworkSubMenu;
   }
 
 

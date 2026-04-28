@@ -76,13 +76,24 @@
                             <td>{{item.u_unique_id}}</td>
                             <td>{{item.full_name}}</td>
                             <td>{{item.total_amount}}</td>
-                            <td class="">
+                            <td>
                                 @if(item.status == 'paid'){
                                 <span class="ct_green_text">Paid</span>
+
                                 } @else if(item.status == 'pending') {
-                                <span class="ct_orange_text">Pending</span>
+                                <span class="ct_yellow_text">Pending</span>
+
+                                } @else if(item.status == 'processing') {
+                                <span class="ct_blue_text">Processing</span>
+
                                 } @else if(item.status == 'overdue') {
-                                <span class="ct_red_text">Failed</span>
+                                <span class="ct_red_text">Overdue</span>
+
+                                } @else if(item.status == 'rejected') {
+                                <span class="ct_red_text">Rejected</span>
+
+                                } @else if(item.status == 'partial') {
+                                <span class="ct_orange_text">Partial</span>
                                 }
                             </td>
                             <td>
@@ -141,7 +152,7 @@
                     <select class="form-control ct_input" [(ngModel)]="form.agreement_id" name="agreement_id">
                         <option value="" disabled>Select Agreement</option>
                         <option *ngFor="let agreement of agreementList" [value]="agreement.agreement_id">
-                            {{ agreement.agreement_id }}
+                            {{ agreement.agreement_unique_id }}
                         </option>
                     </select>
                 </div>
