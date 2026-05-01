@@ -124,10 +124,10 @@
                                             <td>{{ item.u_unique_id }}</td>
                                             <td>{{ item.full_name }}</td>
                                             <!-- <td>{{ item.total_amount | currency:'INR' }}</td> -->
-                                             <td>{{ item.total_amount }}</td>
+                                            <td>{{ item.total_amount }}</td>
                                             <td>{{ item.due_date | date }}</td>
                                             <!-- <td class="">6 Days</td> -->
-                                                <td>
+                                            <td>
                                                 <select [(ngModel)]="item.payment_status" class="form-select w-auto"
                                                     (change)="onEmfStatusChange(item.property_id, item.payment_status)"
                                                     [disabled]="item.payment_status === 'rejected' || item.payment_status === 'approved'">
@@ -185,6 +185,9 @@
                                         </tr> -->
                                     </tbody>
                                 </table>
+                                <div *ngIf="paymentsList?.length == 0" class="text-center">
+                                    <p class="ct_fs_15 mt-5">No data found</p>
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="home" role="tabpanel">
