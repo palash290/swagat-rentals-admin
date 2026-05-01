@@ -1,1 +1,131 @@
-<p>add-inventory works!</p>
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/system-inventory" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Add Inventory
+            </h4>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="ct-card ct_mb_35">
+                <h6 class="ct_fs_18 ct_fw_600 mb-3">System Information</h6>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="mb-2">Device Type <span class="ct_required">*</span></label>
+                        <select class="form-control ct_input" formControlName="device_type">
+                            <option value="" disabled>Select device type</option>
+                            <option value="Desktop">Desktop</option>
+                            <option value="Laptop">Laptop</option>
+                        </select>
+                        <div class="err_msg" *ngIf="isFieldInvalid('device_type')">Device type is required.</div>
+                    </div>
+                </div>
+
+                <div formGroupName="system_info" class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="mb-2">OS <span class="ct_required">*</span></label>
+                        <input type="text" class="form-control ct_input" formControlName="os"
+                            placeholder="Enter operating system">
+                        <div class="err_msg" *ngIf="isFieldInvalid('system_info.os')">OS is required.</div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="mb-2">MAC Address <span class="ct_required">*</span></label>
+                        <input type="text" class="form-control ct_input" formControlName="mac_addres"
+                            placeholder="Enter MAC address">
+                        <div class="err_msg" *ngIf="isFieldInvalid('system_info.mac_addres')">MAC address is required.</div>
+                    </div>
+
+                    <div formGroupName="osInfo" class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="mb-2">Distro</label>
+                            <input type="text" class="form-control ct_input" formControlName="distro"
+                                placeholder="Enter distro">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="mb-2">Platform</label>
+                            <input type="text" class="form-control ct_input" formControlName="platform"
+                                placeholder="Enter platform">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="mb-2">Hostname</label>
+                            <input type="text" class="form-control ct_input" formControlName="hostname"
+                                placeholder="Enter hostname">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+                <h6 class="ct_fs_18 ct_fw_600 mb-0">Assets</h6>
+                <button type="button" class="ct_black_btn" (click)="addAsset()">Add Another Asset</button>
+            </div>
+
+            <div formArrayName="assets">
+                <div class="ct-card ct_mb_35" *ngFor="let assetGroup of assets.controls; let i = index" [formGroupName]="i">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                        <h6 class="ct_fs_16 ct_fw_600 mb-0">Asset {{ i + 1 }}</h6>
+                        <button type="button" class="btn btn-outline-danger btn-sm" *ngIf="assets.length > 1"
+                            (click)="removeAsset(i)">
+                            Remove
+                        </button>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Category <span class="ct_required">*</span></label>
+                            <select class="form-control ct_input" formControlName="category">
+                                <option value="" disabled>Select category</option>
+                                <option *ngFor="let category of categoryList" [value]="category.name">
+                                    {{ category.display_name || category.name }}
+                                </option>
+                            </select>
+                            <div class="err_msg" *ngIf="isAssetFieldInvalid(i, 'category')">Category is required.</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Brand <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" formControlName="brand"
+                                placeholder="Enter brand">
+                            <div class="err_msg" *ngIf="isAssetFieldInvalid(i, 'brand')">Brand is required.</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Model <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" formControlName="model"
+                                placeholder="Enter model">
+                            <div class="err_msg" *ngIf="isAssetFieldInvalid(i, 'model')">Model is required.</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Serial <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" formControlName="serial"
+                                placeholder="Enter serial number">
+                            <div class="err_msg" *ngIf="isAssetFieldInvalid(i, 'serial')">Serial is required.</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Manufacturer <span class="ct_required">*</span></label>
+                            <input type="text" class="form-control ct_input" formControlName="manufacturer"
+                                placeholder="Enter manufacturer">
+                            <div class="err_msg" *ngIf="isAssetFieldInvalid(i, 'manufacturer')">Manufacturer is required.</div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="mb-2">Size</label>
+                            <input type="text" class="form-control ct_input" formControlName="size"
+                                placeholder="Enter size">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="ct_black_btn" [disabled]="loading">
+                {{ loading ? 'Submitting...' : 'Submit Inventory' }}
+            </button>
+        </form>
+    </div>
+</div>

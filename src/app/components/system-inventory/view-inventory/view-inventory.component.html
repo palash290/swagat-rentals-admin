@@ -1,1 +1,296 @@
-<p>view-inventory works!</p>
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/system-inventory" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                Inventory Details
+            </h4>
+        </div>
+
+        <div class="ct-card ct_mb_35" *ngIf="systemData">
+            <div class="d-flex justify-content-between ct_flex_col_575 gap-4">
+                <div>
+                    <h6 class="ct_fs_22 ct_fw_600 mb-1">
+                        {{ systemData.device_type || 'System' }} ({{ systemData.system_uid || '-' }})
+                    </h6>
+                    <p class="ct_fs_14 mb-3 ct_dark_grey_text">
+                        {{ systemData.hostname || systemData.system_info?.osInfo?.hostname || '-' }}
+                    </p>
+                    <div class="d-flex gap-4 flex-wrap">
+                        <div>
+                            <p class="mb-0 ct_fs_14 ct_dark_grey_text">MAC Address</p>
+                            <p class="mb-0 ct_fw_500">{{ systemData.mac_address || systemData.system_info?.mac_addres ||
+                                '-' }}</p>
+                        </div>
+                        <div class="border-right"></div>
+                        <div>
+                            <p class="mb-0 ct_fs_14 ct_dark_grey_text">Status</p>
+                            <p class="mb-0 ct_fw_500">{{ formatLabel(systemData.status) }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-sm-end">
+                    <div class="mb-3">
+                        <span class="ct_custom_badge"
+                            [ngStyle]="systemData.is_active === 1 ? {'background-color': '#4EC40014', color: '#22C55E'} : {'background-color': '#EF444414', color: '#EF4444'}">
+                            {{ systemData.is_active === 1 ? 'Active' : 'Inactive' }}
+                        </span>
+                    </div>
+                    <!-- <p class="mb-0 ct_dark_grey_text ct_fs_14">UUID</p>
+                    <p class="mb-0 ct_fw_600">{{ systemData.system_uuid || '-' }}</p> -->
+                </div>
+            </div>
+        </div>
+
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">System Information</h6>
+        <div class="ct-card ct_mb_35" *ngIf="systemData">
+            <div class="row gy-4">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">System ID</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.system_uid || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">System UID</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.system_uid || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Device Type</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.device_type || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">OS</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.os || systemData.system_info?.os || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Distro</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.system_info?.osInfo?.distro || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Platform</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.system_info?.osInfo?.platform || '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Hostname</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.hostname || systemData.system_info?.osInfo?.hostname ||
+                                '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">MAC Address</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.mac_address || systemData.system_info?.mac_addres || '-'
+                                }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Installation Date</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.installation_date | date:'dd MMM yyyy, hh:mm a' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Created At</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.created_at | date:'dd MMM yyyy, hh:mm a' }}</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p class="ct_dark_grey_text mb-0">Updated At</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="ct_fw_600">{{ systemData.updated_at ? (systemData.updated_at | date:'dd MMM yyyy,
+                                hh:mm a') : '-' }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h6 class="ct_fs_18 ct_fw_600 mb-3">Installed Assets</h6>
+        <div *ngIf="assetsList.length; else noAssets">
+            <div class="ct-card ct_mb_35" *ngFor="let asset of assetsList; let i = index">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                    <div>
+                        <h6 class="ct_fs_18 ct_fw_600 mb-1">
+                            {{ asset.asset_category_display_name || asset.asset_category_name || 'Asset' }} #{{ i + 1 }}
+                        </h6>
+                        <p class="mb-0 ct_dark_grey_text">{{ asset.brand || '-' }} {{ asset.model || '' }}</p>
+                    </div>
+                    <span class="ct_custom_badge"
+                        [ngStyle]="asset.is_available === 1 ? {'background-color': '#4EC40014', color: '#22C55E'} : {'background-color': '#F59E0B24', color: '#F59E0B'}">
+                        {{ asset.is_available === 1 ? 'Available' : 'In Use' }}
+                    </span>
+                </div>
+
+                <div class="row gy-4">
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Category</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.asset_category_display_name || asset.asset_category_name
+                                    || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Brand</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.brand || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Model</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.model || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Serial Number</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.serial_number || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Manufacturer</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.manufacturer || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Size</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.size || '-' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Status</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ formatLabel(asset.status) }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p class="ct_dark_grey_text mb-0">Installed At</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <h6 class="ct_fw_600">{{ asset.installed_at | date:'dd MMM yyyy, hh:mm a' }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- <div class="mt-4">
+                    <h6 class="ct_fs_16 ct_fw_600 mb-3">Specifications</h6>
+                    <div *ngIf="getSpecEntries(asset.spec_json).length; else noSpecs" class="row gy-4">
+                        <div class="col-md-6" *ngFor="let spec of getSpecEntries(asset.spec_json)">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="ct_dark_grey_text mb-0">{{ formatLabel(spec.key) }}</p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h6 class="ct_fw_600">{{ spec.value || '-' }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noSpecs>
+                        <p class="mb-0 ct_dark_grey_text">No specifications available.</p>
+                    </ng-template>
+                </div> -->
+            </div>
+        </div>
+
+        <ng-template #noAssets>
+            <div class="ct-card">
+                <p class="mb-0 ct_dark_grey_text">No installed assets found.</p>
+            </div>
+        </ng-template>
+    </div>
+</div>
