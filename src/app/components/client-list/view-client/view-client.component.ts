@@ -21,6 +21,7 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
   selectedDocTitle: string = '';
   selectedDocIsPdf: boolean = false;
   selectedDocIsVideo: boolean = false;
+  selectedDocIndex: number = -1;
   loading: boolean = false;
   rejectionReason: string = '';
   userRole: string | null = null;
@@ -58,11 +59,7 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
     if (!modalEl) return;
 
     this.onDocPreviewHidden = () => {
-      const video = modalEl.querySelector('video') as HTMLVideoElement | null;
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
-      }
+      this.pausePreviewVideo();
     };
 
     modalEl.addEventListener('hidden.bs.modal', this.onDocPreviewHidden);
@@ -107,10 +104,19 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
   trackByDocType = (_: number, item: { key: string }) => item.key;
 
   openDoc(docType: { key: string; label: string }, doc: any) {
-    this.selectedDocUrl = this.getDocUrl(doc);
-    this.selectedDocTitle = docType?.label ?? 'Document Preview';
-    this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
-    this.selectedDocIsVideo = this.isVideoUrl(this.selectedDocUrl);
+    const docs = this.allPreviewDocs;
+    const selectedIndex = docs.findIndex((item) => item.doc === doc);
+
+    if (selectedIndex === -1) {
+      this.selectedDocIndex = -1;
+      this.selectedDocUrl = this.getDocUrl(doc);
+      this.selectedDocTitle = docType?.label ?? 'Document Preview';
+      this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
+      this.selectedDocIsVideo = this.isVideoUrl(this.selectedDocUrl);
+      return;
+    }
+
+    this.setSelectedDocByIndex(selectedIndex);
   }
 
   getPrimaryDoc(typeKey: string): any | null {
@@ -124,6 +130,42 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
     const clean = url.split('?')[0].split('#')[0];
     const name = clean.substring(clean.lastIndexOf('/') + 1);
     return name || '';
+  }
+
+  get allPreviewDocs(): Array<{ doc: any; type: { key: string; label: string } }> {
+    return this.documentTypes.flatMap((docType) =>
+      (this.documentsByType[docType.key] ?? [])
+        .filter((doc) => this.getDocUrl(doc))
+        .map((doc) => ({ doc, type: docType }))
+    );
+  }
+
+  get canSlideDocs(): boolean {
+    return this.allPreviewDocs.length > 1;
+  }
+
+  get currentPreviewPosition(): number {
+    return this.selectedDocIndex >= 0 ? this.selectedDocIndex + 1 : 0;
+  }
+
+  showPrevDoc(): void {
+    if (!this.canSlideDocs) return;
+
+    const prevIndex = this.selectedDocIndex <= 0
+      ? this.allPreviewDocs.length - 1
+      : this.selectedDocIndex - 1;
+
+    this.setSelectedDocByIndex(prevIndex);
+  }
+
+  showNextDoc(): void {
+    if (!this.canSlideDocs) return;
+
+    const nextIndex = this.selectedDocIndex >= this.allPreviewDocs.length - 1
+      ? 0
+      : this.selectedDocIndex + 1;
+
+    this.setSelectedDocByIndex(nextIndex);
   }
 
   exportClientCsv() {
@@ -201,6 +243,38 @@ export class ViewClientComponent implements AfterViewInit, OnDestroy {
   openPdfInNewTab(url: string): void {
     if (!url) return;
     window.open(url, '_blank');
+  }
+
+  private setSelectedDocByIndex(index: number): void {
+    const docs = this.allPreviewDocs;
+    const selected = docs[index];
+
+    if (!selected) {
+      this.selectedDocIndex = -1;
+      this.selectedDocUrl = '';
+      this.selectedDocTitle = '';
+      this.selectedDocIsPdf = false;
+      this.selectedDocIsVideo = false;
+      return;
+    }
+
+    this.pausePreviewVideo();
+    this.selectedDocIndex = index;
+    this.selectedDocUrl = this.getDocUrl(selected.doc);
+    this.selectedDocTitle = selected.type?.label ?? 'Document Preview';
+    this.selectedDocIsPdf = this.isPdfUrl(this.selectedDocUrl);
+    this.selectedDocIsVideo = this.isVideoUrl(this.selectedDocUrl);
+  }
+
+  private pausePreviewVideo(): void {
+    const modalEl = this.docPreviewModal?.nativeElement as HTMLElement | undefined;
+    if (!modalEl) return;
+
+    const video = modalEl.querySelector('video') as HTMLVideoElement | null;
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
   }
 
   private buildKeyValueRows(source: any, prefix: string = ''): Array<[string, string]> {

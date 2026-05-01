@@ -128,7 +128,14 @@
                         <tr *ngFor="let item of paymentData; let i = index">
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>{{item.u_unique_id}}</td>
-                            <td>{{item.full_name}}</td>
+                            <td>
+                                <span>
+                                    {{ item.full_name }}
+                                    <i *ngIf="item.payment_status == 'pending'"
+                                        class="fa-solid fa-triangle-exclamation ct_yellow ms-1" title="Payment pending"
+                                        style="cursor: pointer;"></i>
+                                </span>
+                            </td>
                             <td>{{item.amount_paid}}</td>
                             <td>{{item.total_amount}}</td>
                             <td>
@@ -165,7 +172,8 @@
 
                             <td>
                                 <select [(ngModel)]="item.payment_status" class="form-select w-auto"
-                                    (change)="onEmfStatusChange(item.payment_id, item.payment_status)"
+                                    (focus)="onPaymentStatusFocus(item)"
+                                    (change)="onEmfStatusChange(item, item.payment_status)"
                                     [disabled]="item.payment_status === 'rejected' || item.payment_status === 'approved'">
 
                                     <option [ngValue]="null" disabled>Select</option>
@@ -218,6 +226,47 @@
                     (click)="changePage(page + 1)">
                     Next
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button #openStatusModalTrigger type="button" hidden data-bs-toggle="modal" data-bs-target="#paymentStatusModal"></button>
+
+<div class="modal fade" id="paymentStatusModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-4">
+            <div class="modal-header px-0 border-0">
+                <h5 class="modal-title ct_fs_18 ct_fw_600">Change Payment Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="cancelPaymentStatusChange()"></button>
+            </div>
+            <div class="modal-body p-0">
+                <p class="ct_dark_grey_text mb-3">
+                    Are you sure you want to change status to <span class="ct_fw_600 text-capitalize">{{ selectedPaymentStatus || '-' }}</span>?
+                </p>
+
+                <div class="mb-3">
+                    <label class="mb-2">Note</label>
+                    <textarea class="form-control ct_input" rows="3" placeholder="Enter note (optional)"
+                        [(ngModel)]="selectedPaymentNote"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="mb-2">Upload Image</label>
+                    <input type="file" class="form-control ct_input" accept="image/*" (change)="onPaymentImageSelected($event)">
+                    <!-- <p class="mb-0 mt-2 ct_fs_12 ct_dark_grey_text">Optional</p> -->
+                </div>
+
+                <div class="d-flex justify-content-end gap-3">
+                    <button #closeStatusModalTrigger type="button" class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal" (click)="cancelPaymentStatusChange()">
+                        Cancel
+                    </button>
+                    <button type="button" class="ct_black_btn" [disabled]="isUpdatingStatus"
+                        (click)="confirmPaymentStatusChange()">
+                        {{ isUpdatingStatus ? 'Updating...' : 'Confirm' }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>

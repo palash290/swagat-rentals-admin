@@ -90,10 +90,18 @@
                                     (change)="toggleRowSelection($event, item.id)" />
                             </td> -->
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
-                            <td>{{item.system_uid}}</td>
+                            <td>
+                                <span>
+                                    {{ item.system_uid }}
+                                    <i *ngIf="item.approval_status == 'pending'"
+                                        class="fa-solid fa-triangle-exclamation ct_yellow ms-1" title="Payment pending"
+                                        style="cursor: pointer;"></i>
+                                </span>
+                            </td>
                             <td><span class="ct_overlay_text d-inline-block">{{item.system_info.cpu_model}}</span></td>
                             <td>{{item.system_info.total_ram_gb}}</td>
-                            <td>{{item.system_info.ssd_and_hdd.ssd_size || '-'}}/{{item.system_info.ssd_and_hdd.hdd_size || '-'}}</td>
+                            <td>{{item.system_info.ssd_and_hdd.ssd_size || '-'}}/{{item.system_info.ssd_and_hdd.hdd_size
+                                || '-'}}</td>
                             <td>{{item.device_type}}</td>
                             <!-- <td>{{item.system_info.mac_address}}</td> -->
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>

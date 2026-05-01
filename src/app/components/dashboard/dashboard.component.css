@@ -1,0 +1,14 @@
+.ct_yellow {
+    color: rgb(201 160 41);
+}
+
+.ct_dashboard_chart {
+    min-height: 360px;
+}
+
+.ct_graph_placeholder {
+    min-height: 360px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+    background: #f8fafc;
+}

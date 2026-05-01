@@ -99,11 +99,17 @@
                             Recent Service Requests
                         </button>
                     </li>
+                    <li>
+                        <button #graphTabButton class="nav-link" id="graph-tab" data-bs-toggle="tab"
+                            data-bs-target="#graph" type="button">
+                            Analytics Graph
+                        </button>
+                    </li>
                 </ul>
                 <!-- Tab Content -->
                 <div class="ct_wrapper_white_box px-4">
                     <div class="tab-content p-4 border-0" id="myTabContent">
-                        <div class="tab-pane fade show active" id="profile" role="tabpanel">
+                        <div class="tab-pane fade show active" role="tabpanel" id="profile">
                             <div class="table-responsive ct_custom_table">
                                 <table class="table">
                                     <thead>
@@ -122,14 +128,22 @@
                                         <tr *ngFor="let item of paymentsList; let i = index">
                                             <td>{{ i + 1 }}</td>
                                             <td>{{ item.u_unique_id }}</td>
-                                            <td>{{ item.full_name }}</td>
+                                            <td>
+                                                <span>
+                                                    {{ item.full_name }}
+                                                    <i *ngIf="item.payment_status == 'pending'"
+                                                        class="fa-solid fa-triangle-exclamation ct_yellow ms-1"
+                                                        title="Payment pending" style="cursor: pointer;"></i>
+                                                </span>
+                                            </td>
                                             <!-- <td>{{ item.total_amount | currency:'INR' }}</td> -->
                                             <td>{{ item.total_amount }}</td>
                                             <td>{{ item.due_date | date }}</td>
                                             <!-- <td class="">6 Days</td> -->
                                             <td>
                                                 <select [(ngModel)]="item.payment_status" class="form-select w-auto"
-                                                    (change)="onEmfStatusChange(item.property_id, item.payment_status)"
+                                                    (focus)="onPaymentStatusFocus(item)"
+                                                    (change)="onEmfStatusChange(item, item.payment_status)"
                                                     [disabled]="item.payment_status === 'rejected' || item.payment_status === 'approved'">
 
                                                     <option [ngValue]="null" disabled>Select</option>
@@ -250,187 +264,280 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="tab-pane fade" id="graph" role="tabpanel">
+                            <div class="d-grid gap-4">
+                                <div class="ct_white_bg p-4 ct_border_radius_5">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                                        <div>
+                                            <h5 class="ct_fs_18 ct_fw_600 mb-1">Payment Analytics</h5>
+                                            <p class="ct_fs_14 ct_dark_grey_text mb-0">
+                                                {{ paymentAnalyticsData?.range?.from | date:'dd MMM yyyy' }} -
+                                                {{ paymentAnalyticsData?.range?.to | date:'dd MMM yyyy' }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="paymentAnalyticsData?.labels?.length; else noPaymentAnalyticsData">
+                                        <div #paymentAnalyticsChartRef class="ct_dashboard_chart"></div>
+                                    </div>
+
+                                    <ng-template #noPaymentAnalyticsData>
+                                        <div
+                                            class="ct_graph_placeholder d-flex flex-column align-items-center justify-content-center">
+                                            <p class="ct_fs_15 ct_dark_grey_text mb-0">No payment analytics data available.</p>
+                                        </div>
+                                    </ng-template>
+                                </div>
+
+                                <div class="ct_white_bg p-4 ct_border_radius_5">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                                        <div>
+                                            <h5 class="ct_fs_18 ct_fw_600 mb-1">Service Request Analytics</h5>
+                                            <p class="ct_fs_14 ct_dark_grey_text mb-0">
+                                                {{ serviceRequestAnalyticsData?.range?.from | date:'dd MMM yyyy' }} -
+                                                {{ serviceRequestAnalyticsData?.range?.to | date:'dd MMM yyyy' }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="serviceRequestAnalyticsData?.labels?.length; else noServiceAnalyticsData">
+                                        <div #serviceRequestAnalyticsChartRef class="ct_dashboard_chart"></div>
+                                    </div>
+
+                                    <ng-template #noServiceAnalyticsData>
+                                        <div
+                                            class="ct_graph_placeholder d-flex flex-column align-items-center justify-content-center">
+                                            <p class="ct_fs_15 ct_dark_grey_text mb-0">No service request analytics data available.</p>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Action Popup -->
-<div class="modal fade ct-assign-modal" id="assignModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header border-0">
-                <h5 class="ct-title ct_fs_22 ct_fw_600">
-                    Assign Service Request
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAssignModal></button>
-            </div>
-            <div class="modal-body">
-                <!-- Info Row -->
-                <div class="ct-info-box mb-4">
-                    <div class="row text-center text-md-start">
-                        <div class="col-md-3">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.system_uid || '--'}}
+    <!-- Action Popup -->
+    <div class="modal fade ct-assign-modal" id="assignModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header border-0">
+                    <h5 class="ct-title ct_fs_22 ct_fw_600">
+                        Assign Service Request
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" #closeAssignModal></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Info Row -->
+                    <div class="ct-info-box mb-4">
+                        <div class="row text-center text-md-start">
+                            <div class="col-md-3">
+                                <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.system_uid || '--'}}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System Name:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.system_model || '--'}}
+                            <div class="col-md-3">
+                                <div class="ct-label ct_fs_14 ct_fw_600">System Name:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.system_model || '--'}}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name || '--'}}</div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.request_title || '--'}}
+                            <div class="col-md-3">
+                                <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
+                                <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name || '--'}}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.request_title || '--'}}
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- Description -->
+                    <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
+                    <div class="ct-description mb-4 ct_fs_13">
+                        {{singleRequest?.request_description || '--'}}
+                    </div>
+                    <!-- Assign To -->
+                    <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
+                    <!-- Search -->
+                    <div class="search-box w-100">
+                        <div class="input-group position-relative">
+                            <select class="form-select" [(ngModel)]="employeeId" required>
+                                <option [ngValue]="null" selected disabled>Select Employee</option>
+                                <option *ngFor="let client of employeeList" [value]="client.id">
+                                    {{ client.full_name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !employeeId">
+                            Please select employee.
+                        </div>
+                    </div>
+                    <div class="my-3">
+                        <label class="form-label">Service Date</label>
+                        <input type="date" class="form-control ct_input" placeholder="27/04/2026"
+                            [(ngModel)]="assignedDate" [min]="minServiceDate" required />
+                        <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !assignedDate">
+                            Please select service date.
+                        </div>
+                    </div>
+                    <!-- Checkbox -->
+                    <div class="form-check my-4">
+                        <input class="form-check-input" type="checkbox" id="urgentCheckDash" [(ngModel)]="isUrgent" />
+                        <label class="form-check-label ct_fw_500" for="urgentCheckDash">
+                            Mark this request as Urgent.
+                        </label>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="d-flex gap-3">
+                        <button class="ct_black_btn" (click)="assignServiceRequest()"
+                            [disabled]="!employeeId || !assignedDate || isAssigning">
+                            Assign Service
+                        </button>
+                        <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
                 </div>
-                <!-- Description -->
-                <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
-                <div class="ct-description mb-4 ct_fs_13">
-                    {{singleRequest?.request_description || '--'}}
+            </div>
+        </div>
+    </div>
+
+    <button #openPaymentStatusModalTrigger type="button" hidden data-bs-toggle="modal"
+        data-bs-target="#dashboardPaymentStatusModal"></button>
+
+    <div class="modal fade" id="dashboardPaymentStatusModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <div class="modal-header px-0 border-0">
+                    <h5 class="modal-title ct_fs_18 ct_fw_600">Change Payment Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        (click)="cancelPaymentStatusChange()"></button>
                 </div>
-                <!-- Assign To -->
-                <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
-                <!-- Search -->
-                <div class="search-box w-100">
+                <div class="modal-body p-0">
+                    <p class="ct_dark_grey_text mb-3">
+                        Are you sure you want to change status to <span
+                            class="ct_fw_600 text-capitalize">{{ selectedPaymentStatus || '-' }}</span>?
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="mb-2">Note</label>
+                        <textarea class="form-control ct_input" rows="3" placeholder="Enter note (optional)"
+                            [(ngModel)]="selectedPaymentNote"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="mb-2">Upload Image</label>
+                        <input type="file" class="form-control ct_input" accept="image/*"
+                            (change)="onPaymentImageSelected($event)">
+                        <p class="mb-0 mt-2 ct_fs_12 ct_dark_grey_text">Optional</p>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-3">
+                        <button #closePaymentStatusModalTrigger type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal" (click)="cancelPaymentStatusChange()">
+                            Cancel
+                        </button>
+                        <button type="button" class="ct_black_btn" [disabled]="isUpdatingPaymentStatus"
+                            (click)="confirmPaymentStatusChange()">
+                            {{ isUpdatingPaymentStatus ? 'Updating...' : 'Confirm' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Complete Popup -->
+    <div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px;">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header border-0">
+                    @if(singleRequest?.status == '4'){
+                    <h5 class="ct-title ct_fs_22 ct_fw_600 ct_green_text d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-circle-check"></i>
+                        Completed Service Request
+                    </h5>
+                    }
+                    @if(singleRequest?.status == '1'){
+                    <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-circle-check"></i>
+                        Service Request Assigned
+                    </h5>
+                    }
+                    @if(singleRequest?.status == '3'){
+                    <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Service Request Under Service
+                    </h5>
+                    }
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Info Row -->
+                    <div class="ct-info-box mb-4">
+                        <div class="ct_grid_col_4">
+                            <div class="ct_info_cnt">
+                                <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.system_uid}}
+                                </div>
+                            </div>
+                            <div class="ct_info_cnt">
+                                <div class="ct-label ct_fs_14 ct_fw_600">Brand/Model:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.system_model}}
+                                </div>
+                            </div>
+                            <div class="ct_info_cnt">
+                                <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
+                                <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name}}</div>
+                            </div>
+                            <div class="ct_info_cnt">
+                                <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
+                                <div class="ct-value ct_fs_14 ct_dark_grey_text">
+                                    {{singleRequest?.request_title}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
+                    <div class="ct-description mb-4 ct_fs_13">
+                        {{singleRequest?.request_description}}
+                    </div>
+                    <!-- Assign To -->
+                    <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
+                    <!-- Search -->
                     <div class="input-group position-relative">
-                        <select class="form-select" [(ngModel)]="employeeId" required>
-                            <option [ngValue]="null" selected disabled>Select Employee</option>
-                            <option *ngFor="let client of employeeList" [value]="client.id">
-                                {{ client.full_name }}
-                            </option>
-                        </select>
+                        <input type="text" class="form-control ct_input" placeholder="--"
+                            [value]="singleRequest?.employee_name" disabled />
                     </div>
-                    <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !employeeId">
-                        Please select employee.
+                    <!-- Checkbox -->
+                    <div class="form-check my-4">
+                        <input class="form-check-input" type="checkbox" id="urgentCheck"
+                            [checked]="singleRequest?.mark_as_urgent === 1" />
+                        <label class="form-check-label ct_fw_500" for="urgentCheck">
+                            Urgent.
+                        </label>
                     </div>
-                </div>
-                <div class="my-3">
-                    <label class="form-label">Service Date</label>
-                    <input type="date" class="form-control ct_input" placeholder="27/04/2026" [(ngModel)]="assignedDate"
-                        [min]="minServiceDate" required />
-                    <div class="ct_fs_12 text-danger mt-1" *ngIf="showAssignErrors && !assignedDate">
-                        Please select service date.
-                    </div>
-                </div>
-                <!-- Checkbox -->
-                <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheckDash" [(ngModel)]="isUrgent" />
-                    <label class="form-check-label ct_fw_500" for="urgentCheckDash">
-                        Mark this request as Urgent.
-                    </label>
-                </div>
-                <!-- Buttons -->
-                <div class="d-flex gap-3">
-                    <button class="ct_black_btn" (click)="assignServiceRequest()"
-                        [disabled]="!employeeId || !assignedDate || isAssigning">
-                        Assign Service
-                    </button>
-                    <button class="ct_bule_transparent_btn px-4" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Action Complete Popup -->
-<div class="modal fade ct-assign-modal" id="assignCompModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 800px;">
-        <div class="modal-content">
-            <!-- Header -->
-            <div class="modal-header border-0">
-                @if(singleRequest?.status == '4'){
-                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_green_text d-flex align-items-center gap-2">
-                    <i class="fa-regular fa-circle-check"></i>
-                    Completed Service Request
-                </h5>
-                }
-                @if(singleRequest?.status == '1'){
-                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
-                    <i class="fa-regular fa-circle-check"></i>
-                    Service Request Assigned
-                </h5>
-                }
-                @if(singleRequest?.status == '3'){
-                <h5 class="ct-title ct_fs_22 ct_fw_600 ct_orange_text d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    Service Request Under Service
-                </h5>
-                }
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <!-- Info Row -->
-                <div class="ct-info-box mb-4">
-                    <div class="ct_grid_col_4">
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">System ID:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.system_uid}}
-                            </div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Brand/Model:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.system_model}}
-                            </div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Client Name:</div>
-                            <div class="ct-value ct_dark_grey_text">{{singleRequest?.client_name}}</div>
-                        </div>
-                        <div class="ct_info_cnt">
-                            <div class="ct-label ct_fs_14 ct_fw_600">Issue Type:</div>
-                            <div class="ct-value ct_fs_14 ct_dark_grey_text">
-                                {{singleRequest?.request_title}}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Description -->
-                <h6 class="ct_fs_18 ct_fw_600 mb-2">Description</h6>
-                <div class="ct-description mb-4 ct_fs_13">
-                    {{singleRequest?.request_description}}
-                </div>
-                <!-- Assign To -->
-                <h6 class="ct_fs_16 ct_fw_400 mb-2">Assign To</h6>
-                <!-- Search -->
-                <div class="input-group position-relative">
-                    <input type="text" class="form-control ct_input" placeholder="--"
-                        [value]="singleRequest?.employee_name" disabled />
-                </div>
-                <!-- Checkbox -->
-                <div class="form-check my-4">
-                    <input class="form-check-input" type="checkbox" id="urgentCheck"
-                        [checked]="singleRequest?.mark_as_urgent === 1" />
-                    <label class="form-check-label ct_fw_500" for="urgentCheck">
-                        Urgent.
-                    </label>
-                </div>
-            </div>
+    <div class="loader-overlay" *ngIf="loading">
+        <div class="loader">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
         </div>
     </div>
-</div>
-
-<div class="loader-overlay" *ngIf="loading">
-    <div class="loader">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-    </div>
-</div>
