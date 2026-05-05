@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import ApexCharts from 'apexcharts';
+import { catchError, forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,6 +35,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   isUpdatingPaymentStatus: boolean = false;
   paymentAnalyticsChart: ApexCharts | null = null;
   serviceRequestAnalyticsChart: ApexCharts | null = null;
+  isPaymentAnalyticsLoading: boolean = true;
+  isServiceRequestAnalyticsLoading: boolean = true;
+  private analyticsRenderFrame: number | null = null;
 
   @ViewChild('closeAssignModal') closeAssignModal!: ElementRef;
   @ViewChild('openPaymentStatusModalTrigger') openPaymentStatusModalTrigger!: ElementRef;
@@ -70,6 +74,10 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     if (graphTabEl) {
       graphTabEl.removeEventListener('shown.bs.tab', this.handleGraphTabShown);
     }
+    if (this.analyticsRenderFrame !== null) {
+      cancelAnimationFrame(this.analyticsRenderFrame);
+      this.analyticsRenderFrame = null;
+    }
     this.paymentAnalyticsChart?.destroy();
     this.serviceRequestAnalyticsChart?.destroy();
   }
@@ -78,14 +86,14 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   serviceRequestAnalyticsData: any;
 
   private handleGraphTabShown = () => {
-    this.renderAnalyticsCharts();
+    this.scheduleAnalyticsChartsRender();
   };
 
   getProfile() {
     this.apiService.get('admin/dashboard').subscribe({
       next: (resp: any) => {
         this.dashboardData = resp.data;
-        this.renderAnalyticsCharts();
+        this.scheduleAnalyticsChartsRender();
       },
       error: (error) => {
         console.log(error.message);
@@ -94,26 +102,29 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   }
 
   getGraph() {
-    this.apiService.get('admin/payments/analytics').subscribe({
-      next: (resp: any) => {
-        this.paymentAnalyticsData = resp.data;
-        this.renderAnalyticsCharts();
-        this.getGraph2();
-      },
-      error: (error) => {
-        console.log(error.message);
-      }
-    });
-  }
+    this.isPaymentAnalyticsLoading = true;
+    this.isServiceRequestAnalyticsLoading = true;
 
-  getGraph2() {
-    this.apiService.get('admin/service-requests/analytics').subscribe({
+    forkJoin({
+      payments: this.apiService.get('admin/payments/analytics').pipe(
+        catchError((error) => {
+          console.log(error.message);
+          return of(null);
+        })
+      ),
+      services: this.apiService.get('admin/service-requests/analytics').pipe(
+        catchError((error) => {
+          console.log(error.message);
+          return of(null);
+        })
+      )
+    }).subscribe({
       next: (resp: any) => {
-        this.serviceRequestAnalyticsData = resp.data;
-        this.renderAnalyticsCharts();
-      },
-      error: (error) => {
-        console.log(error.message);
+        this.paymentAnalyticsData = resp.payments?.data ?? null;
+        this.serviceRequestAnalyticsData = resp.services?.data ?? null;
+        this.isPaymentAnalyticsLoading = false;
+        this.isServiceRequestAnalyticsLoading = false;
+        this.scheduleAnalyticsChartsRender();
       }
     });
   }
@@ -241,10 +252,27 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     this.renderServiceRequestAnalyticsChart();
   }
 
+  private scheduleAnalyticsChartsRender(): void {
+    if (this.analyticsRenderFrame !== null) {
+      cancelAnimationFrame(this.analyticsRenderFrame);
+    }
+
+    this.analyticsRenderFrame = requestAnimationFrame(() => {
+      this.analyticsRenderFrame = null;
+      this.renderAnalyticsCharts();
+    });
+  }
+
   private renderPaymentAnalyticsChart(): void {
     const chartElement = this.paymentAnalyticsChartRef?.nativeElement as HTMLElement | undefined;
 
-    if (!chartElement || !this.paymentAnalyticsData?.labels?.length) {
+    if (!chartElement) {
+      return;
+    }
+
+    if (!this.paymentAnalyticsData?.labels?.length) {
+      this.paymentAnalyticsChart?.destroy();
+      this.paymentAnalyticsChart = null;
       return;
     }
 
@@ -254,7 +282,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         height: 360,
         toolbar: { show: false },
         zoom: { enabled: false },
-        fontFamily: 'inherit'
+        fontFamily: 'inherit',
+        animations: { enabled: false }
       },
       series: [
         {
@@ -323,7 +352,13 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   private renderServiceRequestAnalyticsChart(): void {
     const chartElement = this.serviceRequestAnalyticsChartRef?.nativeElement as HTMLElement | undefined;
 
-    if (!chartElement || !this.serviceRequestAnalyticsData?.labels?.length) {
+    if (!chartElement) {
+      return;
+    }
+
+    if (!this.serviceRequestAnalyticsData?.labels?.length) {
+      this.serviceRequestAnalyticsChart?.destroy();
+      this.serviceRequestAnalyticsChart = null;
       return;
     }
 
@@ -333,7 +368,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         height: 360,
         toolbar: { show: false },
         zoom: { enabled: false },
-        fontFamily: 'inherit'
+        fontFamily: 'inherit',
+        animations: { enabled: false }
       },
       series: [
         {

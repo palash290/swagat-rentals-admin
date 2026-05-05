@@ -110,7 +110,7 @@
                         (change)="onFileChange($event, 'aadhar_card')" />
                     <div *ngIf="fileErrors['aadhar_card']" class="err_msg">{{ fileErrors['aadhar_card'] }}</div>
                     <div *ngIf="selectedFilePreviews['aadhar_card']?.length" class="mt-2">
-                        <div class="small text-muted">Selected files ({{ uploadedFiles['aadhar_card']?.length || 0
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['aadhar_card'].length || 0
                             }}/10):</div>
                         <div class="d-flex flex-wrap gap-4 mt-2">
                             <div *ngFor="let preview of selectedFilePreviews['aadhar_card']; let i = index"
@@ -150,7 +150,7 @@
                     <div *ngIf="fileErrors['police_verifications']" class="err_msg">{{
                         fileErrors['police_verifications'] }}</div>
                     <div *ngIf="selectedFilePreviews['police_verifications']?.length" class="mt-2">
-                        <div class="small text-muted">Selected files ({{ uploadedFiles['police_verifications']?.length
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['police_verifications'].length
                             || 0
                             }}/10):</div>
                         <div class="d-flex flex-wrap gap-4 mt-2">
@@ -239,7 +239,7 @@
                     <div *ngIf="fileErrors['other_documents']" class="err_msg">{{ fileErrors['other_documents'] }}
                     </div>
                     <div *ngIf="selectedFilePreviews['other_documents']?.length" class="mt-2">
-                        <div class="small text-muted">Selected files ({{ uploadedFiles['other_documents']?.length ||
+                        <div class="small text-muted">Selected files ({{ uploadedFiles['other_documents'].length ||
                             0 }}/10):</div>
                         <div class="d-flex flex-wrap gap-4 mt-2">
                             <div *ngFor="let preview of selectedFilePreviews['other_documents']; let i = index"

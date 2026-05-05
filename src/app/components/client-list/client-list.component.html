@@ -73,13 +73,31 @@
                                     </td>
                                     <td>{{ item.email }}</td>
                                     <td>{{ item.show_password || '-' }}</td>
-                                    <td>
+                                    <!-- <td>
                                         <span *ngIf="item.kyc_status === 'approved'"
                                             class="ct_accepted_badge">Approved</span>
                                         <span *ngIf="item.kyc_status === 'pending'"
                                             class="ct_pending_badge">Pending</span>
                                         <span *ngIf="item.kyc_status === 'rejected'"
                                             class="ct_rejected_badge">Rejected</span>
+                                    </td> -->
+                                    <td>
+                                        <select [(ngModel)]="item.kyc_status" class="form-select w-auto"
+                                            (change)="onEmfStatusChange(item.id, item.kyc_status)"
+                                            [disabled]="item.kyc_status === 'rejected' || item.kyc_status === 'approved'">
+                                            <option [ngValue]="null" disabled>Select</option>
+                                            <option *ngIf="item.kyc_status == 'approved'" value="approved">Approved
+                                            </option>
+
+                                            <option *ngIf="item.kyc_status == 'rejected'" value="rejected">Rejected
+                                            </option>
+                                            <ng-container
+                                                *ngIf="item.kyc_status !== 'approved' && item.kyc_status !== 'rejected'">
+                                                <option value="approved">Approve</option>
+                                                <option value="rejected">Reject</option>
+                                                <option value="pending">Pending</option>
+                                            </ng-container>
+                                        </select>
                                     </td>
                                     <td>{{ item.device_count }}</td>
                                     <td>{{'-'}}</td>

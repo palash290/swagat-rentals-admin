@@ -165,5 +165,36 @@ export class ClientListComponent {
     });
   }
 
+  onEmfStatusChange(id: any, overrideStatus: any): void {
+    const statusToUse = overrideStatus;
+
+    if (!statusToUse) {
+      this.toastr.warning('Please select a valid status');
+      return;
+    }
+
+    const statusLabels: any = {
+      APPROVED: 'approved',
+      REJECTED: 'rejected',
+    };
+
+    const formURlData = new URLSearchParams();
+    formURlData.set('client_id', id);
+    formURlData.set('status', statusToUse);
+
+    this.apiService.post(`admin/client/kyc-approvals`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.toastr.success(resp.message || 'Status updated successfully!');
+        this.getClientList();
+      },
+      error: (err) => {
+        this.toastr.warning('Failed to update Status');
+        this.getClientList();
+      }
+    });
+
+
+  }
+
 
 }
