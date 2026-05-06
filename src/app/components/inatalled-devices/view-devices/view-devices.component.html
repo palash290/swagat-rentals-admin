@@ -33,7 +33,7 @@
 
         </div>
         <!-- Identity Verification -->
-        <div class="ct-card ct_mb-35">
+        <div class="ct-card ct_mb-35 mt-4">
             <div class="d-flex justify-content-between flex-wrap gap-4">
                 <div>
                     <!-- <h6 class="ct_fs_22 ct_fw_600 mb-1">System Name: {{deviceData?.device_name}}</h6> -->
@@ -104,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="ct-card ct_mb-35">
+        <div class="ct-card ct_mb-35 mt-3">
             <div class="d-flex justify-content-between flex-wrap gap-4">
                 <div>
                     <h6 class="ct_fs_18 ct_fw_600 mb-0 ct_dark_grey_text">
@@ -117,7 +117,7 @@
             </div>
         </div>
         <!-- ram & storage -->
-        <h6 class="ct_fs_18 ct_fw_600 mb-3">RAM & Storage</h6>
+        <h6 class="ct_fs_18 ct_fw_600 mt-3 mb-3">RAM & Storage</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
                 <div class="col-12" *ngIf="(parsedDevice?.ram_modules?.length || 0) > 1">
@@ -243,7 +243,7 @@
             </div>
         </div>
         <!-- Motherboard & MAC -->
-        <h6 class="ct_fs_18 ct_fw_600 mb-3">Motherboard & MAC</h6>
+        <h6 class="ct_fs_18 ct_fw_600 mb-3 mt-3">Motherboard & MAC</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
                 <div class="col-md-6">
@@ -283,7 +283,7 @@
                 </div>
             </div>
         </div>
-        <h6 class="ct_fs_18 ct_fw_600 mb-3">CPU Details</h6>
+        <h6 class="ct_fs_18 ct_fw_600 mb-3 mt-3">CPU Details</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
                 <div class="col-md-6">
@@ -361,7 +361,7 @@
         }
 
         <!--  Warranty Details -->
-        <h6 class="ct_fs_18 ct_fw_600 mb-3">Warranty Details</h6>
+        <h6 class="ct_fs_18 ct_fw_600 mb-3 mt-3">Warranty Details</h6>
         <div class="ct-card ct_mb-35">
             <div class="row gy-4">
                 <div class="col-md-6">
@@ -389,7 +389,7 @@
             </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-3 mt-3">
             <button type="button" class="ct_black_btn px-4" (click)="showOtherDetails = !showOtherDetails">
                 {{ showOtherDetails ? 'Hide Other Details' : 'Show Other Details' }}
             </button>
