@@ -1,7 +1,8 @@
-<div class="ct_inner_header_bg mt-4 ct_px_30">
-    <div class="d-flex justify-content-between align-items-center">
-        <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Client Requests</h4>
-
+<div class="container-fluid">
+    <div class=" mt-4 ct_px_30">
+        <div class="ct_inner_header_bg ct_px_30">
+            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Client Requests</h4>
+        </div>
     </div>
 </div>
 <div class="ct_px_30 mt-4 pb-5">
@@ -70,9 +71,8 @@
 
                                     <td>
                                         <div class="d-flex gap-2">
-                                            <button type="button" class="btn btn-sm ct_black_btn"
-                                                data-bs-toggle="modal" data-bs-target="#approveKycModal"
-                                                (click)="openApproveModal(item)">
+                                            <button type="button" class="btn btn-sm ct_black_btn" data-bs-toggle="modal"
+                                                data-bs-target="#approveKycModal" (click)="openApproveModal(item)">
                                                 Approve
                                             </button>
                                             <button type="button" class="btn btn-sm ct_bule_transparent_btn"
@@ -122,8 +122,8 @@
                 <div class="d-flex justify-content-end gap-4 my-4">
                     <button #closeApproveModal type="button" data-bs-dismiss="modal"
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
-                    <button (click)="approveKyc()" type="button"
-                        class="ct_blue_text ct_fw_600 btn-transparent">Yes, Approve</button>
+                    <button (click)="approveKyc()" type="button" class="ct_blue_text ct_fw_600 btn-transparent">Yes,
+                        Approve</button>
                 </div>
             </div>
         </div>

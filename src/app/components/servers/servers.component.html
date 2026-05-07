@@ -1,17 +1,22 @@
-<div class="ct_inner_header_bg mt-4 ct_px_30">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Servers</h4>
-            <div>
-                <a data-bs-toggle="modal" data-bs-target="#addClientModal" (click)="openAddModal()"
-                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 ">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    Add Server
-                </a>
+<div class="container-fluid">
+    <div class=" mt-4 ct_px_30">
+        <div class="ct_inner_header_bg ct_px_30">
+            <div class="container-fluid">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">Servers</h4>
+                    <div>
+                        <a data-bs-toggle="modal" data-bs-target="#addClientModal" (click)="openAddModal()"
+                            class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 ">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                                    stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Add Server
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -170,23 +175,23 @@
                 </div>
                 <div class="mb-3">
                     <label class="mb-1">RAM</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter RAM"
-                        [(ngModel)]="form.ram" name="ram" />
+                    <input type="text" class="form-control ct_input" placeholder="Enter RAM" [(ngModel)]="form.ram"
+                        name="ram" />
                 </div>
                 <div class="mb-3">
                     <label class="mb-1">SSD</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter SSD"
-                        [(ngModel)]="form.ssd" name="ssd" />
+                    <input type="text" class="form-control ct_input" placeholder="Enter SSD" [(ngModel)]="form.ssd"
+                        name="ssd" />
                 </div>
                 <div class="mb-3">
                     <label class="mb-1">HDD</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter HDD"
-                        [(ngModel)]="form.hdd" name="hdd" />
+                    <input type="text" class="form-control ct_input" placeholder="Enter HDD" [(ngModel)]="form.hdd"
+                        name="hdd" />
                 </div>
                 <div class="mb-3">
                     <label class="mb-1">Brand</label>
-                    <input type="text" class="form-control ct_input" placeholder="Enter Brand"
-                        [(ngModel)]="form.brand" name="brand" />
+                    <input type="text" class="form-control ct_input" placeholder="Enter Brand" [(ngModel)]="form.brand"
+                        name="brand" />
                 </div>
                 <div class="mb-3">
                     <label class="mb-1">Total Quantity</label>

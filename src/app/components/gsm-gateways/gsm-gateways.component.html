@@ -1,21 +1,24 @@
-<div class="ct_inner_header_bg mt-4 ct_px_30">
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">GSM Gateway</h4>
-            <div>
-                <a data-bs-toggle="modal" data-bs-target="#addClientModal" (click)="openAddModal()"
-                    class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 ">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                            stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    Add Gateway
-                </a>
+<div class="container-fluid">
+    <div class=" mt-4 ct_px_30">
+        <div class="ct_inner_header_bg ct_px_30">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="ct_fs_24 ct_fw_600 mb-0 ct_black_text">GSM Gateway</h4>
+                <div>
+                    <a data-bs-toggle="modal" data-bs-target="#addClientModal" (click)="openAddModal()"
+                        class="ct_black_btn d-flex align-items-center gap-2 mt-md-0 ">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 8V16M8 12H16M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                                stroke="white" stroke-width="1.05" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Add Gateway
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="ct_px_30 mt-4 pb-5">
     <div class="container-fluid">
         <div class="row">
@@ -86,14 +89,12 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-3 gap-2">
-                        <button class="btn btn-sm btn-secondary" [disabled]="page == 1"
-                            (click)="changePage(page - 1)">
+                        <button class="btn btn-sm btn-secondary" [disabled]="page == 1" (click)="changePage(page - 1)">
                             Prev
                         </button>
                         {{pagination?.page}}
                         <button class="btn btn-sm btn-secondary"
-                            [disabled]="page >= pagination?.total / pagination?.limit"
-                            (click)="changePage(page + 1)">
+                            [disabled]="page >= pagination?.total / pagination?.limit" (click)="changePage(page + 1)">
                             Next
                         </button>
                     </div>
@@ -178,8 +179,7 @@
                     <input type="number" class="form-control ct_input" placeholder="Enter Total quantity"
                         [(ngModel)]="form.total_quantity" name="total_quantity" />
                 </div>
-                <button type="button" class="ct_black_btn w-100" (click)="submitGateway()"
-                    [disabled]="isSubmitting">
+                <button type="button" class="ct_black_btn w-100" (click)="submitGateway()" [disabled]="isSubmitting">
                     {{ isEditMode ? 'Update' : 'Add' }}
                 </button>
                 <button type="button" hidden class="btn btn-link w-100 mt-2" data-bs-dismiss="modal"
