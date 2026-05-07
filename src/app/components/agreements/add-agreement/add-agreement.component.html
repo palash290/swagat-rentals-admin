@@ -1,0 +1,180 @@
+<div class="ct_px_30 mt-4 pb-5">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap ct_mb_35">
+            <h4 class="ct_text_black ct_fs_24 ct_fw_600 mb-0">
+                <a routerLink="/home/agreements" class="ct_text_black">
+                    <i class="fa-solid fa-arrow-left me-2"></i>
+                </a>
+                {{ isEditMode ? 'Edit Agreement' : 'Add Agreement' }}
+            </h4>
+        </div>
+
+        <div class="ct_wrapper_white_box">
+            <div class="modal-body p-0">
+                <div class="mb-3">
+                    <label class="mb-1">Select Client <span class="ct_required">*</span></label>
+                    <select class="form-control ct_input" [(ngModel)]="form.client_id" name="client_id"
+                        (ngModelChange)="onClientChange($event)">
+                        <option value="" disabled>Select Client</option>
+                        <option *ngFor="let client of clientList" [value]="client.id">
+                            {{ client.full_name }}
+                        </option>
+                    </select>
+                    <div *ngIf="isSubmitted && isFieldInvalid('client_id')" class="err_msg">
+                        Please select client.
+                    </div>
+                </div>
+
+                <div class="mb-4" *ngIf="form.client_id">
+                    <div class="mb-3">
+                        <label class="mb-2">Systems</label>
+                        <div class="border rounded p-3" *ngIf="clientAssets.systems.length; else noSystems">
+                            <div class="mb-3" *ngFor="let system of clientAssets.systems">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                        [id]="'system-' + system.id"
+                                        [checked]="isSystemSelected(system.id)"
+                                        (change)="onSystemToggle(system, $event)" />
+                                    <label class="form-check-label" [for]="'system-' + system.id">
+                                        {{ system.system_uid }} - {{ system.device_type }}
+                                    </label>
+                                </div>
+                                <div *ngIf="getSelectedSystem(system.id) as selectedSystem">
+                                    <input type="number" class="form-control ct_input" placeholder="Enter price"
+                                        [(ngModel)]="selectedSystem.price"
+                                        [ngModelOptions]="{ standalone: true }" min="1" />
+                                    <div *ngIf="isSubmitted && isInvalidPositiveNumber(selectedSystem.price)" class="err_msg">
+                                        Price must be greater than 0.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noSystems>
+                            <div class="border rounded p-3 text-muted">No systems available for this client.</div>
+                        </ng-template>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="mb-2">GSM Gateways</label>
+                        <div class="border rounded p-3" *ngIf="clientAssets.gsm_gateways.length; else noGateways">
+                            <div class="mb-3" *ngFor="let gateway of clientAssets.gsm_gateways">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                        [id]="'gateway-' + gateway.gateway_id"
+                                        [checked]="isGatewaySelected(gateway.gateway_id)"
+                                        (change)="onGatewayToggle(gateway, $event)" />
+                                    <label class="form-check-label" [for]="'gateway-' + gateway.gateway_id">
+                                        {{ gateway.gateway_name }} (Allocated: {{ gateway.allocated_quantity }})
+                                    </label>
+                                </div>
+                                <div class="row" *ngIf="getSelectedGateway(gateway.gateway_id) as selectedGateway">
+                                    <div class="col-md-6 mb-2">
+                                        <input type="number" class="form-control ct_input" placeholder="Allocated quantity"
+                                            [(ngModel)]="selectedGateway.quantity"
+                                            [ngModelOptions]="{ standalone: true }" min="1" [disabled]="true" />
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <input type="number" class="form-control ct_input" placeholder="Enter price per unit"
+                                            [(ngModel)]="selectedGateway.price_per_unit"
+                                            [ngModelOptions]="{ standalone: true }" min="1" />
+                                        <div *ngIf="isSubmitted && isInvalidPositiveNumber(selectedGateway.price_per_unit)" class="err_msg">
+                                            Price per unit must be greater than 0.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noGateways>
+                            <div class="border rounded p-3 text-muted">No GSM gateways available for this client.</div>
+                        </ng-template>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="mb-2">Servers</label>
+                        <div class="border rounded p-3" *ngIf="clientAssets.servers.length; else noServers">
+                            <div class="mb-3" *ngFor="let server of clientAssets.servers">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                        [id]="'server-' + server.server_id"
+                                        [checked]="isServerSelected(server.server_id)"
+                                        (change)="onServerToggle(server, $event)" />
+                                    <label class="form-check-label" [for]="'server-' + server.server_id">
+                                        {{ server.server_name }} (Allocated: {{ server.allocated_quantity }})
+                                    </label>
+                                </div>
+                                <div class="row" *ngIf="getSelectedServer(server.server_id) as selectedServer">
+                                    <div class="col-md-6 mb-2">
+                                        <input type="number" class="form-control ct_input" placeholder="Allocated quantity"
+                                            [(ngModel)]="selectedServer.quantity"
+                                            [ngModelOptions]="{ standalone: true }" min="1" [disabled]="true" />
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <input type="number" class="form-control ct_input" placeholder="Enter price per unit"
+                                            [(ngModel)]="selectedServer.price_per_unit"
+                                            [ngModelOptions]="{ standalone: true }" min="1" />
+                                        <div *ngIf="isSubmitted && isInvalidPositiveNumber(selectedServer.price_per_unit)" class="err_msg">
+                                            Price per unit must be greater than 0.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noServers>
+                            <div class="border rounded p-3 text-muted">No servers available for this client.</div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Billing Day <span class="ct_required">*</span></label>
+                    <select class="form-control ct_input" [(ngModel)]="form.billing_cycle_day" name="billing_cycle_day">
+                        <option value="" disabled>Select Billing Day</option>
+                        <option *ngFor="let day of billingDays" [value]="day">
+                            {{ day }}
+                        </option>
+                    </select>
+                    <div *ngIf="isSubmitted && isFieldInvalid('billing_cycle_day')" class="err_msg">
+                        Please select billing day.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="mb-1">Start Date <span class="ct_required">*</span></label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.start_date" name="start_date"
+                        (ngModelChange)="onStartDateChange()" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('start_date')" class="err_msg">
+                        Please select start date.
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="mb-1">End Date <span class="ct_required">*</span></label>
+                    <input type="date" class="form-control ct_input" [(ngModel)]="form.end_date" name="end_date"
+                        [disabled]="true" />
+                    <div *ngIf="isSubmitted && isFieldInvalid('end_date')" class="err_msg">
+                        End date will be auto-calculated after selecting start date.
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button type="button" class="ct_black_btn px-4" (click)="submitAgreement()"
+                        [disabled]="isSubmitting">
+                        {{ isEditMode ? 'Update' : 'Add' }} Agreement
+                    </button>
+                    <button type="button" routerLink="/home/agreements" class="ct_bule_transparent_btn px-4">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="loading">
+    <div class="loader">
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    </div>
+</div>

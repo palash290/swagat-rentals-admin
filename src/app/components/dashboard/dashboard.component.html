@@ -9,7 +9,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            {{dashboardData?.total_clients}}
+                            {{dashboardData?.total_clients || 0}}
                         </h3>
                         <p class="mb-0">Total Clients</p>
                     </div>
@@ -27,7 +27,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            {{dashboardData?.total_devices}}
+                            {{dashboardData?.total_devices || 0}}
                         </h3>
                         <p class="mb-0">Total Systems</p>
                     </div>
@@ -45,7 +45,7 @@
                 <div class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            {{dashboardData?.service_requests}}
+                            {{dashboardData?.service_requests || 0}}
                         </h3>
                         <p class="mb-0">Service Requests</p>
                     </div>
@@ -63,7 +63,7 @@
                     class="ct_white_bg ct_py_25_px_21 ct_dash_card ct_border_radius_5">
                     <div>
                         <h3 class="ct_fw_600 ct_fs_30 mb-1 ct_text_clr_0f172a">
-                            {{dashboardData?.total_employees}}
+                            {{dashboardData?.total_employees || 0}}
                         </h3>
                         <p class="mb-0">Total Employees</p>
                     </div>

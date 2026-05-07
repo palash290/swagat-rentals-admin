@@ -8,61 +8,62 @@
                 Agreement Details
             </h4>
         </div>
+
         <!-- Identity Verification -->
         <div class="ct-card ct_mb_35">
             <div class="d-flex justify-content-between ct_flex_col_575 gap-4">
                 <div>
-                    <h6 class="ct_fs_18 ct_fw_600 mb-3">{{agreementData?.u_unique_id}}</h6>
-                    <p class="ct_fs_16 ct_fw_500 mb-3 ct_dark_grey_text">
+                    <h6 class="ct_fs_18 ct_fw_600 mb-1">{{agreementData?.agreement_unique_id}}</h6>
+                    <p class="ct_fs_14 ct_fw_400 mb-2 ct_dark_grey_text">User ID: {{agreementData?.u_unique_id}}</p>
+                    <p class="ct_fs_16 ct_fw_500 mb-0 ct_dark_grey_text">
                         {{agreementData?.full_name}}
                     </p>
+                    <p class="ct_fs_14 ct_fw_400 mb-0 ct_dark_grey_text">{{agreementData?.email}}</p>
                 </div>
                 <div class="text-sm-end">
                     <div class="mb-3">
-                        <span class="" style="background-color: #2563eb0d; color: #2563eb">Rental – 11 Months
+                        <span style="background-color: #2563eb0d; color: #2563eb">Rental – 11 Months</span>
+                        <p class="mt-2 mb-1">Date Created: {{agreementData?.created_at | date:'dd MMM yyyy'}}</p>
+                        <span [ngClass]="{
+                            'ct_green_text': agreementData?.status === 'active',
+                            'ct_red_text': agreementData?.status === 'expired' || agreementData?.status === 'terminated',
+                            'ct_blue_text': agreementData?.status === 'renewed'
+                        }" class="ct_fw_600">
+                            {{ agreementData?.status | titlecase }}
                         </span>
-                        <!-- <span class="ct_custom_badge" style="background-color: #F59E0B24; color: #F59E0B;">Low Stock</span> -->
-                        <p class="mt-3 mb-0">Date Created: {{agreementData?.created_at | date:'dd MMM yyyy'}}</p>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
+            <!-- Payment Information -->
             <div class="col-lg-6">
-                <!-- Configuration -->
                 <h6 class="ct_fs_18 ct_fw_600 mb-3">Payment Information</h6>
                 <div class="ct-card ct_mb_35">
-                    <div class="table-responsive mt-4 ct_custom_table">
+                    <div class="table-responsive ct_custom_table">
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Registration Fee</th>
-                                    <th>Status</th>
-                                    <th>Start Date</th>
+                                    <th>Rent Amount</th>
+                                    <th>Payment Type</th>
+                                    <th>Billing Cycle Day</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>₹{{agreementData?.rent_amount}}</td>
-
-                                    <td class="">
-                                        <span [ngClass]="{
-                                'ct_green_text': agreementData.status === 'active',
-                                'ct_red_text': agreementData.status === 'expired' || agreementData.status === 'terminated',
-                                'ct_blue_text': agreementData.status === 'renewed'
-                                }">
-                                            {{ agreementData.status | titlecase }}
-                                        </span>
-                                    </td>
-                                    <td>{{agreementData?.agreement_start_date | date:'dd MMM yyyy'}}</td>
+                                    <td>{{ agreementData?.payment_type | titlecase }}</td>
+                                    <td>Day {{agreementData?.billing_cycle_day}} of month</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <!-- Agreement Duration -->
             <div class="col-lg-6">
-                <!-- Configuration -->
                 <h6 class="ct_fs_18 ct_fw_600 mb-3">Agreement Duration</h6>
                 <div class="ct-card ct_mb_35">
                     <div class="row gy-4">
@@ -90,53 +91,105 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-3">
-                            <!-- <div class="row">
-                                <div class="col-sm-8">
-                                    <p class="mb-0 ct_fw_500">Days Remaining</p>
-                                </div>
-                                <div class="col-sm-4">
-                                    <h6 class="ct_dark_grey_text ct_fw_400">156 Days</h6>
-                                </div>
-                            </div> -->
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 1 -->
-        <!-- <div class="ct_px_30 mt-4 pb-5">
-            <div class="container-fluid">
-                <div class="d-flex align-items-center gap-2 justify-content-between flex-wrap mb-4">
-                    <h4 class="ct_text_black ct_fs_18ct_fw_600 mb-0">
-                        Renewal History
-                    </h4>
-                </div>
-                <div class="ct_wrapper_white_box">
-                    <div class="table-responsive mt-4 ct_custom_table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Renewal No</th>
-                                    <th>Renewal Date</th>
-                                    <th>New End Date</th>
-                                    <th>Renewal Fee</th>
-                                    <th>Payment Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>12 Aug 2026</td>
-                                    <td>12 Aug 2027</td>
-                                    <td>₹500</td>
-                                    <td><span class="ct_green_text">Paid</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+        <!-- Systems -->
+        <div *ngIf="agreementData?.systems?.length">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Systems</h6>
+            <div class="ct-card ct_mb_35">
+                <div class="table-responsive ct_custom_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>System UID</th>
+                                <th>Device Type</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let system of agreementData.systems">
+                                <td>{{system.system_uid}}</td>
+                                <td>{{system.device_type}}</td>
+                                <td>₹{{system.system_price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div> -->
+        </div>
+
+        <!-- GSM Gateways -->
+        <div *ngIf="agreementData?.gsm_gateways?.length">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">GSM Gateways</h6>
+            <div class="ct-card ct_mb_35">
+                <div class="table-responsive ct_custom_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Gateway Name</th>
+                                <th>Manufacturer</th>
+                                <th>Model No.</th>
+                                <th>Ports</th>
+                                <th>Qty</th>
+                                <th>Price/Unit</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let gateway of agreementData.gsm_gateways">
+                                <td>{{gateway.gateway_name}}</td>
+                                <td>{{gateway.manufacturer}}</td>
+                                <td>{{gateway.model_number}}</td>
+                                <td>{{gateway.number_of_port}}</td>
+                                <td>{{gateway.allocated_quantity}}</td>
+                                <td>₹{{gateway.price_per_unit}}</td>
+                                <td>₹{{gateway.total_price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Servers -->
+        <div *ngIf="agreementData?.servers?.length">
+            <h6 class="ct_fs_18 ct_fw_600 mb-3">Servers</h6>
+            <div class="ct-card ct_mb_35">
+                <div class="table-responsive ct_custom_table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Server Name</th>
+                                <th>Brand</th>
+                                <th>Processor</th>
+                                <th>RAM</th>
+                                <th>SSD</th>
+                                <th>HDD</th>
+                                <th>Qty</th>
+                                <th>Price/Unit</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let server of agreementData.servers">
+                                <td>{{server.server_name}}</td>
+                                <td>{{server.brand}}</td>
+                                <td>{{server.processor}}</td>
+                                <td>{{server.ram}}</td>
+                                <td>{{server.ssd}}</td>
+                                <td>{{server.hdd}}</td>
+                                <td>{{server.allocated_quantity}}</td>
+                                <td>₹{{server.price_per_unit}}</td>
+                                <td>₹{{server.total_price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

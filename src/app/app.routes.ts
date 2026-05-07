@@ -132,6 +132,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./components/agreements/agreements.component').then(m => m.AgreementsComponent)
                   },
                   {
+                        path: 'add-agreement',
+                        loadComponent: () => import('./components/agreements/add-agreement/add-agreement.component').then(m => m.AddAgreementComponent)
+                  },
+                  {
                         path: 'agreements-details',
                         loadComponent: () => import('./components/agreements/agreement-details/agreement-details.component').then(m => m.AgreementDetailsComponent)
                   },

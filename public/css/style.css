@@ -844,6 +844,7 @@ header {
       transition: 0.4s ease all;
       color: #fff;
       overflow: hidden;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
 }
 
 .ct_black_btn:before {
@@ -1020,7 +1021,12 @@ button.btn-close.ct_close {
       color: #fff;
       padding: 11px 34px;
       border-radius: 4px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
 
+}
+
+.reject_btn:hover {
+      color: #fff;
 }
 
 .accept_btn {
@@ -1028,7 +1034,12 @@ button.btn-close.ct_close {
       color: #fff;
       padding: 11px 34px;
       border-radius: 4px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px -50px 36px -28px inset;
 
+}
+
+.accept_btn:hover {
+      color: #fff;
 }
 
 .ct_wrapper_white_box {
