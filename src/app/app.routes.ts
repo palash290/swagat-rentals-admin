@@ -6,6 +6,19 @@ export const routes: Routes = [
             path: '',
             loadComponent: () => import('./components/landing-page/landing-page.component').then(m => m.LandingPageComponent)
       },
+           {
+            path: 'about',
+            loadComponent: () => import('./components/landing-page/about/about.component').then(m => m.AboutComponent)
+      },
+           {
+            path: 'service',
+            loadComponent: () => import('./components/landing-page/service/service.component').then(m => m.ServiceComponent)
+      },
+           {
+            path: 'contact',
+            loadComponent: () => import('./components/landing-page/contact/contact.component').then(m => m.ContactComponent)
+      },
+
       {
             path: 'login',
             loadComponent: () => import('./components/log-in/log-in.component').then(m => m.LogInComponent)

@@ -1,0 +1,167 @@
+ .ct_inquiry_section{
+      padding:90px 0;
+      background:linear-gradient(
+        90deg,
+        #f4f7fc 0%,
+        #eef3ff 100%
+        
+      );
+      padding-top: 170px;
+    }
+
+    .ct_inquiry_box{
+      background:#fff;
+      border:1px solid #dfe7f3;
+      border-radius:16px;
+      padding:45px;
+      height:100%;
+      position:relative;
+      overflow:hidden;
+      z-index: 1;
+    }
+.ct_inquiry_box_left::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url(../../../../../public/img/contact_left_shape.jpg);
+    pointer-events: none;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+    .ct_brand_logo{
+      width:110px;
+      margin-bottom:40px;
+    }
+
+    .ct_info_item{
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      margin-bottom:26px;
+    }
+
+    .ct_info_icon{
+      width:34px;
+      height:34px;
+      min-width:34px;
+      border-radius:50%;
+      background:#2f63e9;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      font-size:18px;
+    }
+
+    .ct_info_text{
+      font-size:16px;
+      line-height:1.7;
+      color:#4b5563;
+      margin-bottom:0;
+    }
+
+    .ct_social_media{
+      display:flex;
+      gap:28px;
+      margin-top:45px;
+    }
+
+    .ct_social_media a{
+      color:#2f63e9;
+      font-size:22px;
+      transition:0.3s ease;
+    }
+
+    .ct_social_media a:hover{
+      transform:translateY(-4px);
+    }
+
+    .ct_inquiry_title{
+      font-size:30px;
+      font-weight:600;
+      color:#1f2947;
+      margin-bottom:35px;
+    }
+
+    .ct_input_group{
+      margin-bottom:25px;
+    }
+
+    .ct_input_field{
+      width:100%;
+      border:none;
+      border-bottom:1px solid #d5ddeb;
+      padding:12px 0;
+      font-size:16px;
+      color:#111827;
+      background:transparent;
+      outline:none;
+      transition:0.3s ease;
+    }
+
+    .ct_input_field:focus{
+      border-color:#2f63e9;
+    }
+
+    .ct_input_field::placeholder{
+      color:#6b7280;
+    }
+
+    textarea.ct_input_field{
+      border:1px solid #d5ddeb;
+      border-radius:8px;
+      padding:16px;
+      resize:none;
+      min-height:140px;
+    }
+
+    .ct_form_submit_btn{
+      min-width:160px;
+      height:56px;
+      border:none;
+      border-radius:6px;
+      background:#2f63e9;
+      color:#fff;
+      font-size:18px;
+      font-weight:500;
+      transition:0.3s ease;
+    }
+
+    .ct_form_submit_btn:hover{
+      background:#1f4fd1;
+      transform:translateY(-2px);
+    }
+
+     @media(max-width:991px){
+
+      .ct_inquiry_box{
+        padding:35px;
+      }
+
+      .ct_inquiry_title{
+        font-size:34px;
+        margin-bottom:40px;
+      }
+    }
+
+    @media(max-width:767px){
+
+    
+
+      .ct_inquiry_box{
+        padding:25px;
+      }
+
+      .ct_inquiry_title{
+        font-size:28px;
+      }
+
+      .ct_info_text{
+        font-size:14px;
+      }
+    }
