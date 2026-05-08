@@ -219,8 +219,6 @@ export class AddClientComponent implements OnDestroy {
         company_name: new FormControl(''),
         company_address: new FormControl(''),
         gst_no: new FormControl(''),
-        rent_amount: new FormControl('', [Validators.required, Validators.min(1)]),
-        payment_type: new FormControl(''),
         mobile_no: new FormControl('', [Validators.required, Validators.pattern(this.PHONE_PATTERN)]),
         email: new FormControl('', [Validators.required, Validators.email]),
 
@@ -231,18 +229,22 @@ export class AddClientComponent implements OnDestroy {
         admin_contact_no: new FormControl('', [Validators.pattern(this.PHONE_PATTERN)]),
 
         // ── Infrastructure ──────────────────────────────────────────────────
-        // total_computers: new FormControl(0, [Validators.min(0)]),
-        // total_laptops: new FormControl(0, [Validators.min(0)]),
         total_servers: new FormControl(''),
         server_ids: new FormControl([]),
         total_gsm_gateway: new FormControl(''),
         gateway_ids: new FormControl([]),
 
         // ── Agreement Details ───────────────────────────────────────────────
-        billing_day: new FormControl('', Validators.required),
-        agreement_start_date: new FormControl('', Validators.required),
+        // billing_day: new FormControl('', Validators.required),
+        // agreement_start_date: new FormControl('', Validators.required),
+        // agreement_end_date: new FormControl({ value: '', disabled: true }),
+        // payment_type: new FormControl(''),
+        // rent_amount: new FormControl('', [Validators.required, Validators.min(1)]),
+        billing_day: new FormControl(''),
+        agreement_start_date: new FormControl(''),
         agreement_end_date: new FormControl({ value: '', disabled: true }),
-        // security_cheque_number: new FormControl(''),
+        payment_type: new FormControl(''),
+        rent_amount: new FormControl(''),
       },
       { validators: endDateAfterStart }
     );
@@ -506,7 +508,7 @@ export class AddClientComponent implements OnDestroy {
     formData.append('total_servers', totalServersAllocated ?? 0);
     const totalGatewaysAllocated: any = this.gatewayAllocations.reduce((sum, a) => sum + Number(a.allocated_quantity || 0), 0);
     formData.append('total_gsm_gateways', totalGatewaysAllocated ?? 0);
-    
+
     if (!this.shouldLockAgreementFields()) {
       formData.append('billing_day', v.billing_day ?? '');
       formData.append('agreement_start_date', v.agreement_start_date ?? '');
@@ -700,5 +702,6 @@ export class AddClientComponent implements OnDestroy {
     if (!this.selectedGatewayIds.length) return 'Select Gateway';
     return this.selectedGatewayIds.map(id => this.getGatewayName(id)).join(', ');
   }
+  
 
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CommonService } from '../../services/common.service';
@@ -90,6 +90,61 @@ export class AgreementsComponent {
       error: (err) => {
         this.toastr.warning('Failed to update Status');
         this.getAgreements();
+      }
+    });
+  }
+
+
+
+  systemId: any;
+  nextStatus!: any;
+  selectedUser: any;
+  @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
+  @ViewChild('closeModalAssign') closeModalAssign!: ElementRef;
+
+  get modalTitle(): string {
+    return this.nextStatus === 'terminated' ? 'Activate Agreement' : 'Terminate Agreement';
+  }
+
+  get modalMessage(): string {
+    return this.nextStatus === 'terminated'
+      ? 'Are you sure you want to Activate this Agreement?'
+      : 'Are you sure you want to Terminate this Agreement?';
+  }
+
+  get confirmBtnText(): string {
+    return this.nextStatus === 'terminated' ? 'Yes, Activate' : 'Yes, Terminate';
+  }
+
+  onToggleUser(item: any) {
+    this.selectedUser = item;
+    this.systemId = item.agreement_id;
+    this.nextStatus = item.status;
+  }
+
+  confirmToggle() {
+    this.loading = true;
+    const formURlData = new URLSearchParams();
+
+    if (this.nextStatus == 'terminated') {
+      formURlData.set('status', 'reinstate');
+    }
+    else {
+      formURlData.set('status', 'terminated');
+    }
+
+
+
+    this.apiService.put(`admin/agreements/${this.systemId}/status`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        this.selectedUser.is_disabled = this.nextStatus;
+        this.closeModalBlock.nativeElement.click();
+        this.loading = false;
+        this.toastr.success(resp.message);
+        this.getAgreements();
+      },
+      error: (err) => {
+        this.loading = false;
       }
     });
   }
