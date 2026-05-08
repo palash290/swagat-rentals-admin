@@ -1,49 +1,65 @@
-    @media(max-width: 1199px){
-.ct_hero_content h1 ,.ct_heading ,.ct_stat_number ,.ct_solution_title ,.ct_rental_service_heading ,.ct_approach_heading{
-  font-size: 38px !important;
-}
-      .ct_service_heading h2{
-        font-size: 38px;
+    @media(max-width: 1199px) {
+
+      .ct_hero_content h1,
+      .ct_heading,
+      .ct_stat_number,
+      .ct_solution_title,
+      .ct_rental_service_heading,
+      .ct_approach_heading {
+        font-size: 38px !important;
       }
-       .ct_section_title{
+
+      .ct_service_heading h2 {
         font-size: 38px;
       }
 
-      .ct_service_heading p{
+      .ct_section_title {
+        font-size: 38px;
+      }
+
+      .ct_service_heading p {
         font-size: 20px;
       }
 
-      .ct_service_card h4{
+      .ct_service_card h4 {
         font-size: 28px;
       }
 
-      .ct_service_card p{
+      .ct_service_card p {
         font-size: 18px;
       }
-        .ct_benefit_card h4{
+
+      .ct_benefit_card h4 {
         font-size: 28px;
       }
 
-      .ct_benefit_card p{
+      .ct_benefit_card p {
         font-size: 18px;
       }
     }
 
-@media screen and (max-width:991px){
-     .ct_hero_content {
+    @media screen and (max-width:991px) {
+      .ct_hero_content {
         text-align: center;
         margin-bottom: 20px;
       }
-  .ct_rental_service_heading{
-        margin-bottom:50px;
+
+      .ct_header nav ul {
+        gap: 30px;
       }
-      .ct_service_card{
+
+      .ct_rental_service_heading {
+        margin-bottom: 50px;
+      }
+
+      .ct_service_card {
         height: auto !important;
       }
 
-      .ct_rental_card_heading{
-        font-size:24px;
+      .ct_rental_card_heading {
+        font-size: 24px;
       }
+
       .ct_hero_content h1,
       .ct_hero_content p {
         margin-inline: auto;
@@ -62,250 +78,282 @@
         right: 0;
         bottom: -20px;
       }
-      .ct_hero_image img + img{
+
+      .ct_hero_image img+img {
         display: none;
       }
-       .ct_stat_card{
+
+      .ct_stat_card {
         padding: 35px 30px;
       }
 
-      .ct_stat_card h2{
+      .ct_stat_card h2 {
         font-size: 42px;
       }
 
-      .ct_stat_card p{
+      .ct_stat_card p {
         font-size: 18px;
       }
-       .ct_service_heading h2{
+
+      .ct_service_heading h2 {
         font-size: 42px;
       }
 
-      .ct_service_heading p{
+      .ct_service_heading p {
         margin-bottom: 40px;
       }
 
-      .ct_card_lg{
+      .ct_card_lg {
         min-height: auto;
       }
 
-      .ct_card_sm{
+      .ct_card_sm {
         min-height: auto;
       }
 
-      .ct_card_md{
+      .ct_card_md {
         min-height: auto;
       }
 
-      .ct_bottom_img{
+      .ct_bottom_img {
         position: relative;
         right: unset;
         bottom: unset;
         margin-top: 25px;
       }
 
-      .ct_flex_between{
+      .ct_flex_between {
         flex-direction: column;
         align-items: flex-start;
       }
-      .ct_service_card p{
+
+      .ct_service_card p {
         max-width: 100% !important;
       }
-        .ct_steps_section{
+
+      .ct_steps_section {
         padding: 70px 0;
       }
 
-      .ct_section_title{
+      .ct_section_title {
         font-size: 40px;
         margin-bottom: 40px;
       }
 
-      .ct_step_card{
+      .ct_step_card {
         min-height: auto;
       }
 
-       .ct_benefits_section{
+      .ct_benefits_section {
         padding: 70px 0;
       }
 
-      .ct_section_title{
+      .ct_section_title {
         font-size: 42px;
         margin-bottom: 50px;
       }
-        .ct_about_section{
+
+      .ct_about_section {
         padding: 70px 0;
       }
-   .ct_cta_box{
+
+      .ct_cta_box {
         padding: 90px 30px;
       }
 
-      .ct_cta_title{
+      .ct_cta_title {
         font-size: 42px;
       }
 
-      
 
-      br{
+
+      br {
         display: none;
       }
 
-    
 
-  .ct_business_title{
-        font-size:38px;
-        max-width:100%;
-      }
 
-      .ct_counter_number{
-        font-size:40px;
+      .ct_business_title {
+        font-size: 38px;
+        max-width: 100%;
       }
 
-      .ct_business_description{
-        font-size:22px;
-        margin-top:50px;
-      }
-       .ct_solution_wrapper{
-        padding:35px;
+      .ct_counter_number {
+        font-size: 40px;
       }
 
-      .ct_solution_title{
-        font-size:38px;
+      .ct_business_description {
+        font-size: 22px;
+        margin-top: 50px;
       }
 
-      .ct_solution_content{
-        margin-top:40px;
+      .ct_solution_wrapper {
+        padding: 35px;
       }
-      .ct_solution_image_box img{
+
+      .ct_solution_title {
+        font-size: 38px;
+      }
+
+      .ct_solution_content {
+        margin-top: 40px;
+      }
+
+      .ct_solution_image_box img {
         /* object-fit: cover !important; */
         height: auto !important;
       }
-      .ct_solution_section:before{
+
+      .ct_solution_section:before {
         background-size: cover !important;
       }
-      .ct_solution_wrapper{
+
+      .ct_solution_wrapper {
         padding: 0px !important;
       }
-      .ct_solution_content{
+
+      .ct_solution_content {
         padding-left: 0px !important;
       }
-      .ct_approach_wrapper{
+
+      .ct_approach_wrapper {
         padding-right: 40px !important;
       }
-}
+    }
 
-@media screen and (max-width:767px){
-   .ct_rental_service_section{
-        padding:60px 0;
+    @media screen and (max-width:767px) {
+      .ct_rental_service_section {
+        padding: 60px 0;
       }
 
-      
 
-      .ct_rental_service_box{
-        padding:24px;
+
+      .ct_rental_service_box {
+        padding: 24px;
       }
 
-      .ct_rental_card_heading{
-        font-size:22px;
+      .ct_rental_card_heading {
+        font-size: 22px;
       }
 
-      .ct_rental_card_description{
-        font-size:14px;
+      .ct_rental_card_description {
+        font-size: 14px;
       }
-    .ct_menu_bar{
+
+      .ct_menu_bar {
         display: block;
         font-size: 18px;
-    }
- .ct_header nav {
-    position: fixed;
-    width: 100%;
-    max-width: 300px;
-    background-color: #ffffff;
-    right: -100%;
-    height: 100vh;
-    top: 0px;
-    padding: 60px 30px;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
-    transition: 0.4s ease all;
-}
- .ct_header nav.show{
-    right: 0px;
- }
-   .ct_heading ,.ct_solution_title{
-        font-size:32px !important;
       }
-.ct_header nav ul{
-    flex-direction: column;
-    align-items: start !important;
-}
-.ct_close_menu{
-    display: block;
-}
-.ct_section_container {
-    max-width: calc(100% - 36px);
-}
-.ct_hero_content h1 ,.ct_service_heading h2 ,.ct_section_title ,.ct_stat_number ,.ct_rental_service_heading ,.ct_approach_heading{
-    font-size: 32px !important;
-}
-.ct_description{
-  font-size: 20px !important;
-  line-height: 32px !important;
-}
-.ct_hero_content p{
-    font-size: 18px !important;
-}
-.ct_price_text{
-    font-size: 20px !important;
-}
-  .ct_section{
-        padding:60px 0;
+
+      .ct_header nav {
+        position: fixed;
+        width: 100%;
+        max-width: 300px;
+        background-color: #ffffff;
+        right: -100%;
+        height: 100vh;
+        top: 0px;
+        padding: 60px 30px;
+        box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.09);
+        transition: 0.4s ease all;
+      }
+
+      .ct_header nav.show {
+        right: 0px;
+      }
+
+      .ct_heading,
+      .ct_solution_title {
+        font-size: 32px !important;
+      }
+
+      .ct_header nav ul {
+        flex-direction: column;
+        align-items: start !important;
+      }
+
+      .ct_close_menu {
+        display: block;
+      }
+
+      .ct_section_container {
+        max-width: calc(100% - 36px);
+      }
+
+      .ct_hero_content h1,
+      .ct_service_heading h2,
+      .ct_section_title,
+      .ct_stat_number,
+      .ct_rental_service_heading,
+      .ct_approach_heading {
+        font-size: 32px !important;
+      }
+
+      .ct_description {
+        font-size: 20px !important;
+        line-height: 32px !important;
+      }
+
+      .ct_hero_content p {
+        font-size: 18px !important;
+      }
+
+      .ct_price_text {
+        font-size: 20px !important;
+      }
+
+      .ct_section {
+        padding: 60px 0;
       }
 
 
-          .ct_business_section{
-        padding:60px 0;
+      .ct_business_section {
+        padding: 60px 0;
       }
 
-      .ct_business_title{
-        font-size:30px;
+      .ct_business_title {
+        font-size: 30px;
       }
 
-      .ct_counter_number{
-        font-size:34px;
+      .ct_counter_number {
+        font-size: 34px;
       }
 
-      .ct_business_description{
-        font-size:18px;
-        line-height:1.7;
+      .ct_business_description {
+        font-size: 18px;
+        line-height: 1.7;
       }
 
-       .ct_solution_section{
-        padding:60px 0;
+      .ct_solution_section {
+        padding: 60px 0;
       }
 
-      .ct_solution_wrapper{
-        padding:25px;
-        border-radius:20px;
+      .ct_solution_wrapper {
+        padding: 25px;
+        border-radius: 20px;
       }
 
-      .ct_solution_title{
-        font-size:30px;
+      .ct_solution_title {
+        font-size: 30px;
       }
 
-      .ct_solution_text{
-        font-size:15px;
-        line-height:1.8;
+      .ct_solution_text {
+        font-size: 15px;
+        line-height: 1.8;
       }
 
-      .ct_solution_image_box{
-        border-radius:18px;
+      .ct_solution_image_box {
+        border-radius: 18px;
       }
-      .ct_approach_wrapper{
+
+      .ct_approach_wrapper {
         padding: 30px !important;
       }
-}
+    }
 
 
-@media screen and (max-width:575px){
-     .ct_hero_content h1 {
+    @media screen and (max-width:575px) {
+      .ct_hero_content h1 {
         font-size: 40px;
       }
 
@@ -320,125 +368,128 @@
       .ct_laptop {
         width: 200px;
       }
-       .ct_stats_section{
+
+      .ct_stats_section {
         padding: 50px 0;
       }
 
-      .ct_stat_card{
+      .ct_stat_card {
         text-align: center;
       }
 
-        .ct_service_section{
+      .ct_service_section {
         padding: 60px 0;
       }
 
-      .ct_service_heading h2{
+      .ct_service_heading h2 {
         font-size: 34px;
       }
 
-      .ct_service_heading p{
+      .ct_service_heading p {
         font-size: 17px;
       }
 
-      .ct_service_card{
+      .ct_service_card {
         padding: 28px 24px;
       }
 
-      .ct_service_card h4{
+      .ct_service_card h4 {
         font-size: 24px;
       }
 
-      .ct_service_card p{
+      .ct_service_card p {
         font-size: 16px;
       }
-            .ct_section_title{
+
+      .ct_section_title {
         font-size: 32px;
       }
 
-      .ct_step_card{
+      .ct_step_card {
         padding: 28px 20px;
       }
 
-      .ct_step_number{
+      .ct_step_number {
         font-size: 58px;
       }
 
-      .ct_step_card h4{
+      .ct_step_card h4 {
         font-size: 20px;
       }
 
-      .ct_step_card p{
+      .ct_step_card p {
         font-size: 15px;
       }
 
-       .ct_benefits_section{
+      .ct_benefits_section {
         padding: 60px 0;
       }
 
-      .ct_section_title{
+      .ct_section_title {
         font-size: 32px;
       }
 
-      .ct_benefit_card{
+      .ct_benefit_card {
         padding: 30px 24px;
       }
 
-      .ct_benefit_card h4{
+      .ct_benefit_card h4 {
         font-size: 24px;
       }
 
-      .ct_benefit_card p{
+      .ct_benefit_card p {
         font-size: 16px;
       }
 
 
-        .ct_about_section{
+      .ct_about_section {
         padding: 60px 0;
       }
 
-      .ct_about_title{
+      .ct_about_title {
         font-size: 34px;
       }
 
-      .ct_about_text{
+      .ct_about_text {
         font-size: 16px;
         line-height: 1.7;
       }
 
-      .ct_about_stats{
+      .ct_about_stats {
         gap: 24px;
       }
 
-      .ct_about_stat{
+      .ct_about_stat {
         padding-right: 0;
       }
 
-      .ct_about_stat::after{
+      .ct_about_stat::after {
         display: none;
       }
 
-      .ct_about_stat h4{
+      .ct_about_stat h4 {
         font-size: 28px;
       }
 
-       .ct_cta_section{
+      .ct_cta_section {
         padding: 60px 0;
       }
 
-      .ct_cta_box{
+      .ct_cta_box {
         padding: 70px 22px;
         border-radius: 18px;
       }
 
-      .ct_cta_title{
+      .ct_cta_title {
         font-size: 30px;
       }
 
-      .ct_cta_text{
+      .ct_cta_text {
         font-size: 16px;
         line-height: 1.7;
       }
-      br{
+
+      br {
         display: none;
       }
-}
+    }
