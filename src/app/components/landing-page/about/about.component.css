@@ -1,0 +1,226 @@
+ .ct_section{
+      padding:80px 0;
+    }
+
+    .ct_heading{
+      font-size:48px;
+      font-weight:600;
+      color:#1f2d5a;
+      line-height:1.2;
+    }
+
+    .ct_heading span{
+      color:#2f63e9;
+    }
+
+    .ct_subheading{
+      font-size:15px;
+      color:#667085;
+      max-width:650px;
+      margin:auto;
+      line-height:1.7;
+    }
+
+    .ct_card{
+      border-radius:14px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .ct_card img{
+      width:100%;
+      height:510px;
+      object-fit:cover;
+      border-radius: 10px;
+      transition:0.4s ease;
+    }
+
+  
+
+    .ct_blue_card{
+      background:#2f63e9;
+      color:#fff;
+      padding:27px 28px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      height: auto;
+    }
+
+    .ct_dark_card{
+      background:#15254b;
+      color:#fff;
+      padding:35px 28px;
+      /* min-height:180px; */
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      height: auto;
+    }
+
+    .ct_stat_number{
+      font-size:48px;
+      font-weight:600;
+      margin-bottom:41px;
+      color: #fff;
+    }
+
+    .ct_stat_text{
+      font-size:16px;
+    }
+
+    .ct_business_section{
+      padding:80px 0;
+    }
+
+    .ct_business_title{
+      font-size:52px;
+      font-weight:700;
+      line-height:1.15;
+      color:#1b2340;
+      max-width:650px;
+    }
+
+    .ct_business_title span{
+      color:#2f63e9;
+    }
+
+    .ct_counter_box{
+      margin-bottom:35px;
+    }
+
+    .ct_counter_number{
+      font-size:52px;
+      font-weight:700;
+      color:#1b2340;
+      line-height:1;
+      margin-bottom:10px;
+    }
+
+    .ct_counter_text{
+      font-size:15px;
+      color:#6f7787;
+      margin-bottom:0;
+    }
+
+    .ct_description{
+      font-size:30px;
+      line-height:45px;
+      font-weight:600;
+      color:#0F172A;
+      text-align:center;
+      margin-top:70px;
+    }
+
+    .ct_stat_box h3{
+        color: #000;
+        margin-bottom: 10px;
+    }
+    .ct_stat_box p{
+        color: #475569;
+    }
+
+
+
+    .ct_solution_section{
+      padding:90px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ct_solution_wrapper{
+      border-radius:28px;
+      padding:55px;
+      position:relative;
+      overflow:hidden;
+      z-index: 1;
+    }
+
+  .ct_solution_section:before {
+    content: "";
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background: url(../../../../../public/img/why_choose_bg.png);
+    right: 0px;
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+    .ct_solution_wrapper::before{
+      content:"";
+      position:absolute;
+      top:-120px;
+      right:-120px;
+      width:320px;
+      height:320px;
+      background:rgba(255,255,255,0.25);
+      border-radius:50%;
+    }
+.ct_solution_content{
+    padding-left: 30px;
+}
+    .ct_solution_image_box{
+      border-radius:24px;
+      overflow:hidden;
+      perspective: 300px;
+    
+    }
+
+    .ct_solution_image_box img{
+      width:100%;
+      height:561px;
+      object-fit:contain;
+      transition:0.5s ease;
+      transform-style: preserve-3d;
+
+    }
+
+    .ct_solution_image_box:hover img{
+      transform:scale(1.05);
+    }
+
+    .ct_solution_tag{
+      font-size:14px;
+      font-weight:500;
+      color:#2f63e9;
+      margin-bottom:12px;
+    }
+
+    .ct_solution_title{
+      font-size:48px;
+      font-weight:600;
+      line-height:1.2;
+      color:#1d2746;
+      margin-bottom:25px;
+    }
+
+    .ct_solution_title span{
+      color:#2f63e9;
+    }
+
+    .ct_solution_text{
+      font-size:18px;
+      line-height:1.9;
+      color:#6b7280;
+      margin-bottom:0;
+      max-width:500px;
+    }
+
+
+    .ct_partner_section{
+        position: relative;
+    }
+
+    .ct_partner_section:before {
+    content: "";
+    position: absolute;
+    right: 0px;
+    background: linear-gradient(227.63deg, rgba(37, 99, 235, 0.7) -13.51%, rgba(255, 255, 255, 0) 68.68%);
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    opacity: 0.2;
+    filter: blur(39px);
+}
