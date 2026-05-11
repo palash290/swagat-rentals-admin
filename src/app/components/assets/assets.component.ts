@@ -25,11 +25,11 @@ export class AssetsComponent {
   constructor(private apiService: CommonService) { }
 
   ngOnInit() {
-    this.getAllTasks();
+    this.getAllAssets();
   }
 
 
-  getAllTasks() {
+  getAllAssets() {
     let params = new URLSearchParams();
 
     if (this.searchText?.trim()) {
@@ -57,14 +57,14 @@ export class AssetsComponent {
 
   changePage(page: number) {
     this.page = page;
-    this.getAllTasks();
+    this.getAllAssets();
   }
 
   onSearchChange() {
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
       this.page = 1;
-      this.getAllTasks();
+      this.getAllAssets();
     }, 500);
   }
 

@@ -24,6 +24,28 @@
                 </div>
 
                 <div class="mb-3">
+                    <label class="mb-1">Select Asset <span class="ct_required">*</span></label>
+                    <div class="ct_multi_select" (click)="toggleAssetDropdown($event)">
+                        <div class="ct_multi_select_input ct_input">
+                            {{ getSelectedAssetsLabel() }}
+                        </div>
+                        <div class="ct_multi_select_menu" *ngIf="assetDropdownOpen"
+                            (click)="$event.stopPropagation()">
+                            <div class="ct_multi_select_option" *ngFor="let asset of assetsList"
+                                (click)="toggleAssetSelection(asset.asset_id, $event)">
+                                <input type="checkbox" [checked]="isAssetSelected(asset.asset_id)" />
+                                <span>{{ getAssetName(asset) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="Form.controls['asset_ids'].invalid && Form.controls['asset_ids'].touched"
+                        class="err_msg">
+                        <div *ngIf="Form.controls['asset_ids'].errors?.['required']">Please select at least one
+                            asset.</div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
                     <label class="mb-1">Company Name </label>
                     <input type="text" class="form-control ct_input" placeholder="Enter company name"
                         formControlName="company_name" />

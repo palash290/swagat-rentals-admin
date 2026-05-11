@@ -14,6 +14,8 @@ import { CommonService } from '../../../services/common.service';
 export class AddAgreementComponent {
 
   loading: boolean = false;
+  selectedClientId: any = '';
+  clientSystems: any[] = [];
   isSubmitting: boolean = false;
   isSubmitted: boolean = false;
   clientList: any[] = [];
@@ -56,9 +58,6 @@ export class AddAgreementComponent {
       }
     });
   }
-
-  selectedClientId: any = '';
-  clientSystems: any[] = [];
 
   getClientSystems() {
     if (!this.selectedClientId) {

@@ -64,6 +64,7 @@ export class AddClientComponent implements OnDestroy {
     this.getClientDetails();
     this.getServerList();
     this.getGatewayList();
+    this.getAllAssets();
   }
 
   ngOnDestroy(): void {
@@ -89,6 +90,27 @@ export class AddClientComponent implements OnDestroy {
       error: (error) => {
         console.log(error.message);
         this.serverList = [];
+      }
+    });
+  }
+
+
+  assetsList: any[] = [];
+  selectedAssetDetails: any[] = [];
+  selectedAssetIds: number[] = [];
+  assetDropdownOpen: boolean = false;
+
+  getAllAssets() {
+    this.apiService.get(`assets/inventory`).subscribe({
+      next: (resp: any) => {
+        const availableAssets = resp.data.items.filter(
+          (asset: any) => asset.is_available == 1 && asset.status == 'in_stock'
+        );
+        this.assetsList = this.mergeAssets(availableAssets, this.selectedAssetDetails);
+      },
+      error: (error) => {
+        console.log(error.message);
+        this.assetsList = this.mergeAssets([], this.selectedAssetDetails);
       }
     });
   }
@@ -155,6 +177,21 @@ export class AddClientComponent implements OnDestroy {
           })).filter(a => !!a.gateway_id);
           this.selectedGatewayIds = this.gatewayAllocations.map(a => a.gateway_id);
           this.Form.patchValue({ gateway_ids: this.selectedGatewayIds });
+        }
+
+        const assetAllocations = (
+          client?.asset_allocations ??
+          client?.asset_allocation ??
+          client?.assets ??
+          []
+        ) as Array<any>;
+        if (Array.isArray(assetAllocations) && assetAllocations.length) {
+          this.selectedAssetDetails = assetAllocations;
+          this.selectedAssetIds = assetAllocations
+            .map(asset => Number(asset?.asset_id ?? asset?.id))
+            .filter(assetId => !!assetId);
+          this.Form.patchValue({ asset_ids: this.selectedAssetIds });
+          this.assetsList = this.mergeAssets(this.assetsList, assetAllocations);
         }
 
         this.existingDocs = {};
@@ -233,6 +270,7 @@ export class AddClientComponent implements OnDestroy {
         server_ids: new FormControl([]),
         total_gsm_gateway: new FormControl(''),
         gateway_ids: new FormControl([]),
+        asset_ids: new FormControl([], Validators.required),
 
         // ── Agreement Details ───────────────────────────────────────────────
         // billing_day: new FormControl('', Validators.required),
@@ -406,6 +444,23 @@ export class AddClientComponent implements OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
+  private mergeAssets(baseAssets: any[], selectedAssets: any[]): any[] {
+    const assetMap = new Map<number, any>();
+
+    [...baseAssets, ...selectedAssets].forEach(asset => {
+      const assetId = Number(asset?.asset_id ?? asset?.id);
+      if (!assetId) return;
+
+      assetMap.set(assetId, {
+        ...assetMap.get(assetId),
+        ...asset,
+        asset_id: assetId
+      });
+    });
+
+    return Array.from(assetMap.values());
+  }
+
   getRentAmountError(): string {
     const control = this.Form.get('rent_amount');
 
@@ -530,6 +585,8 @@ export class AddClientComponent implements OnDestroy {
 
     formData.append('server_allocations', JSON.stringify(this.serverAllocations));
     formData.append('gateway_allocations', JSON.stringify(this.gatewayAllocations));
+    const selectedAssetIds = (this.Form.get('asset_ids')?.value ?? []).map((id: any) => Number(id)).filter((id: number) => !!id);
+    formData.append('asset_allocations', JSON.stringify(selectedAssetIds));
 
     const endpoint = this.clientId ? `admin/clients/${this.clientId}` : 'admin/clients';
 
@@ -542,6 +599,12 @@ export class AddClientComponent implements OnDestroy {
           this.clearAllSelectedFiles();
           this.fileErrors = {};
           this.deleteKycIds = [];
+          this.selectedAssetDetails = [];
+          this.selectedAssetIds = [];
+          this.selectedServerIds = [];
+          this.selectedGatewayIds = [];
+          this.serverAllocations = [];
+          this.gatewayAllocations = [];
           this.Form.reset();
         } else {
           this.toastr.warning(resp.message);
@@ -566,8 +629,52 @@ export class AddClientComponent implements OnDestroy {
 
   @HostListener('document:click')
   onDocumentClick() {
+    this.closeAssetDropdown();
     this.closeServerDropdown();
     this.closeGatewayDropdown();
+  }
+
+  toggleAssetDropdown(event?: Event) {
+    if (event) event.stopPropagation();
+    this.assetDropdownOpen = !this.assetDropdownOpen;
+  }
+
+  closeAssetDropdown() {
+    this.assetDropdownOpen = false;
+  }
+
+  isAssetSelected(assetId: number): boolean {
+    return this.selectedAssetIds.includes(Number(assetId));
+  }
+
+  toggleAssetSelection(assetId: number, event?: Event) {
+    if (event) event.stopPropagation();
+    const id = Number(assetId);
+    if (this.selectedAssetIds.includes(id)) {
+      this.selectedAssetIds = this.selectedAssetIds.filter(selectedId => selectedId !== id);
+    } else {
+      this.selectedAssetIds = [...this.selectedAssetIds, id];
+    }
+    this.Form.patchValue({ asset_ids: this.selectedAssetIds });
+    this.Form.get('asset_ids')?.markAsTouched();
+    this.selectedAssetDetails = this.assetsList.filter(asset => this.selectedAssetIds.includes(Number(asset.asset_id)));
+  }
+
+  getAssetName(asset: any): string {
+    return `${asset?.asset_category_name ?? 'Asset'} (${asset?.serial_number ?? asset?.asset_id ?? ''})`;
+  }
+
+  getSelectedAssetsLabel(): string {
+    if (!this.selectedAssetIds.length) return 'Select Asset';
+    const selectedAssets = this.selectedAssetIds
+      .map(id => this.assetsList.find(asset => Number(asset.asset_id) === Number(id)))
+      .filter(asset => !!asset);
+
+    if (!selectedAssets.length) {
+      return `${this.selectedAssetIds.length} asset(s) selected`;
+    }
+
+    return selectedAssets.map(asset => this.getAssetName(asset)).join(', ');
   }
 
   isServerSelected(serverId: number): boolean {
@@ -702,6 +809,6 @@ export class AddClientComponent implements OnDestroy {
     if (!this.selectedGatewayIds.length) return 'Select Gateway';
     return this.selectedGatewayIds.map(id => this.getGatewayName(id)).join(', ');
   }
-  
+
 
 }
