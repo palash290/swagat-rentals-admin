@@ -27,6 +27,34 @@
 
                 <div class="mb-4" *ngIf="form.client_id">
                     <div class="mb-3">
+                        <label class="mb-2">Assets</label>
+                        <div class="border rounded p-3" *ngIf="clientAssets.assets.length; else noAssets">
+                            <div class="mb-3" *ngFor="let asset of clientAssets.assets">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox"
+                                        [id]="'asset-' + asset.asset_id"
+                                        [checked]="isAssetSelected(asset.asset_id)"
+                                        (change)="onAssetToggle(asset, $event)" />
+                                    <label class="form-check-label" [for]="'asset-' + asset.asset_id">
+                                        {{ asset.asset_category_name }} (Asset ID: {{ asset.asset_id }})
+                                    </label>
+                                </div>
+                                <div *ngIf="getSelectedAsset(asset.asset_id) as selectedAsset">
+                                    <input type="number" class="form-control ct_input" placeholder="Enter price"
+                                        [(ngModel)]="selectedAsset.price"
+                                        [ngModelOptions]="{ standalone: true }" min="1" />
+                                    <div *ngIf="isSubmitted && isInvalidPositiveNumber(selectedAsset.price)" class="err_msg">
+                                        Price must be greater than 0.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #noAssets>
+                            <div class="border rounded p-3 text-muted">No assets available for this client.</div>
+                        </ng-template>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="mb-2">Systems</label>
                         <div class="border rounded p-3" *ngIf="clientAssets.systems.length; else noSystems">
                             <div class="mb-3" *ngFor="let system of clientAssets.systems">

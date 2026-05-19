@@ -63,9 +63,6 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <!-- <th *ngIf="userRole !== 'sub_admin'">
-                                Select
-                            </th> -->
                             <th>S.No</th>
                             <th>
                                 <div class="d-flex flex-column">
@@ -80,7 +77,6 @@
                                     <span>System Type</span>
                                 </div>
                             </th>
-                            <!-- <th>Mac Address</th> -->
                             <th>Installed On</th>
                             <th>System Status</th>
                             <th>Approve Status</th>
@@ -90,10 +86,6 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of deviceList; let i = index">
-                            <!-- <td *ngIf="userRole !== 'sub_admin'">
-                                <input type="checkbox" [checked]="selectedDeviceIds.has(item.id)"
-                                    (change)="toggleRowSelection($event, item.id)" />
-                            </td> -->
                             <td>{{ (page - 1) * limit + i + 1 }}</td>
                             <td>
                                 <span>
@@ -108,9 +100,9 @@
                             <td>{{item.system_info.ssd_and_hdd.ssd_size || '-'}}/{{item.system_info.ssd_and_hdd.hdd_size
                                 || '-'}}</td>
                             <td>{{item.device_type}}</td>
-                            <!-- <td>{{item.system_info.mac_address}}</td> -->
+
                             <td>{{item.installation_date | date:'dd MMM yyyy, hh:mm a'}}</td>
-                            <td class="">
+                            <!-- <td class="">
                                 @if(item.status == "active"){
                                 <span class="ct_accepted_badge">Active</span>
                                 }
@@ -123,6 +115,19 @@
                                 @if(item.status == "inactive"){
                                 <span class="ct_rejected_badge">Inactive</span>
                                 }
+                            </td> -->
+                            <td>
+                                <select [(ngModel)]="item.status" class="form-select w-auto"
+                                    (change)="onDeviceStatusChange(item, item.status)">
+                                    <option [ngValue]="null" disabled>Select</option>
+                                    <ng-container>
+                                        <option value="active">Active</option>
+                                        <option value="under_service">Under Service</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="inactive">Inactive</option>
+                                        <option value="restart">Restart</option>
+                                    </ng-container>
+                                </select>
                             </td>
                             <td>
                                 @if(item.approval_status == "pending"){
@@ -171,6 +176,9 @@
 </div>
 
 <!-- Assign Device Modal -->
+<button #openRestartModalBtn type="button" class="d-none" data-bs-toggle="modal" data-bs-target="#restartStatusModal">
+</button>
+
 <div class="modal fade ct_delete_employee_modal" id="assignDevicesModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -187,6 +195,34 @@
                         class="ct_dark_grey_text btn-transparent">Cancel</button>
                     <button (click)="confirmAssignDevices()" type="button"
                         class="ct_blue_text ct_fw_600 btn-transparent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Restart Status Modal -->
+<div class="modal fade ct_delete_employee_modal" id="restartStatusModal" tabindex="-1" #restartModal>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header px-0 border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-0">
+                <h5 class="modal-title ct_fs_18 ct_blue_text ct_fw_600 mb-2">Restart System</h5>
+                <p class="ct_dark_grey_text mb-3">
+                    Enter restart interval before updating the system status.
+                </p>
+                <div class="mb-3">
+                    <label class="form-label ct_fw_600">Restart Interval (In Minutes)</label>
+                    <input type="number" min="1" class="form-control ct_input" [(ngModel)]="restartInterval"
+                        placeholder="Enter restart interval" />
+                </div>
+                <div class="d-flex justify-content-end gap-4 my-4">
+                    <button #closeRestartModal type="button" data-bs-dismiss="modal"
+                        class="ct_dark_grey_text btn-transparent">Cancel</button>
+                    <button (click)="confirmRestartStatus()" type="button"
+                        class="ct_blue_text ct_fw_600 btn-transparent">Submit</button>
                 </div>
             </div>
         </div>

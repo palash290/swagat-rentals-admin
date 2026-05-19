@@ -23,6 +23,7 @@ export class AddAgreementComponent {
   agreementId: number | null = null;
   isEditMode: boolean = false;
   clientAssets: any = {
+    assets: [],
     systems: [],
     gsm_gateways: [],
     servers: []
@@ -32,6 +33,7 @@ export class AddAgreementComponent {
     billing_cycle_day: '',
     start_date: '',
     end_date: '',
+    assets: [],
     systems: [],
     gsm_gateways: [],
     servers: []
@@ -63,6 +65,7 @@ export class AddAgreementComponent {
     if (!this.selectedClientId) {
       this.clientSystems = [];
       this.clientAssets = {
+        assets: [],
         systems: [],
         gsm_gateways: [],
         servers: []
@@ -76,6 +79,7 @@ export class AddAgreementComponent {
         const data = resp?.data?.items || resp?.data || {};
         this.clientSystems = Array.isArray(data?.systems) ? data.systems : [];
         this.clientAssets = {
+          assets: Array.isArray(data?.assets) ? data.assets : [],
           systems: Array.isArray(data?.systems) ? data.systems : [],
           gsm_gateways: Array.isArray(data?.gsm_gateways) ? data.gsm_gateways : [],
           servers: Array.isArray(data?.servers) ? data.servers : []
@@ -86,6 +90,7 @@ export class AddAgreementComponent {
         console.log(error.message);
         this.clientSystems = [];
         this.clientAssets = {
+          assets: [],
           systems: [],
           gsm_gateways: [],
           servers: []
@@ -133,6 +138,7 @@ export class AddAgreementComponent {
           ),
           start_date: this.toDateInput(item?.agreement_start_date ?? item?.start_date),
           end_date: this.toDateInput(item?.agreement_end_date ?? item?.end_date),
+          assets: this.mapSelectedAssets(item?.assets),
           systems: this.mapSelectedSystems(item?.systems),
           gsm_gateways: this.mapSelectedGateways(item?.gsm_gateways),
           servers: this.mapSelectedServers(item?.servers)
@@ -159,6 +165,7 @@ export class AddAgreementComponent {
       billing_cycle_day: '',
       start_date: '',
       end_date: '',
+      assets: [],
       systems: [],
       gsm_gateways: [],
       servers: []
@@ -206,12 +213,17 @@ export class AddAgreementComponent {
   }
 
   private clearAssetSelections(): void {
+    this.form.assets = [];
     this.form.systems = [];
     this.form.gsm_gateways = [];
     this.form.servers = [];
   }
 
   private syncSelectionsWithAvailableAssets(): void {
+    this.form.assets = (this.form.assets || []).filter((selected: any) =>
+      this.clientAssets.assets.some((asset: any) => Number(asset.asset_id) === Number(selected.asset_id))
+    );
+
     this.form.systems = (this.form.systems || []).filter((selected: any) =>
       this.clientAssets.systems.some((asset: any) => Number(asset.id) === Number(selected.system_id))
     );
@@ -237,6 +249,14 @@ export class AddAgreementComponent {
     }).filter((selected: any) =>
       this.clientAssets.servers.some((asset: any) => Number(asset.server_id) === Number(selected.server_id))
     );
+  }
+
+  private mapSelectedAssets(items: any): any[] {
+    if (!Array.isArray(items)) return [];
+    return items.map((item: any) => ({
+      asset_id: Number(item?.asset_id ?? item?.id),
+      price: item?.asset_price ?? item?.price ?? ''
+    })).filter((item: any) => !!item.asset_id);
   }
 
   private mapSelectedSystems(items: any): any[] {
@@ -267,6 +287,31 @@ export class AddAgreementComponent {
 
   isSystemSelected(systemId: number): boolean {
     return this.form.systems.some((item: any) => Number(item.system_id) === Number(systemId));
+  }
+
+  isAssetSelected(assetId: number): boolean {
+    return this.form.assets.some((item: any) => Number(item.asset_id) === Number(assetId));
+  }
+
+  onAssetToggle(asset: any, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const assetId = Number(asset.asset_id ?? asset.id);
+
+    if (checked) {
+      if (!this.isAssetSelected(assetId)) {
+        this.form.assets = [
+          ...this.form.assets,
+          { asset_id: assetId, price: '' }
+        ];
+      }
+      return;
+    }
+
+    this.form.assets = this.form.assets.filter((item: any) => Number(item.asset_id) !== assetId);
+  }
+
+  getSelectedAsset(assetId: number): any {
+    return this.form.assets.find((item: any) => Number(item.asset_id) === Number(assetId));
   }
 
   onSystemToggle(system: any, event: Event): void {
@@ -353,6 +398,12 @@ export class AddAgreementComponent {
   }
 
   private hasInvalidAssetPricing(): boolean {
+    const invalidAsset = this.form.assets.some((item: any) => this.isInvalidPositiveNumber(item.price));
+    if (invalidAsset) {
+      this.toastr.warning('Please enter a valid price for each selected asset.');
+      return true;
+    }
+
     const invalidSystem = this.form.systems.some((item: any) => this.isInvalidPositiveNumber(item.price));
     if (invalidSystem) {
       this.toastr.warning('Please enter a valid price for each selected system.');
@@ -412,6 +463,10 @@ export class AddAgreementComponent {
       billing_cycle_day: Number(this.form.billing_cycle_day),
       start_date: this.form.start_date,
       end_date: this.form.end_date,
+      assets: this.form.assets.map((item: any) => ({
+        asset_id: Number(item.asset_id),
+        price: Number(item.price)
+      })),
       systems: this.form.systems.map((item: any) => ({
         system_id: Number(item.system_id),
         price: Number(item.price)

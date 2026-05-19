@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
+declare const bootstrap: any;
+
 @Component({
   selector: 'app-inatalled-devices',
   imports: [RouterLink, CommonModule, FormsModule],
@@ -139,6 +141,8 @@ export class InatalledDevicesComponent {
   selectedUser: any;
   @ViewChild('closeModalBlock') closeModalBlock!: ElementRef;
   @ViewChild('closeModalAssign') closeModalAssign!: ElementRef;
+  @ViewChild('closeRestartModal') closeRestartModal!: ElementRef;
+  @ViewChild('openRestartModalBtn') openRestartModalBtn!: ElementRef;
 
   get modalTitle(): string {
     return this.nextStatus === 1 ? 'Unblock System' : 'Block System';
@@ -155,6 +159,11 @@ export class InatalledDevicesComponent {
   }
 
   systemId: any;
+  restartInterval: string | number = '';
+  restartSystemId: any = null;
+  restartDeviceItem: any = null;
+  previousDeviceStatus: string = '';
+  restartConfirmed: boolean = false;
 
   onToggleUser(item: any) {
     this.selectedUser = item;
@@ -188,12 +197,19 @@ export class InatalledDevicesComponent {
   }
 
   @ViewChild('blockModal') blockModal!: ElementRef;
+  @ViewChild('restartModal') restartModal!: ElementRef;
 
   ngAfterViewInit() {
-    const modalEl = this.blockModal.nativeElement;
-
-    modalEl.addEventListener('hidden.bs.modal', () => {
+    this.blockModal.nativeElement.addEventListener('hidden.bs.modal', () => {
       this.getAllSystems();
+    });
+
+    this.restartModal.nativeElement.addEventListener('hidden.bs.modal', () => {
+      if (!this.restartConfirmed && this.restartDeviceItem) {
+        this.restartDeviceItem.status = this.previousDeviceStatus;
+      }
+
+      this.resetRestartModalState();
     });
   }
 
@@ -261,6 +277,73 @@ export class InatalledDevicesComponent {
         this.toastr.warning('Something went wrong.');
       }
     });
+  }
+
+  onDeviceStatusChange(item: any, overrideStatus: any): void {
+    const statusToUse = overrideStatus;
+
+    if (!statusToUse) {
+      this.toastr.warning('Please select a valid status');
+      return;
+    }
+
+    if (statusToUse === 'restart') {
+      this.restartSystemId = item.id;
+      this.restartDeviceItem = item;
+      this.previousDeviceStatus = this.originalList.find((system: any) => system.id === item.id)?.status || '';
+      this.restartInterval = '';
+      this.restartConfirmed = false;
+      this.openRestartModalBtn.nativeElement.click();
+      return;
+    }
+
+    this.updateDeviceStatus(item.id, statusToUse);
+  }
+
+  confirmRestartStatus(): void {
+    const restartIntervalValue = String(this.restartInterval ?? '').trim();
+
+    if (!restartIntervalValue) {
+      this.toastr.warning('Please enter restart interval');
+      return;
+    }
+
+    this.restartConfirmed = true;
+    this.updateDeviceStatus(this.restartSystemId, 'restart', restartIntervalValue, true);
+  }
+
+  updateDeviceStatus(id: any, statusToUse: string, restartInterval: string = '', closeRestartModal: boolean = false): void {
+    const formURlData = new URLSearchParams();
+    formURlData.set('system_id', id);
+    formURlData.set('status', statusToUse);
+    if(restartInterval) {
+      formURlData.set('restart_interval', restartInterval);
+    }
+
+    this.apiService.patch(`admin/systems/status`, formURlData.toString()).subscribe({
+      next: (resp: any) => {
+        if (closeRestartModal) {
+          this.closeRestartModal.nativeElement.click();
+        }
+        this.toastr.success(resp.message || 'Status updated successfully!');
+        this.getAllSystems();
+      },
+      error: (err) => {
+        if (closeRestartModal) {
+          this.restartConfirmed = false;
+        }
+        this.toastr.warning('Failed to update Status');
+        this.getAllSystems();
+      }
+    });
+  }
+
+  resetRestartModalState(): void {
+    this.restartInterval = '';
+    this.restartSystemId = null;
+    this.restartDeviceItem = null;
+    this.previousDeviceStatus = '';
+    this.restartConfirmed = false;
   }
 
 
